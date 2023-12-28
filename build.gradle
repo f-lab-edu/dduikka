@@ -1,40 +1,65 @@
+// build.grdle은?
+// 의존성 관리나 플러그인 설정들을 위해 작성하는 빌드 스크립트다.
+
+// plugins
+// - gradle 기능을 확장하는 플러그인들을 설정한다.
+// - 플러그인은 여러 task들을 내장한다.
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.1.6'
-	id 'io.spring.dependency-management' version '1.1.4'
+	id 'org.springframework.boot' version '3.1.6' // 스프링 부트 Gradle 플러그인
+	id 'io.spring.dependency-management' version '1.1.4' // 종속성 관리 기능을 제공하는 Gradle 플러그인
 }
 
 group = 'com.flab'
 version = '0.0.1-SNAPSHOT'
 
+
+// sourceCompatibility
+// - 해당 프로젝트의 소스 코드가 java버전과 호환되도록 설정한다. 만약, 다른 버전으로 변경된다면 해당 버전에서 도입된 기능을 사용하고 있는 코드는 컴파일 에러가 발생할 수 있다.
 java {
 	sourceCompatibility = '17'
 }
 
+// build.gradle 내부에서 사용되는 설정을 정의한다.
 configurations {
-	compileOnly {
+	compileOnly { // 컴파일 시에만 필요한 의존성을 정의한다.
 		extendsFrom annotationProcessor
 	}
 }
 
+// repositories
+// - 외부 종속성이 위치한 open repository들을 정의한다. maven central과 google maven(android)를 사용할 수 있다.
+// - 사용자 정의 repository를 정의할 수도 있다.
 repositories {
-	mavenCentral()
+	mavenCentral() // maven 중앙 저장소
 }
 
+// dependencies : 프로젝트를 빌드를 지원하는 JAR, 플러그인, 라이브러리 또는 소스 코드들
+// implementation : 구현 전용 종속성. 이 모듈을 의존하는 모듈의 의존성을 노출시키지 않는다. 즉, 변경이 다른 모듈의 재컴파일을 유발하지 않는다.
+// compileOnly : 컴파일 시에만 사용되며 런타임 시에는 사용되지 않는다.
+// runtimeOnly : 런타임 전용 종속성
+// annotationProcessor : 컴파일 중에 사용되는 주석 프로세서
+
+// testImplementation : 테스트 전용 구현 전용 종속성
+// testCompileOnly : 테스트 컴파일에만 종속성이 있으며 런타임 시에는 사용되지 않는다
+// testCompileClasspath : 테스트 소스를 컴파일 할 때 사용되는 테스트 컴파일 클래스 패스
+// testRuntimeOnly : 테스트 실행을 위한 런타임 전용 종속성
+// testRuntimeClasspath : 테스트 실행을 위한 런타임 클래스 패스
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'com.h2database:h2'
-	runtimeOnly 'com.mysql:mysql-connector-j'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa' // Spring Data JPA를 사용하기 위한 스타터
+	implementation 'org.springframework.boot:spring-boot-starter-web' // Spring MVC를 사용하여 RESTful, 애플리케이션을 포함한 스타터. Tomcat을 내장 컨테이너로 사용한다.
+	runtimeOnly 'com.h2database:h2' // h2 database
+	runtimeOnly 'com.mysql:mysql-connector-j' // mysql용 jdbc 타입 드라이버
+	compileOnly 'org.projectlombok:lombok' // 보일러 플레이트 코드를 자동화하는 java 라이브러리
 	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test' // Spring Boot 애플리케이션 테스트 스타터
 }
 
 tasks.named('bootBuildImage') {
 	builder = 'paketobuildpacks/builder-jammy-base:latest'
 }
-
+// task
+// - 테스크 태스트에서 사용할 프레임워크를 옵션을 지정한다.
 tasks.named('test') {
 	useJUnitPlatform()
 }
