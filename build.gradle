@@ -35,7 +35,8 @@ repositories {
 }
 
 // dependencies : 프로젝트를 빌드를 지원하는 JAR, 플러그인, 라이브러리 또는 소스 코드들
-// implementation : 구현 전용 종속성. 이 모듈을 의존하는 모듈의 의존성을 노출시키지 않는다. 즉, 변경이 다른 모듈의 재컴파일을 유발하지 않는다.
+// api : api 종속성. 의존하는 모듈에게 의존성이 노출되며 컴파일 클래스 경로에도 노출된다. 즉, 변경이 다른 모듈의 재컴파일을 유발한다.
+// implementation : 구현 전용 종속성. 의존하는 모듈에게 의존성이 노출되지 않는다. 즉, 변경이 다른 모듈의 재컴파일을 유발하지 않는다.
 // compileOnly : 컴파일 시에만 사용되며 런타임 시에는 사용되지 않는다.
 // runtimeOnly : 런타임 전용 종속성
 // annotationProcessor : 컴파일 중에 사용되는 주석 프로세서
@@ -59,7 +60,33 @@ tasks.named('bootBuildImage') {
 	builder = 'paketobuildpacks/builder-jammy-base:latest'
 }
 // task
-// - 테스크 태스트에서 사용할 프레임워크를 옵션을 지정한다.
+// - gradle 프로젝트의 작업단위. Configuration과 Execution 단계에서 수행된다.
 tasks.named('test') {
-	useJUnitPlatform()
+	useJUnitPlatform() // 테스크에서 사용할 프레임워크를 옵션을 지정한다.
+}
+
+// build 시 Hello world!를 출력하는 other task
+tasks.register('helloTask') {
+	// task chaining : task 작업 실행 순서를 지정할 때 사용된다.
+	dependsOn superTask // superTask -> helloTask
+	finalizedBy subTask // helloTask -> subTask
+//	println 'Do onConfiguration' // Configuration 단계에서 수행
+	doFirst { // task 목록 시작에 추가한다.
+		println 'hello print first' // Execution 단계에서 수행
+	}
+	doLast { // task 목록 끝에 추가한다.
+		println 'hello print last'
+	}
+}
+
+tasks.register('superTask') {
+	doFirst {
+		println 'superTask'
+	}
+}
+
+tasks.register('subTask') {
+	doFirst {
+		println 'subTask'
+	}
 }
