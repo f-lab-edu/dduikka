@@ -11,19 +11,19 @@ import com.flab.dduikka.User;
 public class Vote {
 
 	private final Date date;
-	private Set<VoteContent> voteContentList = new HashSet<>();
+	private Set<VoteContentManager> voteContentManagerList = new HashSet<>();
 	private List<VoteRecord> voteRecordList = new ArrayList<>();
 
 	public Vote(Date date) {
 		this.date = date;
 	}
 
-	public void addVote(User user, VoteContent voteContent) {
-		voteContent.addVoteContent();
-		addVoteContent(voteContent);
+	public void addVote(User user, VoteContentManager voteContentManager) {
+		voteContentManager.addVoteContent();
+		addVoteContent(voteContentManager);
 
-		VoteRecord voteRecord = new VoteRecord(user, this, voteContent);
-		voteRecord.addVoteRecord(user, voteContent);
+		VoteRecord voteRecord = new VoteRecord(user, this, voteContentManager);
+		voteRecord.addVoteRecord(user, voteContentManager);
 		addVoteRecord(voteRecord);
 	}
 
@@ -33,25 +33,25 @@ public class Vote {
 		return null;
 	}
 
-	public void cancelVote(User user, VoteContent voteContent) {
-		voteContent.cancelVoteContent();
-		VoteRecord voteRecord = findVoteRecordByUserAndVoteContent(user, voteContent);
+	public void cancelVote(User user, VoteContentManager voteContentManager) {
+		voteContentManager.cancelVoteContent();
+		VoteRecord voteRecord = findVoteRecordByUserAndVoteContent(user, voteContentManager);
 		if (voteRecord == null) {
 			return;
 		}
 		voteRecord.deleteVoteRecord();
 	}
 
-	private void addVoteContent(VoteContent voteContent) {
-		this.voteContentList.add(voteContent);
+	private void addVoteContent(VoteContentManager voteContentManager) {
+		this.voteContentManagerList.add(voteContentManager);
 	}
 
 	private void addVoteRecord(VoteRecord voteRecord) {
 		voteRecordList.add(voteRecord);
 	}
 
-	private VoteRecord findVoteRecordByUserAndVoteContent(User user, VoteContent voteContent) {
-		VoteRecord aVoteRecord = new VoteRecord(user, this, voteContent);
+	private VoteRecord findVoteRecordByUserAndVoteContent(User user, VoteContentManager voteContentManager) {
+		VoteRecord aVoteRecord = new VoteRecord(user, this, voteContentManager);
 		for (VoteRecord voteRecord : voteRecordList) {
 			if (voteRecord.equals(aVoteRecord)) {
 				return voteRecord;
@@ -61,8 +61,8 @@ public class Vote {
 		return null;
 	}
 
-	public List<VoteContent> findVoteContents() {
-		return new ArrayList<>(voteContentList);
+	public List<VoteContentManager> findVoteContents() {
+		return new ArrayList<>(voteContentManagerList);
 	}
 
 	public List<VoteRecord> findVoteRecords() {

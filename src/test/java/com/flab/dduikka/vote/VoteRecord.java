@@ -6,26 +6,25 @@ import com.flab.dduikka.User;
 
 public class VoteRecord {
 	private User user;
-
 	private Vote vote;
-	private VoteContent voteContent;
+	private VoteContentManager voteContentManager;
 
 	private boolean isCanceled;
 
-	public VoteRecord(User user, Vote vote, VoteContent voteContent) {
+	public VoteRecord(User user, Vote vote, VoteContentManager voteContentManager) {
 		this.user = user;
 		this.vote = vote;
-		this.voteContent = voteContent;
+		this.voteContentManager = voteContentManager;
 		this.isCanceled = false;
 	}
 
-	public void addVoteRecord(User user, VoteContent voteContent) {
-		System.out.println(user.toString() + "님이 " + voteContent.getVoteContent() + "에 투표 하셨습니다.");
+	public void addVoteRecord(User user, VoteContentManager voteContentManager) {
+		System.out.println(user.toString() + "님이 " + voteContentManager.getVoteContent() + "에 한 투표를 취소하셨습니다.");
 	}
 
 	public void deleteVoteRecord() {
 		this.isCanceled = true;
-		System.out.println(user.toString() + "님이 " + voteContent.getVoteContent() + "에 한 투표를 취소하셨습니다.");
+		System.out.println(user.toString() + "님이 " + voteContentManager.getVoteContent() + "에 한 투표를 취소하셨습니다.");
 	}
 
 	@Override
@@ -35,12 +34,12 @@ public class VoteRecord {
 		if (o == null || getClass() != o.getClass())
 			return false;
 		VoteRecord that = (VoteRecord)o;
-		return Objects.equals(user, that.user) && Objects.equals(voteContent, that.voteContent);
+		return Objects.equals(user, that.user) && Objects.equals(voteContentManager, that.voteContentManager);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(user, voteContent);
+		return Objects.hash(user, voteContentManager);
 	}
 
 	@Override
@@ -48,7 +47,7 @@ public class VoteRecord {
 		return "VoteRecord{" +
 			"user=" + user +
 			", vote=" + vote +
-			", voteContent=" + voteContent +
+			", voteContent=" + voteContentManager +
 			", isCanceled=" + isCanceled +
 			'}';
 	}
