@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import com.flab.dduikka.User;
 import com.flab.dduikka.user.StubUser;
 
-// TODO 테스트 코드로 변경하기
 public class VoteTest {
 
 	private Vote vote;
@@ -62,21 +61,23 @@ public class VoteTest {
 	}
 
 	@Test
-	void 투표_취소시_투표기록과_투표내용이_삭제되어야_한다() {
+	void 투표_추가_후_취소시_투표기록과_투표내용이_삭제되어야_한다() {
 		// given
 		vote = new Vote(LocalDate.of(2023, 12, 28));
 		User user = new StubUser("testId");
 		VoteRecord mockVoteRecord = mock(VoteRecord.class);
-		vote.addVote(user, VoteType.RUN, mockVoteRecord);
 
 		// when
+		vote.addVote(user, VoteType.RUN, mockVoteRecord);
+		List<VoteRecord> voteRecords = vote.findVoteRecords();
+		assertThat(voteRecords).contains(mockVoteRecord);
 		vote.cancelVote(VoteType.RUN, mockVoteRecord);
 
 		// then
 		int voteContentCount = vote.getVoteContentCount(VoteType.RUN);
 		assertThat(voteContentCount).isEqualTo(0);
-		List<VoteRecord> voteRecords = vote.findVoteRecords();
-		assertThat(voteRecords).doesNotContain(mockVoteRecord);
+		voteRecords = vote.findVoteRecords();
+		assertThat(voteRecords).isEmpty();
 	}
 
 	@Test
@@ -84,7 +85,6 @@ public class VoteTest {
 		// given
 		vote = new Vote(LocalDate.of(2023, 12, 28));
 		User user = new StubUser("testId");
-		VoteContent mockVoteContent = mock(VoteContent.class);
 		VoteRecord mockVoteRecord = mock(VoteRecord.class);
 		vote.addVote(user, VoteType.RUN, mockVoteRecord);
 
