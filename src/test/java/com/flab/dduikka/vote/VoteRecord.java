@@ -7,24 +7,32 @@ import com.flab.dduikka.User;
 public class VoteRecord {
 	private User user;
 	private Vote vote;
-	private VoteContentManager voteContentManager;
-
+	private VoteType voteType;
 	private boolean isCanceled;
 
-	public VoteRecord(User user, Vote vote, VoteContentManager voteContentManager) {
+	public VoteRecord(User user, Vote vote, VoteType voteType) {
 		this.user = user;
 		this.vote = vote;
-		this.voteContentManager = voteContentManager;
+		this.voteType = voteType;
 		this.isCanceled = false;
 	}
 
-	public void addVoteRecord(User user, VoteContentManager voteContentManager) {
-		System.out.println(user.toString() + "님이 " + voteContentManager.getVoteContent() + "에 한 투표를 취소하셨습니다.");
+	public void addVoteRecord(User user, VoteType voteType) {
+		System.out.println(user.toString() + "님이 " + voteType.getDescription() + "에 투표하셨습니다.");
 	}
 
 	public void deleteVoteRecord() {
 		this.isCanceled = true;
-		System.out.println(user.toString() + "님이 " + voteContentManager.getVoteContent() + "에 한 투표를 취소하셨습니다.");
+		System.out.println(user.toString() + "님이 " + voteType.getDescription() + "에 한 투표를 취소하셨습니다.");
+	}
+
+	public VoteRecord findVoteRecordByUserAndVote(User user, VoteType voteType) {
+		if (isCanceled)
+			return null;
+		if (!this.user.equals(user) || !this.voteType.equals(voteType))
+			return null;
+
+		return this;
 	}
 
 	@Override
@@ -34,12 +42,13 @@ public class VoteRecord {
 		if (o == null || getClass() != o.getClass())
 			return false;
 		VoteRecord that = (VoteRecord)o;
-		return Objects.equals(user, that.user) && Objects.equals(voteContentManager, that.voteContentManager);
+		return Objects.equals(user, that.user) && Objects.equals(vote, that.vote)
+			&& voteType == that.voteType;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(user, voteContentManager);
+		return Objects.hash(user, vote, voteType);
 	}
 
 	@Override
@@ -47,7 +56,6 @@ public class VoteRecord {
 		return "VoteRecord{" +
 			"user=" + user +
 			", vote=" + vote +
-			", voteContent=" + voteContentManager +
 			", isCanceled=" + isCanceled +
 			'}';
 	}
