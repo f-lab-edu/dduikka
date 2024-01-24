@@ -10,7 +10,7 @@ import com.flab.dduikka.domain.vote.repository.VoteRepository;
 
 @SpringBootTest
 @ActiveProfiles("local")
-@Sql(scripts = "classpath:h2/teardown.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+@Sql(scripts = "classpath:h2/teardown.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 public abstract class SpringBootRepositoryTestHelper {
 
 	@Autowired
