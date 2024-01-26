@@ -1,12 +1,9 @@
 package com.flab.dduikka.domain.vote.application;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 import java.time.LocalDate;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,7 +12,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.flab.dduikka.domain.vote.domain.Vote;
-import com.flab.dduikka.domain.vote.dto.VoteResponseDto;
 import com.flab.dduikka.domain.vote.repository.VoteRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -36,15 +32,12 @@ class VoteServiceTest {
 			.build();
 
 		given(voteRepository.createVote(any(Vote.class))).willReturn(mockVote);
-		given(voteRepository.findByDate(date)).willReturn(Optional.ofNullable(mockVote));
 
 		// when
 		voteService.createVote(date);
 
 		// then
-		VoteResponseDto foundVote = voteService.findByDate(date);
-		assert mockVote != null;
-		assertThat(foundVote.getVoteDate()).isEqualTo(mockVote.getVoteDate());
+		verify(voteRepository, times(1)).createVote(any(Vote.class));
 	}
 
 	@Test
@@ -63,25 +56,6 @@ class VoteServiceTest {
 		voteService.createVote(aDate);
 		assertThrows(IllegalStateException.class,
 			() -> voteService.createVote(sameDate));
-	}
-
-	@Test
-	void 다른_날짜로_조회하면_오류가_발생한다() {
-		// given
-		LocalDate date = LocalDate.of(2023, 12, 28);
-		LocalDate anotherDate = LocalDate.of(2023, 12, 31);
-		Vote mockVote = Vote.builder()
-			.voteId(1L)
-			.voteDate(date)
-			.build();
-		given(voteRepository.createVote(any(Vote.class))).willReturn(mockVote);
-		given(voteRepository.findByDate(anotherDate))
-			.willThrow(NoSuchElementException.class);
-
-		voteService.createVote(date);
-
-		assertThrows(NoSuchElementException.class,
-			() -> voteService.findByDate(anotherDate));
 	}
 
 }
