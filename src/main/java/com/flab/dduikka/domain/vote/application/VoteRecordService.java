@@ -34,7 +34,7 @@ public class VoteRecordService {
 			throw new IllegalStateException("이미 투표한 유저입니다.");
 		}
 		VoteRecord entity = VoteRecord.toEntity(request);
-		voteRecordRepository.addVote(entity);
+		voteRecordRepository.createVoteRecord(entity);
 	}
 
 	// TODO : voteId로 투표 존재 여부 확인 필요
@@ -47,7 +47,7 @@ public class VoteRecordService {
 	public VoteResponseDto findVoteTypeCount(LocalDate voteDate) {
 		Vote foundVote = voteRepository.findByDate(voteDate)
 			.orElseThrow(() -> new NoSuchElementException("해당 날짜에 투표가 존재하지 않습니다. date" + voteDate));
-		List<VoteRecord> voteList = voteRecordRepository.findByVoteAndVoteType(voteDate);
+		List<VoteRecord> voteList = voteRecordRepository.findAllByVoteDate(voteDate);
 		return VoteResponseDto.toDto(foundVote, countVoteTypes(voteList));
 	}
 

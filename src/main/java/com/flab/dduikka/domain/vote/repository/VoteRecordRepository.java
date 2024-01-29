@@ -8,11 +8,11 @@ import com.flab.dduikka.domain.vote.domain.VoteRecord;
 
 public interface VoteRecordRepository {
 
-	VoteRecord addVote(VoteRecord voteRecord);
+	VoteRecord createVoteRecord(VoteRecord voteRecord);
 
 	Optional<VoteRecord> findByUserAndVoteAndIsCanceled(long userId, long voteId);
 
-	List<VoteRecord> findByVoteAndVoteType(LocalDate voteDate);
+	List<VoteRecord> findAllByVoteDate(LocalDate voteDate);
 
 	Optional<VoteRecord> findById(long voteRecordId);
 

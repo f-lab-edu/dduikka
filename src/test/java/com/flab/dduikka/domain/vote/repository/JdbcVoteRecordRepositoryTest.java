@@ -32,7 +32,7 @@ class JdbcVoteRecordRepositoryTest extends SpringBootRepositoryTestHelper {
 			.build();
 
 		//when
-		VoteRecord createdVote = voteRecordRepository.addVote(newVote);
+		VoteRecord createdVote = voteRecordRepository.createVoteRecord(newVote);
 
 		//then
 		VoteRecord foundVoteRecord = voteRecordRepository
@@ -50,7 +50,7 @@ class JdbcVoteRecordRepositoryTest extends SpringBootRepositoryTestHelper {
 			.isCanceled(false)
 			.createdAt(LocalDateTime.now())
 			.build();
-		VoteRecord createdVote = voteRecordRepository.addVote(newVote);
+		VoteRecord createdVote = voteRecordRepository.createVoteRecord(newVote);
 
 		//when
 		VoteRecord foundVoteRecord = voteRecordRepository
@@ -83,10 +83,10 @@ class JdbcVoteRecordRepositoryTest extends SpringBootRepositoryTestHelper {
 			.isCanceled(false)
 			.createdAt(LocalDateTime.now())
 			.build();
-		voteRecordRepository.addVote(newVoteRecord);
+		voteRecordRepository.createVoteRecord(newVoteRecord);
 
 		//when
-		List<VoteRecord> voteRecords = voteRecordRepository.findByVoteAndVoteType(voteDate);
+		List<VoteRecord> voteRecords = voteRecordRepository.findAllByVoteDate(voteDate);
 
 		//then
 		assertThat(voteRecords).hasSize(1);
@@ -105,7 +105,7 @@ class JdbcVoteRecordRepositoryTest extends SpringBootRepositoryTestHelper {
 			.isCanceled(false)
 			.createdAt(LocalDateTime.now())
 			.build();
-		VoteRecord createdVoteRecord = voteRecordRepository.addVote(newVoteRecord);
+		VoteRecord createdVoteRecord = voteRecordRepository.createVoteRecord(newVoteRecord);
 
 		// given
 		VoteRecord foundVoteRecord = voteRecordRepository
@@ -130,7 +130,7 @@ class JdbcVoteRecordRepositoryTest extends SpringBootRepositoryTestHelper {
 			.isCanceled(false)
 			.createdAt(LocalDateTime.now())
 			.build();
-		VoteRecord createdVoteRecord = voteRecordRepository.addVote(newVoteRecord);
+		VoteRecord createdVoteRecord = voteRecordRepository.createVoteRecord(newVoteRecord);
 		createdVoteRecord.cancel();
 
 		//when

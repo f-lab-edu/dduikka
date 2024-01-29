@@ -26,7 +26,7 @@ public class JdbcVoteRecordRepository implements VoteRecordRepository {
 	private final NamedParameterJdbcTemplate jdbcTemplate;
 
 	@Override
-	public VoteRecord addVote(VoteRecord voteRecord) {
+	public VoteRecord createVoteRecord(VoteRecord voteRecord) {
 		SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate.getJdbcTemplate());
 		SqlParameterSource param = new BeanPropertySqlParameterSource(voteRecord);
 
@@ -66,7 +66,7 @@ public class JdbcVoteRecordRepository implements VoteRecordRepository {
 	}
 
 	@Override
-	public List<VoteRecord> findByVoteAndVoteType(LocalDate voteDate) {
+	public List<VoteRecord> findAllByVoteDate(LocalDate voteDate) {
 		String sql = "select vr.vote_record_id, v.vote_id, vr.user_id, vr.vote_type, vr.is_canceled, vr.created_at "
 			+ "from vote v "
 			+ "inner join vote_record vr "

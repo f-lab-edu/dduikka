@@ -50,7 +50,7 @@ class VoteRecordServiceTest {
 			.isCanceled(false)
 			.build();
 
-		given(voteRecordRepository.addVote(any(VoteRecord.class)))
+		given(voteRecordRepository.createVoteRecord(any(VoteRecord.class)))
 			.willReturn(mockVoteRecord);
 		given(voteRecordRepository.findByUserAndVoteAndIsCanceled(anyLong(), anyLong()))
 			.willReturn(Optional.empty())
@@ -81,7 +81,7 @@ class VoteRecordServiceTest {
 			.isCanceled(false)
 			.build();
 
-		given(voteRecordRepository.addVote(any(VoteRecord.class)))
+		given(voteRecordRepository.createVoteRecord(any(VoteRecord.class)))
 			.willReturn(mockVoteRecord);
 		given(voteRecordRepository.findByUserAndVoteAndIsCanceled(anyLong(), anyLong()))
 			.willReturn(Optional.empty())
@@ -136,7 +136,7 @@ class VoteRecordServiceTest {
 			.voteDate(voteDate)
 			.build();
 
-		given(voteRecordRepository.findByVoteAndVoteType(any(LocalDate.class)))
+		given(voteRecordRepository.findAllByVoteDate(any(LocalDate.class)))
 			.willReturn(mockVoteRecordList);
 		given(voteRepository.findByDate(any(LocalDate.class)))
 			.willReturn(Optional.of(mockVote));
