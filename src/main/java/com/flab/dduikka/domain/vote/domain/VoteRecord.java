@@ -2,10 +2,6 @@ package com.flab.dduikka.domain.vote.domain;
 
 import java.time.LocalDateTime;
 
-import com.flab.dduikka.domain.vote.dto.VoteRecordAddRequestDto;
-
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,7 +17,6 @@ public class VoteRecord {
 
 	private Long userId;
 
-	@Enumerated(EnumType.STRING)
 	private VoteType voteType;
 
 	private Boolean isCanceled;
@@ -37,16 +32,6 @@ public class VoteRecord {
 		this.voteType = voteType;
 		this.isCanceled = isCanceled;
 		this.createdAt = createdAt;
-	}
-
-	public static VoteRecord toEntity(VoteRecordAddRequestDto request) {
-		return VoteRecord.builder()
-			.voteId(request.getVoteId())
-			.userId(request.getUserId())
-			.voteType(request.getVoteType())
-			.isCanceled(request.isCanceled())
-			.createdAt(LocalDateTime.now())
-			.build();
 	}
 
 	public void cancel() {

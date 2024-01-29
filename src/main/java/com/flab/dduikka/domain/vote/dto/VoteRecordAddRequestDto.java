@@ -1,5 +1,8 @@
 package com.flab.dduikka.domain.vote.dto;
 
+import java.time.LocalDateTime;
+
+import com.flab.dduikka.domain.vote.domain.VoteRecord;
 import com.flab.dduikka.domain.vote.domain.VoteType;
 
 import jakarta.validation.constraints.NotBlank;
@@ -24,5 +27,15 @@ public class VoteRecordAddRequestDto {
 		this.userId = userId;
 		this.voteType = voteType;
 		this.isCanceled = false;
+	}
+
+	public static VoteRecord toEntity(VoteRecordAddRequestDto request) {
+		return VoteRecord.builder()
+			.voteId(request.getVoteId())
+			.userId(request.getUserId())
+			.voteType(request.getVoteType())
+			.isCanceled(request.isCanceled())
+			.createdAt(LocalDateTime.now())
+			.build();
 	}
 }

@@ -33,7 +33,7 @@ public class VoteRecordService {
 		if (foundVote.isPresent()) {
 			throw new IllegalStateException("이미 투표한 유저입니다.");
 		}
-		VoteRecord entity = VoteRecord.toEntity(request);
+		VoteRecord entity = VoteRecordAddRequestDto.toEntity(request);
 		voteRecordRepository.createVoteRecord(entity);
 	}
 
