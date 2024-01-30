@@ -4,34 +4,34 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+import com.flab.dduikka.domain.BaseEntity;
+
 import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Vote {
+public class Vote extends BaseEntity {
 
 	private Long voteId;
 
 	@NotNull
 	private LocalDate voteDate;
 
-	@NotNull
-	private LocalDateTime createdAt;
+	private Vote(LocalDateTime createdAt) {
+		super(createdAt);
+	}
 
 	public Vote(LocalDate voteDate) {
+		super(LocalDateTime.now());
 		this.voteDate = voteDate;
-		this.createdAt = LocalDateTime.now();
 	}
 
 	@Builder
 	public Vote(Long voteId, LocalDate voteDate, LocalDateTime createdAt) {
+		super(createdAt);
 		this.voteId = voteId;
 		this.voteDate = voteDate;
-		this.createdAt = createdAt;
 	}
 
 	@Override
