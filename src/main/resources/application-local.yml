@@ -25,3 +25,7 @@ logging:
     org:
       springframework:
         jdbc: debug             # jdbc 로그 설정
+
+schedules:
+  cron-expression:
+    publisher: 0 0 23 * * *
