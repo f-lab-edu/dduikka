@@ -47,11 +47,7 @@ public class JdbcVoteRecordRepository implements VoteRecordRepository {
 	@Override
 	public Optional<VoteRecord> findByUserAndVoteAndIsCanceled(long userId, long voteId) {
 		try {
-			String sql = "select vote_record_id, vote_id, user_id, vote_type, is_canceled, created_at "
-				+ "from vote_record "
-				+ "where vote_id = :voteId "
-				+ "  and user_id = :userId "
-				+ "  and is_canceled = 0 ";
+			String sql = "select vote_record_id, vote_id, user_id, vote_type, is_canceled, created_at from vote_record where vote_id = :voteId and user_id = :userId and is_canceled = 0 ";
 			MapSqlParameterSource param = new MapSqlParameterSource()
 				.addValue("voteId", voteId)
 				.addValue("userId", userId);
@@ -66,10 +62,7 @@ public class JdbcVoteRecordRepository implements VoteRecordRepository {
 
 	@Override
 	public List<VoteRecord> findAllByVoteId(long voteId) {
-		String sql = "select vote_record_id, vote_id, user_id, vote_type, is_canceled, created_at "
-			+ "from vote_record "
-			+ "where vote_id = :voteId "
-			+ "  and is_canceled = 0 ";
+		String sql = "select vote_record_id, vote_id, user_id, vote_type, is_canceled, created_at from vote_record where vote_id = :voteId and is_canceled = 0 ";
 		Map<String, Object> param = Map.of("voteId", voteId);
 		return jdbcTemplate.query(sql, param, voteRecordMapper());
 	}
@@ -77,10 +70,7 @@ public class JdbcVoteRecordRepository implements VoteRecordRepository {
 	@Override
 	public Optional<VoteRecord> findById(long voteRecordId) {
 		try {
-			String sql = "select vote_record_id, vote_id, user_id, vote_type, is_canceled, created_at "
-				+ "from vote_record "
-				+ "where vote_record_id = :voteRecordId"
-				+ "  and is_canceled = 0";
+			String sql = "select vote_record_id, vote_id, user_id, vote_type, is_canceled, created_at from vote_record where vote_record_id = :voteRecordId and is_canceled = 0";
 			Map<String, Object> param = Map.of("voteRecordId", voteRecordId);
 			VoteRecord foundVoteRecord = jdbcTemplate.queryForObject(sql, param, voteRecordMapper());
 			assert foundVoteRecord != null;
@@ -92,9 +82,7 @@ public class JdbcVoteRecordRepository implements VoteRecordRepository {
 
 	@Override
 	public void cancelVoteRecord(VoteRecord foundVoteRecord) {
-		String sql = "update vote_record "
-			+ "set is_canceled = :isCanceled "
-			+ "where vote_record_id = :voteRecordId ";
+		String sql = "update vote_record set is_canceled = :isCanceled where vote_record_id = :voteRecordId ";
 		MapSqlParameterSource param = new MapSqlParameterSource()
 			.addValue("isCanceled", foundVoteRecord.getIsCanceled())
 			.addValue("voteRecordId", foundVoteRecord.getVoteRecordId());
