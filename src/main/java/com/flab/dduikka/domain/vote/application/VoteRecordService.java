@@ -44,7 +44,7 @@ public class VoteRecordService {
 	public VoteResponseDto findVoteTypeCount(LocalDate voteDate) {
 		Vote foundVote = voteRepository.findByDate(voteDate)
 			.orElseThrow(() -> new NoSuchElementException("해당 날짜에 투표가 존재하지 않습니다. date" + voteDate));
-		VoteRecords voteRecords = new VoteRecords(voteRecordRepository.findAllByVoteDate(voteDate));
+		VoteRecords voteRecords = new VoteRecords(voteRecordRepository.findAllByVoteId(foundVote.getVoteId()));
 		return VoteResponseDto.toDto(foundVote, voteRecords.countsVoteRecords());
 	}
 
