@@ -1,6 +1,5 @@
 package com.flab.dduikka.domain.vote.repository;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,7 +11,7 @@ public interface VoteRecordRepository {
 
 	Optional<VoteRecord> findByUserAndVoteAndIsCanceled(long userId, long voteId);
 
-	List<VoteRecord> findAllByVoteDate(LocalDate voteDate);
+	List<VoteRecord> findAllByVoteId(long voteId);
 
 	Optional<VoteRecord> findById(long voteRecordId);
 

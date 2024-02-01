@@ -136,7 +136,7 @@ class VoteRecordServiceTest {
 			.voteDate(voteDate)
 			.build();
 
-		given(voteRecordRepository.findAllByVoteDate(any(LocalDate.class)))
+		given(voteRecordRepository.findAllByVoteId(anyLong()))
 			.willReturn(mockVoteRecordList);
 		given(voteRepository.findByDate(any(LocalDate.class)))
 			.willReturn(Optional.of(mockVote));

@@ -86,7 +86,7 @@ class JdbcVoteRecordRepositoryTest extends SpringBootRepositoryTestHelper {
 		voteRecordRepository.createVoteRecord(newVoteRecord);
 
 		//when
-		List<VoteRecord> voteRecords = voteRecordRepository.findAllByVoteDate(voteDate);
+		List<VoteRecord> voteRecords = voteRecordRepository.findAllByVoteId(createdVote.getVoteId());
 
 		//then
 		assertThat(voteRecords).hasSize(1);
