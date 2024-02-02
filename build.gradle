@@ -70,7 +70,7 @@ dependencies {
 }
 
 ext {
-    snippetsDir = file('build/generated-snippets') // snippets 파일이 저장될 경로
+    snippetsDir = file("build/generated-snippets") // snippets 파일이 저장될 경로
 }
 
 tasks.named('bootBuildImage') {
@@ -84,12 +84,14 @@ tasks.named('test') {
 }
 
 asciidoctor {
-    inputs.dir snippetsDir // input 디렉토리
+    configurations 'asciidoctorExt'
     dependsOn test // build 시 test 후 asciidoctor를 진행하도록 설정
+    inputs.dir snippetsDir // input 디렉토리
+    baseDirFollowsSourceFile() // 다른 adoc include
 }
 
 asciidoctor.doFirst {
-    delete file('src/main/resources/static/docs')  // 기존에 존재하는 adoc 파일을 제거한다.
+    delete file("src/main/resources/static/docs")  // 기존에 존재하는 adoc 파일을 제거한다.
 }
 
 tasks.register('copyDocument', Copy) { // 디렉토리에 생성된 html 문서를 docs 디렉토리에 복사한다.
