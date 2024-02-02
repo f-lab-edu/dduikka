@@ -4,14 +4,14 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-import com.flab.dduikka.domain.BaseEntity;
+import com.flab.dduikka.domain.Auditable;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class Vote extends BaseEntity {
+public class Vote extends Auditable {
 
 	private Long voteId;
 

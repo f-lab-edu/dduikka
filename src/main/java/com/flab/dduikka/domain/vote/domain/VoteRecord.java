@@ -2,13 +2,13 @@ package com.flab.dduikka.domain.vote.domain;
 
 import java.time.LocalDateTime;
 
-import com.flab.dduikka.domain.BaseEntity;
+import com.flab.dduikka.domain.Auditable;
 
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class VoteRecord extends BaseEntity {
+public class VoteRecord extends Auditable {
 
 	private Long voteRecordId;
 

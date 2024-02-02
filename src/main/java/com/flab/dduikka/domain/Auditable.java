@@ -6,12 +6,12 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 @Getter
-public abstract class BaseEntity {
+public abstract class Auditable {
 
 	@NotNull
 	private final LocalDateTime createdAt;
 
-	protected BaseEntity(LocalDateTime createdAt) {
+	protected Auditable(LocalDateTime createdAt) {
 		this.createdAt = createdAt;
 	}
 }
