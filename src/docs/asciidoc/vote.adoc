@@ -1,0 +1,68 @@
+= VOTE API
+== /vote
+
+== 투표 조회
+
+=== curl-request
+
+include::{snippets}/vote/findVote/curl-request.adoc[]
+
+=== REQUEST
+
+include::{snippets}/vote/findVote/path-parameters.adoc[]
+include::{snippets}/vote/findVote/http-request.adoc[]
+
+=== RESPONSE
+
+include::{snippets}/vote/findVote/response-fields.adoc[]
+include::{snippets}/vote/findVote/http-response.adoc[]
+
+== /vote/record
+
+== 투표 기록 조회
+
+=== curl-request
+
+include::{snippets}/vote/findVoteRecord/curl-request.adoc[]
+
+=== REQUEST
+
+include::{snippets}/vote/findVoteRecord/path-parameters.adoc[]
+include::{snippets}/vote/findVoteRecord/http-request.adoc[]
+
+=== RESPONSE
+
+include::{snippets}/vote/findVoteRecord/response-fields.adoc[]
+include::{snippets}/vote/findVoteRecord/http-response.adoc[]
+
+== 투표 기록 등록
+
+=== curl-request
+
+include::{snippets}/vote/create/curl-request.adoc[]
+
+=== REQUEST
+
+include::{snippets}/vote/create/request-fields.adoc[]
+include::{snippets}/vote/create/http-request.adoc[]
+
+=== RESPONSE
+
+include::{snippets}/vote/create/http-response.adoc[]
+
+== 투표 기록 취소
+
+=== curl-request
+
+include::{snippets}/vote/delete/curl-request.adoc[]
+
+=== REQUEST
+
+include::{snippets}/vote/delete/path-parameters.adoc[]
+include::{snippets}/vote/delete/http-request.adoc[]
+
+=== RESPONSE
+
+include::{snippets}/vote/delete/http-response.adoc[]
+
+
