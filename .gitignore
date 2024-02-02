@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Spring REST Dosc ###
+/src/main/resources/static/docs/
