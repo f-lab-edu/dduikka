@@ -10,17 +10,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.JsonFieldType;
 
-import com.flab.dduikka.domain.helper.ApiDocumentationHelper;
+import com.flab.dduikka.common.docs.ApiDocumentationHelper;
 import com.flab.dduikka.domain.vote.domain.VoteType;
 import com.flab.dduikka.domain.vote.dto.VoteRecordResponseDto;
 import com.flab.dduikka.domain.vote.dto.VoteResponseDto;
@@ -50,13 +53,14 @@ class VoteDocumentationTest extends ApiDocumentationHelper {
 				responseFields(
 					fieldWithPath("voteId").description("투표번호")   // 필드 설명 snippets 생성
 					, fieldWithPath("voteDate").description("투표일자")
-					, fieldWithPath("voteTypeCountMap.*").type(JsonFieldType.VARIES).description("투표타입별 투표수 맵")
+					, fieldWithPath("voteTypeCountMap.*").type(JsonFieldType.VARIES)
+						.description("투표타입별 투표수 맵 - (VoteType : Integer)")
 				)))
 			.andExpect(status().isOk());
 	}
 
 	@Test
-	@DisplayName("유저의 투표 기록을 가져온다.")
+	@DisplayName("유저의 투표 기록을 가져온다")
 	void findRecordVote() throws Exception {
 		//given
 		VoteRecordResponseDto mockResponse =
@@ -74,7 +78,7 @@ class VoteDocumentationTest extends ApiDocumentationHelper {
 				responseFields(
 					fieldWithPath("voteRecordId").description("투표기록번호")   // 필드 설명 snippets 생성
 					, fieldWithPath("voteId").description("투표번호")
-					, fieldWithPath("voteType").description("투표타입")
+					, voteTypeFiled()
 				)))
 			.andExpect(status().isOk());
 	}
@@ -98,7 +102,7 @@ class VoteDocumentationTest extends ApiDocumentationHelper {
 				requestFields(
 					fieldWithPath("voteId").description("투표번호")
 					, fieldWithPath("userId").description("유저번호")
-					, fieldWithPath("voteType").description("투표타입")
+					, voteTypeFiled()
 				)))
 			.andExpect(status().isCreated())
 			.andExpect(header().string("Location", "/vote/record/" + LocalDate.now())) //질문
@@ -116,6 +120,13 @@ class VoteDocumentationTest extends ApiDocumentationHelper {
 				preprocessResponse(prettyPrint()),
 				pathParameters(parameterWithName("voteRecordId").description("투표기록번호"))))
 			.andExpect(status().isOk());
+	}
+
+	private FieldDescriptor voteTypeFiled() {
+		String formattedEnumValues = Arrays.stream(VoteType.values())
+			.map(type -> String.format("`%s`", type))
+			.collect(Collectors.joining(", "));
+		return fieldWithPath("voteType").description("투표 타입 상세 : " + formattedEnumValues);
 	}
 
 }
