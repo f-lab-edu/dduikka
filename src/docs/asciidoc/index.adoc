@@ -1,0 +1,11 @@
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+endif::[]
+= API Document
+:doctype: book
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:seclinks:
+
+include::vote.adoc[]

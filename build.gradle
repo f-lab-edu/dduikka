@@ -8,6 +8,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.1.6' // 스프링 부트 Gradle 플러그인
     id 'io.spring.dependency-management' version '1.1.4' // 종속성 관리 기능을 제공하는 Gradle 플러그인
+    id "org.asciidoctor.jvm.convert" version "3.3.2" // asciidoctor 플러그인 adoc -> html
 }
 
 group = 'com.flab'
@@ -22,6 +23,7 @@ java {
 
 // build.gradle 내부에서 사용되는 설정을 정의한다.
 configurations {
+    asciidoctorExt
     compileOnly { // 컴파일 시에만 필요한 의존성을 정의한다.
         extendsFrom annotationProcessor
     }
@@ -61,6 +63,14 @@ dependencies {
     //테스트에서 lombok 사용
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
+
+    //Spring REST Docs
+    asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+}
+
+ext {
+    snippetsDir = file("build/generated-snippets") // snippets 파일이 저장될 경로
 }
 
 tasks.named('bootBuildImage') {
@@ -70,6 +80,28 @@ tasks.named('bootBuildImage') {
 // - gradle 프로젝트의 작업단위. Configuration과 Execution 단계에서 수행된다.
 tasks.named('test') {
     useJUnitPlatform() // 테스크에서 사용할 프레임워크를 옵션을 지정한다.
+    outputs.dir snippetsDir // 출력할 디렉토리
+}
+
+asciidoctor {
+    configurations 'asciidoctorExt'
+    dependsOn test // build 시 test 후 asciidoctor를 진행하도록 설정
+    inputs.dir snippetsDir // input 디렉토리
+    baseDirFollowsSourceFile() // 다른 adoc include
+}
+
+asciidoctor.doFirst {
+    delete file("src/main/resources/static/docs")  // 기존에 존재하는 adoc 파일을 제거한다.
+}
+
+tasks.register('copyDocument', Copy) { // 디렉토리에 생성된 html 문서를 docs 디렉토리에 복사한다.
+    dependsOn asciidoctor
+    from file("build/docs/asciidoc")
+    into file("src/main/resources/static/docs")
+}
+
+bootJar {
+    dependsOn copyDocument
 }
 
 // build 시 Hello world!를 출력하는 other task
