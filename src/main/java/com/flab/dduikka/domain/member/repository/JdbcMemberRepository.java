@@ -26,7 +26,7 @@ public class JdbcMemberRepository implements MemberRepository {
 			MapSqlParameterSource param = new MapSqlParameterSource()
 				.addValue("memberId", memberId)
 				.addValue("memberStatus", memberStatus.name());
-			Member foundUser = jdbcTemplate.queryForObject(sql, param, MemberRecordMapper());
+			Member foundUser = jdbcTemplate.queryForObject(sql, param, memberRecordMapper());
 			assert foundUser != null;
 			return Optional.of(foundUser);
 		} catch (EmptyResultDataAccessException e) {
@@ -34,7 +34,7 @@ public class JdbcMemberRepository implements MemberRepository {
 		}
 	}
 
-	private RowMapper<Member> MemberRecordMapper() {
+	private RowMapper<Member> memberRecordMapper() {
 		return (rs, rowNum) ->
 			Member.builder()
 				.memberId(rs.getLong("member_id"))

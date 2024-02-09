@@ -15,10 +15,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MemberService {
 
-	private final MemberRepository MemberRepository;
+	private final MemberRepository memberRepository;
 
 	public MemberResponseDto findMember(final long memberId) {
-		Member foundUser = MemberRepository.findByIdAndMemberStatus(memberId, MemberStatus.JOIN)
+		Member foundUser = memberRepository.findByIdAndMemberStatus(memberId, MemberStatus.JOIN)
 			.orElseThrow(() -> new NoSuchElementException("해당 유저가 존재하지 않습니다. userId: " + memberId));
 		return MemberResponseDto.toDto(foundUser);
 	}
