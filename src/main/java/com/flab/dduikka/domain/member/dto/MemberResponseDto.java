@@ -15,7 +15,7 @@ public class MemberResponseDto {
 	private final String email;
 	private final LocalDate joinDate;
 
-	public static MemberResponseDto toDto(Member member) {
+	public static MemberResponseDto from(Member member) {
 		return new MemberResponseDto(
 			member.getMemberId(),
 			member.getEmail(),
