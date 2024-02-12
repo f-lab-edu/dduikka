@@ -20,12 +20,11 @@ public class JdbcMemberRepository implements MemberRepository {
 	private final NamedParameterJdbcTemplate jdbcTemplate;
 
 	@Override
-	public Optional<Member> findByIdAndMemberStatus(final long memberId, final MemberStatus memberStatus) {
+	public Optional<Member> findById(final long memberId) {
 		try {
-			String sql = "select member_id, email, member_status, join_date, created_at from member where member_id =:memberId and member_status=:memberStatus";
+			String sql = "select member_id, email, password, member_status, join_date, created_at from member where member_id =:memberId";
 			MapSqlParameterSource param = new MapSqlParameterSource()
-				.addValue("memberId", memberId)
-				.addValue("memberStatus", memberStatus.name());
+				.addValue("memberId", memberId);
 			Member foundUser = jdbcTemplate.queryForObject(sql, param, memberRecordMapper());
 			assert foundUser != null;
 			return Optional.of(foundUser);
@@ -39,6 +38,7 @@ public class JdbcMemberRepository implements MemberRepository {
 			Member.builder()
 				.memberId(rs.getLong("member_id"))
 				.email(rs.getString("email"))
+				.password(rs.getString("password"))
 				.memberStatus(MemberStatus.valueOf(rs.getString("member_status")))
 				.joinDate(rs.getDate("join_date").toLocalDate())
 				.createAt(rs.getTimestamp("created_at").toLocalDateTime())
