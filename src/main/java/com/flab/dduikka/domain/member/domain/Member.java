@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import com.flab.dduikka.domain.Auditable;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import lombok.Builder;
@@ -16,10 +17,11 @@ public class Member extends Auditable {
 
 	private long memberId;
 	@Email
-	@NotNull
+	@NotBlank
 	private String email;
-	@NotNull
+	@NotBlank
 	private String password;
+	@NotNull
 	private MemberStatus memberStatus;
 	@PastOrPresent
 	private LocalDate joinDate;
@@ -36,4 +38,9 @@ public class Member extends Auditable {
 		this.memberStatus = memberStatus;
 		this.joinDate = joinDate;
 	}
+
+	public boolean isJoined() {
+		return memberStatus.equals(MemberStatus.JOIN);
+	}
+
 }
