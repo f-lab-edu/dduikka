@@ -3,6 +3,7 @@ package com.flab.dduikka.domain.member.domain;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import com.flab.dduikka.common.util.CustomValidator;
 import com.flab.dduikka.domain.Auditable;
 
 import jakarta.validation.constraints.Email;
@@ -37,10 +38,50 @@ public class Member extends Auditable {
 		this.password = password;
 		this.memberStatus = memberStatus;
 		this.joinDate = joinDate;
+		validate();
 	}
 
 	public boolean isJoined() {
 		return memberStatus.equals(MemberStatus.JOIN);
+	}
+
+	private void validate() {
+		validateEmail();
+		validatePassword();
+		validateMemberStatus();
+		validateJoinDate();
+		validateCreatedAt();
+	}
+
+	private void validateEmail() {
+		String fieldValue = "email";
+		CustomValidator.notBlank(email, fieldValue);
+	}
+
+	private void validatePassword() {
+		String fieldValue = "password";
+		CustomValidator.notBlank(password, fieldValue);
+	}
+
+	private void validateMemberStatus() {
+		String fieldValue = "memberStatus";
+		CustomValidator.notNull(memberStatus, fieldValue);
+	}
+
+	private void validateJoinDate() {
+		String fieldValue = "joinDate";
+		CustomValidator.notNull(joinDate, fieldValue);
+		CustomValidator.pastOrPresent(joinDate, fieldValue);
+	}
+
+	private void validateCreatedAt() {
+		String fieldValue = "createdAt";
+		CustomValidator.notNull(getCreatedAt(), fieldValue);
+	}
+
+	private void validateLeaveDate() {
+		String fieldValue = "leaveDate";
+		CustomValidator.pastOrPresent(joinDate, fieldValue);
 	}
 
 }
