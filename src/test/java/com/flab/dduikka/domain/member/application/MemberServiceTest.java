@@ -1,8 +1,7 @@
 package com.flab.dduikka.domain.member.application;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
+import static org.assertj.core.api.BDDAssertions.then;
+import static org.assertj.core.api.BDDAssertions.*;
 import static org.mockito.BDDMockito.*;
 
 import java.time.LocalDate;
@@ -33,31 +32,55 @@ class MemberServiceTest {
 	void 회원_가입을_하면_유저가_등록된다() {
 		// given
 		long memberId = 1L;
-		Member mockUser = Member.builder()
+		Member mockMember = Member.builder()
 			.memberId(memberId)
 			.email("test@dduikka.com")
+			.password("1234")
 			.memberStatus(MemberStatus.JOIN)
 			.joinDate(LocalDate.now())
 			.createAt(LocalDateTime.now())
 			.build();
-		given(memberRepository.findByIdAndMemberStatus(anyLong(), any()))
-			.willReturn(Optional.ofNullable(mockUser));
+		given(memberRepository.findById(memberId))
+			.willReturn(Optional.ofNullable(mockMember));
 
 		// when
 		MemberResponseDto response = memberService.findMember(memberId);
 
 		//then
-		assertThat(response.getMemberId()).isEqualTo(memberId);
+		then(response.getMemberId()).isEqualTo(memberId);
+		verify(memberRepository, times(1)).findById(memberId);
 	}
 
 	@Test
 	void 등록되지_않은_회원을_조회하면_예외가_발생한다() {
 		//given
 		long memberId = 1L;
-		given(memberRepository.findByIdAndMemberStatus(anyLong(), any()))
+		given(memberRepository.findById(anyLong()))
 			.willReturn(Optional.empty());
 
 		//when,then
-		assertThrows(NoSuchElementException.class, () -> memberService.findMember(memberId));
+		thenThrownBy(
+			() -> memberService.findMember(memberId)).isInstanceOf(NoSuchElementException.class);
 	}
+
+	@Test
+	void 탈퇴한_회원을_조회하면_예외가_발생한다() {
+		//given
+		long memberId = 1L;
+		Member mockMember = Member.builder()
+			.memberId(memberId)
+			.email("test@dduikka.com")
+			.password("1234")
+			.memberStatus(MemberStatus.LEAVE)
+			.joinDate(LocalDate.now())
+			.createAt(LocalDateTime.now())
+			.build();
+		given(memberRepository.findById(anyLong()))
+			.willReturn(Optional.ofNullable(mockMember));
+
+		//when,then
+		thenThrownBy(
+			() -> memberService.findMember(memberId)).isInstanceOf(IllegalStateException.class);
+	}
+
 }
