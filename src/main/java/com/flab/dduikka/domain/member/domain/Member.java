@@ -38,7 +38,7 @@ public class Member extends Auditable {
 		this.password = password;
 		this.memberStatus = memberStatus;
 		this.joinDate = joinDate;
-		validate();
+		// validate();
 	}
 
 	public boolean isJoined() {
