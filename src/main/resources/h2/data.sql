@@ -1,3 +1,8 @@
+insert into member(member_id, email, password, member_status, join_date, leave_date, created_at)
+values (1, 'test@dduikka.net', '1234', 'JOIN', CURRENT_TIMESTAMP, null, CURRENT_TIMESTAMP);
+insert into member(member_id, email, password, member_status, join_date, leave_date, created_at)
+values (2, 'test2@dduikka.net', '1234', 'LEAVE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
 insert into vote(vote_id, vote_date, created_at)
 values (1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
