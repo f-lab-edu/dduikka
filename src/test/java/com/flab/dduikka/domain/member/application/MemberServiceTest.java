@@ -15,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.flab.dduikka.common.validator.CustomValidator;
 import com.flab.dduikka.domain.member.domain.Member;
 import com.flab.dduikka.domain.member.domain.MemberStatus;
 import com.flab.dduikka.domain.member.dto.MemberResponseDto;
@@ -27,6 +28,8 @@ class MemberServiceTest {
 	private MemberService memberService;
 	@Mock
 	private MemberRepository memberRepository;
+	@Mock
+	private CustomValidator validator;
 
 	@Test
 	void 회원_가입을_하면_유저가_등록된다() {
@@ -77,6 +80,27 @@ class MemberServiceTest {
 			.build();
 		given(memberRepository.findById(anyLong()))
 			.willReturn(Optional.ofNullable(mockMember));
+
+		//when,then
+		thenThrownBy(
+			() -> memberService.findMember(memberId)).isInstanceOf(IllegalStateException.class);
+	}
+
+	@Test
+	void 조회한_멤버_객체_유효성_검증을_실패하면_예외가_발생한다() {
+		//given
+		long memberId = 1L;
+		Member mockMember = Member.builder()
+			.memberId(memberId)
+			// .email("test@dduikka.com")
+			.password("1234")
+			.memberStatus(MemberStatus.LEAVE)
+			.joinDate(LocalDate.now())
+			.createAt(LocalDateTime.now())
+			.build();
+		given(memberRepository.findById(anyLong()))
+			.willReturn(Optional.ofNullable(mockMember));
+		doThrow(IllegalStateException.class).when(validator).validateObject(any());
 
 		//when,then
 		thenThrownBy(
