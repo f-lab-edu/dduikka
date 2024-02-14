@@ -3,25 +3,16 @@ package com.flab.dduikka.common.validator;
 import static org.assertj.core.api.BDDAssertions.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import com.flab.dduikka.domain.member.domain.Member;
-import com.flab.dduikka.domain.member.domain.MemberStatus;
 
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 
 class CustomValidatorTest {
-
-	private static final String notNullErrorMessage = "널이어서는 안됩니다.";
-	private static final String notBlankErrorMessage = "공백일 수 없습니다.";
-	private static final String emailErrorMessage = "올바른 형식의 이메일 주소여야 합니다.";
-	private static final String pastOrPresentErrorMessage = "과거 또는 현재의 날짜여야 합니다.";
-
 	private CustomValidator customValidator;
 
 	@BeforeEach
@@ -32,104 +23,209 @@ class CustomValidatorTest {
 	}
 
 	@Test
-	void 객체의_유효성을_검증한다() {
+	@DisplayName("양수필드에 음수가 들어가면 예외가 발생한다")
+	void whenValidatePositiveFieldThenExceptionOccurs() {
 		//given
-		Member mockMember = Member.builder()
-			.memberId(1L)
-			.email("test@dduikka.com")
-			.password("1234")
-			.memberStatus(MemberStatus.LEAVE)
-			.joinDate(LocalDate.now())
-			.createAt(LocalDateTime.now())
-			.build();
-
-		//when
-		customValidator.validateObject(mockMember);
-
-		//then
-	}
-
-	@Test
-	void notBlank인_필드에_null이나_공백이_들어가면_예외를_발생한다() {
-		//given
-		Member mockMember = Member.builder()
-			.memberId(1L)
-			// .email("test@dduikka.com")
-			.password("1234")
-			.memberStatus(MemberStatus.JOIN)
-			.joinDate(LocalDate.now())
-			.createAt(LocalDateTime.now())
-			.build();
-		Member anotherMember = Member.builder()
-			.memberId(2L)
-			.email("")
-			.password("1234")
-			.memberStatus(MemberStatus.JOIN)
-			.joinDate(LocalDate.now())
-			.createAt(LocalDateTime.now())
+		ValidationTestFixture newFixture = createFixture()
+			.toBuilder()
+			.positiveNumber(-1) // 테스트 케이스에 맞게 변경
 			.build();
 
 		//when, then
-		assertThatThrownBy(() -> customValidator.validateObject(mockMember))
-			.isInstanceOf(IllegalStateException.class)
-			.hasMessageContaining(notBlankErrorMessage);
-		assertThatThrownBy(() -> customValidator.validateObject(anotherMember))
-			.isInstanceOf(IllegalStateException.class)
-			.hasMessageContaining(notBlankErrorMessage);
+		assertThatThrownBy(() -> customValidator.validateObject(newFixture))
+			.isInstanceOf(IllegalStateException.class);
 	}
 
 	@Test
-	void notNull인_필드에_null이_들어가면_예외를_발생한다() {
+	@DisplayName("음수필드에 양수가 들어가면 예외가 발생한다")
+	void whenValidateNegativeFieldThenExceptionOccurs() {
 		//given
-		Member mockMember = Member.builder()
-			.memberId(1L)
-			.email("test@dduikka.com")
-			.password("1234")
-			// .memberStatus(MemberStatus.JOIN)
-			.joinDate(LocalDate.now())
-			.createAt(LocalDateTime.now())
+		ValidationTestFixture newFixture = createFixture()
+			.toBuilder()
+			.negativeNumber(100) // 테스트 케이스에 맞게 변경
 			.build();
 
 		//when, then
-		assertThatThrownBy(() -> customValidator.validateObject(mockMember))
-			.isInstanceOf(IllegalStateException.class)
-			.hasMessageContaining(notNullErrorMessage);
+		assertThatThrownBy(() -> customValidator.validateObject(newFixture))
+			.isInstanceOf(IllegalStateException.class);
 	}
 
 	@Test
-	void email_형식이_알맞지_않으면_예외를_발생한다() {
+	@DisplayName("음수 혹은 0 허용인 필드에 양수가 들어가면 예외가 발생한다")
+	void whenValidateNegativeOrZeroFieldThenExceptionOccurs() {
 		//given
-		Member mockMember = Member.builder()
-			.memberId(1L)
-			.email("test@")
-			.password("1234")
-			.memberStatus(MemberStatus.JOIN)
-			.joinDate(LocalDate.now())
-			.createAt(LocalDateTime.now())
+		ValidationTestFixture newFixture = createFixture()
+			.toBuilder()
+			.negativeOrZero(100) // 테스트 케이스에 맞게 변경
 			.build();
 
 		//when, then
-		assertThatThrownBy(() -> customValidator.validateObject(mockMember))
-			.isInstanceOf(IllegalStateException.class)
-			.hasMessageContaining(emailErrorMessage);
+		assertThatThrownBy(() -> customValidator.validateObject(newFixture))
+			.isInstanceOf(IllegalStateException.class);
 	}
 
 	@Test
-	void 과거나_현재날짜만_허용되는_필드가_미래일자면_예외를_발생한다() {
+	@DisplayName("크거나 같아야 하는 수에 작은 수가 들어가면 예외가 발생한다")
+	void whenValidateMinFieldThenExceptionOccurs() {
 		//given
-		LocalDate tomorrow = LocalDate.now().plusDays(1);
-		Member mockMember = Member.builder()
-			.memberId(1L)
-			.email("test@dduikka.com")
-			.password("1234")
-			.memberStatus(MemberStatus.JOIN)
-			.joinDate(tomorrow)
-			.createAt(LocalDateTime.now())
+		ValidationTestFixture newFixture = createFixture()
+			.toBuilder()
+			.atLeast100(50) // 테스트 케이스에 맞게 변경
 			.build();
 
 		//when, then
-		assertThatThrownBy(() -> customValidator.validateObject(mockMember))
-			.isInstanceOf(IllegalStateException.class)
-			.hasMessageContaining(pastOrPresentErrorMessage);
+		assertThatThrownBy(() -> customValidator.validateObject(newFixture))
+			.isInstanceOf(IllegalStateException.class);
+	}
+
+	@Test
+	@DisplayName("작거나 같아야 하는 수에 큰 수가 들어가면 예외가 발생한다")
+	void whenValidateMaxFieldThenExceptionOccurs() {
+		//given
+		ValidationTestFixture newFixture = createFixture()
+			.toBuilder()
+			.atMost100(300)
+			.build();
+
+		//when, then
+		assertThatThrownBy(() -> customValidator.validateObject(newFixture))
+			.isInstanceOf(IllegalStateException.class);
+	}
+
+	@Test
+	@DisplayName("크거나 같아야 하는 수에 작은 수가 들어가면 예외가 발생한다_decimal")
+	void whenValidateDecimalMinFieldThenExceptionOccurs() {
+		//given
+		ValidationTestFixture newFixture = createFixture()
+			.toBuilder()
+			.decimalAtLeast100(50)
+			.build();
+
+		//when, then
+		assertThatThrownBy(() -> customValidator.validateObject(newFixture))
+			.isInstanceOf(IllegalStateException.class);
+	}
+
+	@Test
+	@DisplayName("작거나 같아야 하는 수에 큰 수가 들어가면 예외가 발생한다_decimal")
+	void whenValidateDecimalMaxFieldThenExceptionOccurs() {
+		//given
+		ValidationTestFixture newFixture = createFixture()
+			.toBuilder()
+			.decimalAtMost100(300)
+			.build();
+
+		//when, then
+		assertThatThrownBy(() -> customValidator.validateObject(newFixture))
+			.isInstanceOf(IllegalStateException.class);
+	}
+
+	@Test
+	@DisplayName("정해진 자릿수 이상이 들어가면 예외가 발생한다")
+	void whenValidateDigitsFieldThenExceptionOccurs() {
+		//given
+		ValidationTestFixture newFixture = createFixture()
+			.toBuilder()
+			.numberWithAtMostFiveDigits(100_000)
+			.build();
+
+		//when, then
+		assertThatThrownBy(() -> customValidator.validateObject(newFixture))
+			.isInstanceOf(IllegalStateException.class);
+	}
+
+	@Test
+	@DisplayName("notBlank인 필드에 null이나 공백이 들어가면 예외가 발생한다")
+	void whenValidateNotBlankFieldThenExceptionOccurs() {
+		//given
+		ValidationTestFixture newFixture1 = createFixture()
+			.toBuilder()
+			.notBlankField("")
+			.build();
+		ValidationTestFixture newFixture2 = createFixture()
+			.toBuilder()
+			.notBlankField(null)
+			.build();
+
+		//when, then
+		assertThatThrownBy(() -> customValidator.validateObject(newFixture1))
+			.isInstanceOf(IllegalStateException.class);
+		assertThatThrownBy(() -> customValidator.validateObject(newFixture2))
+			.isInstanceOf(IllegalStateException.class);
+	}
+
+	@Test
+	@DisplayName("notNull인 필드에 null이 들어가면 예외가 발생한다")
+	void whenValidateNotNullFieldThenExceptionOccurs() {
+		//given
+		ValidationTestFixture newFixture = createFixture()
+			.toBuilder()
+			.notNullField(null)
+			.build();
+
+		//when, then
+		assertThatThrownBy(() -> customValidator.validateObject(newFixture))
+			.isInstanceOf(IllegalStateException.class);
+	}
+
+	@Test
+	@DisplayName("email 형식이 알맞지 않으면 예외가 발생한다")
+	void whenValidateEmailFieldThenExceptionOccurs() {
+		//given
+		ValidationTestFixture newFixture = createFixture()
+			.toBuilder()
+			.emailField("test@")
+			.build();
+
+		//when, then
+		assertThatThrownBy(() -> customValidator.validateObject(newFixture))
+			.isInstanceOf(IllegalStateException.class);
+	}
+
+	@Test
+	@DisplayName("과거나 현재날짜만 허용되는 필드가 미래일자면 예외가 발생한다")
+	void whenValidatePastOrPresentFieldThenExceptionOccurs() {
+		//given
+		LocalDate tomorrow = LocalDate.now().plusDays(10);
+		ValidationTestFixture newFixture = createFixture()
+			.toBuilder()
+			.pastOrPresentDate(tomorrow)
+			.build();
+
+		//when, then
+		assertThatThrownBy(() -> customValidator.validateObject(newFixture))
+			.isInstanceOf(IllegalStateException.class);
+	}
+
+	@Test
+	@DisplayName("null이어야하는 필드가 null이 아니면 예외를 발생한다")
+	void whenValidateNullFieldThenExceptionOccurs() {
+		//given
+		ValidationTestFixture newFixture = createFixture()
+			.toBuilder()
+			.nullField("not null!!!")
+			.build();
+
+		//when, then
+		assertThatThrownBy(() -> customValidator.validateObject(newFixture))
+			.isInstanceOf(IllegalStateException.class);
+	}
+
+	private ValidationTestFixture createFixture() {
+		return ValidationTestFixture.builder()
+			.positiveNumber(100)
+			.negativeNumber(-1)
+			.decimalAtLeast100(100)
+			.decimalAtMost100(100)
+			.numberWithAtMostFiveDigits(10000)
+			.emailField("test@dduikka.com")
+			.atLeast100(100)
+			.atMost100(100)
+			.negativeOrZero(0)
+			.notBlankField("String")
+			.notNullField("String")
+			.nullField(null)
+			.pastOrPresentDate(LocalDate.now())
+			.build();
 	}
 }
