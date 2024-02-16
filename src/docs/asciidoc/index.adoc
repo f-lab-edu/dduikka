@@ -8,4 +8,5 @@ endif::[]
 :toclevels: 2
 :seclinks:
 
+include::member.adoc[]
 include::vote.adoc[]
