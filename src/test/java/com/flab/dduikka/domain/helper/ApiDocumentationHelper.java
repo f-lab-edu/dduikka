@@ -9,12 +9,18 @@ import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.flab.dduikka.domain.member.api.MemberController;
+import com.flab.dduikka.domain.member.application.MemberService;
 import com.flab.dduikka.domain.vote.api.VoteController;
 import com.flab.dduikka.domain.vote.application.VoteRecordService;
 
 @ExtendWith({RestDocumentationExtension.class})
 @AutoConfigureRestDocs
-@WebMvcTest(VoteController.class)
+@WebMvcTest(controllers =
+	{
+		VoteController.class
+		, MemberController.class
+	})
 public abstract class ApiDocumentationHelper {
 
 	@Autowired
@@ -22,6 +28,9 @@ public abstract class ApiDocumentationHelper {
 
 	@MockBean
 	protected VoteRecordService voteRecordService;
+
+	@MockBean
+	protected MemberService memberService;
 
 	@Autowired
 	protected ObjectMapper objectMapper;
