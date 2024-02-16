@@ -6,9 +6,11 @@ import static org.mockito.BDDMockito.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -105,6 +107,61 @@ class MemberServiceTest {
 		//when,then
 		thenThrownBy(
 			() -> memberService.findMember(memberId)).isInstanceOf(IllegalStateException.class);
+	}
+
+	@Test
+	void 이메일이_중복되면_true를_반환한다() {
+		//given
+		String email = "test@dduikka.com";
+		Member mockMember = Member.builder()
+			.memberId(1L)
+			.email("test@dduikka.com")
+			.password("1234")
+			.memberStatus(MemberStatus.JOIN)
+			.joinDate(LocalDate.now())
+			.createAt(LocalDateTime.now())
+			.build();
+		given(memberRepository.findAllByEmail(email))
+			.willReturn(List.of(mockMember));
+		//when
+		boolean response = memberService.isEmailDuplicated(email);
+		//then
+		assertThat(response).isTrue();
+	}
+
+	@Test
+	@DisplayName("이메일이 중복되지 않으면 true를 반환한다")
+	void whenIsNotEmailDuplicatedThenReturnsTrue() {
+		//given
+		String email = "test@dduikka.com";
+		Member mockMember = Member.builder()
+			.memberId(1L)
+			.email("test@dduikka.com")
+			.password("1234")
+			.memberStatus(MemberStatus.LEAVE)
+			.joinDate(LocalDate.now())
+			.createAt(LocalDateTime.now())
+			.build();
+		given(memberRepository.findAllByEmail(email))
+			.willReturn(List.of(mockMember));
+		//when
+		boolean response = memberService.isEmailDuplicated(email);
+		//then
+		assertThat(response).isFalse();
+	}
+
+	@Test
+	@DisplayName("이메일이 중복되지 않으면 false를 반환한다")
+	void whenIsNotEmailDuplicatedThenReturnsFalse() {
+		//given
+		String email = "test@dduikka.com";
+
+		given(memberRepository.findAllByEmail(email))
+			.willReturn(List.of());
+		//when
+		boolean response = memberService.isEmailDuplicated(email);
+		//then
+		assertThat(response).isFalse();
 	}
 
 }
