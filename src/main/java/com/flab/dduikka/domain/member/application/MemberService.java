@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.flab.dduikka.common.validator.CustomValidator;
 import com.flab.dduikka.domain.member.domain.Member;
+import com.flab.dduikka.domain.member.domain.Members;
 import com.flab.dduikka.domain.member.dto.MemberResponseDto;
 import com.flab.dduikka.domain.member.repository.MemberRepository;
 
@@ -26,5 +27,10 @@ public class MemberService {
 			throw new IllegalStateException("탈퇴한 회원입니다. memberId:" + memberId);
 		}
 		return MemberResponseDto.from(foundUser);
+	}
+
+	public boolean isEmailDuplicated(String email) {
+		return new Members(memberRepository.findAllByEmail(email))
+			.isDuplicatedEmail();
 	}
 }
