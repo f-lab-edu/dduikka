@@ -1,6 +1,5 @@
 package com.flab.dduikka.domain.member.repository;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -36,10 +35,10 @@ public class JdbcMemberRepository implements MemberRepository {
 	}
 
 	@Override
-	public List<Member> findAllByEmail(String email) {
-		String sql = "select member_id, email, password, member_status, join_date, created_at from member where email =:email";
+	public Boolean existsByEmail(String email) {
+		String sql = "select exists(select * from member where email =:email and member_status = 'JOIN')";
 		Map<String, String> param = Map.of("email", email);
-		return jdbcTemplate.query(sql, param, memberRecordMapper());
+		return jdbcTemplate.queryForObject(sql, param, Boolean.class);
 	}
 
 	private RowMapper<Member> memberRecordMapper() {
