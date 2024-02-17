@@ -2,8 +2,6 @@ package com.flab.dduikka.domain.member.repository;
 
 import static org.assertj.core.api.Assertions.*;
 
-import java.util.List;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,28 +29,28 @@ class JdbcMemberRepositoryTest extends SpringBootRepositoryTestHelper {
 	}
 
 	@Test
-	@DisplayName("등록된 이메일로 회원을 조회하면 회원이 조회된다")
-	void whenFindAllByEmailThenMembersExist() {
+	@DisplayName("등록된 회원의 이메일로 조회하면 true가 반환된다")
+	void whenNotExistsByEmailThenReturnsTure() {
 		//given
 		String email = "test@dduikka.net";
 
 		//when
-		List<Member> members = memberRepository.findAllByEmail(email);
+		boolean existsByEmail = memberRepository.existsByEmail(email);
 
 		//then
-		assertThat(members).hasSize(1);
+		assertThat(existsByEmail).isTrue();
 	}
 
 	@Test
-	@DisplayName("등록되지 않은 이메일로 회원을 조회하면 회원이 조회되지 않는다")
-	void whenFindAllByEmailThenNoMembersFound() {
+	@DisplayName("등록된 회원의 이메일로 조회하면 false가 반환된다")
+	void whenExistsByEmailThenReturnsFalse() {
 		//given
 		String email = "email@dduikka.net";
 
 		//when
-		List<Member> members = memberRepository.findAllByEmail(email);
+		boolean existsByEmail = memberRepository.existsByEmail(email);
 
 		//then
-		assertThat(members).isEmpty();
+		assertThat(existsByEmail).isFalse();
 	}
 }

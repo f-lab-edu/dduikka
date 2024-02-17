@@ -6,7 +6,6 @@ import static org.mockito.BDDMockito.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -121,8 +120,8 @@ class MemberServiceTest {
 			.joinDate(LocalDate.now())
 			.createAt(LocalDateTime.now())
 			.build();
-		given(memberRepository.findAllByEmail(email))
-			.willReturn(List.of(mockMember));
+		given(memberRepository.existsByEmail(email))
+			.willReturn(Boolean.TRUE);
 		//when
 		boolean response = memberService.isEmailDuplicated(email);
 		//then
@@ -142,8 +141,8 @@ class MemberServiceTest {
 			.joinDate(LocalDate.now())
 			.createAt(LocalDateTime.now())
 			.build();
-		given(memberRepository.findAllByEmail(email))
-			.willReturn(List.of(mockMember));
+		given(memberRepository.existsByEmail(email))
+			.willReturn(Boolean.FALSE);
 		//when
 		boolean response = memberService.isEmailDuplicated(email);
 		//then
@@ -156,8 +155,8 @@ class MemberServiceTest {
 		//given
 		String email = "test@dduikka.com";
 
-		given(memberRepository.findAllByEmail(email))
-			.willReturn(List.of());
+		given(memberRepository.existsByEmail(email))
+			.willReturn(Boolean.FALSE);
 		//when
 		boolean response = memberService.isEmailDuplicated(email);
 		//then
