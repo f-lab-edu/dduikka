@@ -35,7 +35,7 @@ class JdbcMemberRepositoryTest extends SpringBootRepositoryTestHelper {
 		String email = "test@dduikka.net";
 
 		//when
-		boolean existsByEmail = memberRepository.existsByEmail(email);
+		boolean existsByEmail = memberRepository.existsByEmailAndMemberStatus(email);
 
 		//then
 		assertThat(existsByEmail).isTrue();
@@ -48,7 +48,7 @@ class JdbcMemberRepositoryTest extends SpringBootRepositoryTestHelper {
 		String email = "email@dduikka.net";
 
 		//when
-		boolean existsByEmail = memberRepository.existsByEmail(email);
+		boolean existsByEmail = memberRepository.existsByEmailAndMemberStatus(email);
 
 		//then
 		assertThat(existsByEmail).isFalse();

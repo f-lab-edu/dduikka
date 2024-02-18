@@ -35,7 +35,7 @@ public class JdbcMemberRepository implements MemberRepository {
 	}
 
 	@Override
-	public Boolean existsByEmail(String email) {
+	public Boolean existsByEmailAndMemberStatus(String email) {
 		String sql = "select exists(select * from member where email =:email and member_status = 'JOIN')";
 		Map<String, String> param = Map.of("email", email);
 		return jdbcTemplate.queryForObject(sql, param, Boolean.class);

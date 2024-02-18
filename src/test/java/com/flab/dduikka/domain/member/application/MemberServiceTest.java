@@ -120,7 +120,7 @@ class MemberServiceTest {
 			.joinDate(LocalDate.now())
 			.createAt(LocalDateTime.now())
 			.build();
-		given(memberRepository.existsByEmail(email))
+		given(memberRepository.existsByEmailAndMemberStatus(email))
 			.willReturn(Boolean.TRUE);
 		//when
 		boolean response = memberService.isEmailDuplicated(email);
@@ -141,7 +141,7 @@ class MemberServiceTest {
 			.joinDate(LocalDate.now())
 			.createAt(LocalDateTime.now())
 			.build();
-		given(memberRepository.existsByEmail(email))
+		given(memberRepository.existsByEmailAndMemberStatus(email))
 			.willReturn(Boolean.FALSE);
 		//when
 		boolean response = memberService.isEmailDuplicated(email);
@@ -155,7 +155,7 @@ class MemberServiceTest {
 		//given
 		String email = "test@dduikka.com";
 
-		given(memberRepository.existsByEmail(email))
+		given(memberRepository.existsByEmailAndMemberStatus(email))
 			.willReturn(Boolean.FALSE);
 		//when
 		boolean response = memberService.isEmailDuplicated(email);
