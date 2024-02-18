@@ -27,4 +27,8 @@ public class MemberService {
 		}
 		return MemberResponseDto.from(foundUser);
 	}
+
+	public Boolean isEmailDuplicated(String email) {
+		return memberRepository.existsByEmailAndMemberStatus(email);
+	}
 }

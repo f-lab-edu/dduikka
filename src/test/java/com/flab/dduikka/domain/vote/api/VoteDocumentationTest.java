@@ -23,7 +23,7 @@ import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.JsonFieldType;
 
-import com.flab.dduikka.common.docs.ApiDocumentationHelper;
+import com.flab.dduikka.domain.helper.ApiDocumentationHelper;
 import com.flab.dduikka.domain.vote.domain.VoteType;
 import com.flab.dduikka.domain.vote.dto.VoteRecordResponseDto;
 import com.flab.dduikka.domain.vote.dto.VoteResponseDto;

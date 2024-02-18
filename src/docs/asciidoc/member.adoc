@@ -1,0 +1,33 @@
+= MEMBER API
+== /members
+
+== 회원 조회
+
+=== curl-request
+
+include::{snippets}/members/findMember/curl-request.adoc[]
+
+=== REQUEST
+
+include::{snippets}/members/findMember/path-parameters.adoc[]
+include::{snippets}/members/findMember/http-request.adoc[]
+
+=== RESPONSE
+
+include::{snippets}/members/findMember/response-fields.adoc[]
+include::{snippets}/members/findMember/http-response.adoc[]
+
+== 이메일 중복 여부 조회
+
+=== curl-request
+
+include::{snippets}/members/isDuplicatedEmail/curl-request.adoc[]
+
+=== REQUEST
+
+include::{snippets}/members/isDuplicatedEmail/path-parameters.adoc[]
+include::{snippets}/members/isDuplicatedEmail/http-request.adoc[]
+
+=== RESPONSE
+
+include::{snippets}/members/isDuplicatedEmail/http-response.adoc[]
