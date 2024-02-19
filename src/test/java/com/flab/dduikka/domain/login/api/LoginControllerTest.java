@@ -1,49 +1,42 @@
 package com.flab.dduikka.domain.login.api;
 
 import static org.assertj.core.api.BDDAssertions.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.BDDMockito;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MvcResult;
 
-import com.flab.dduikka.domain.login.application.LoginService;
+import com.flab.dduikka.domain.helper.IntegrationTestHelper;
 import com.flab.dduikka.domain.login.dto.LoginRequestDto;
 import com.flab.dduikka.domain.login.dto.SessionMember;
 
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpSession;
 
-@ExtendWith(MockitoExtension.class)
-class LoginControllerTest {
-
-	@InjectMocks
-	private LoginController loginController;
-
-	@Mock
-	private LoginService loginService;
+class LoginControllerTest extends IntegrationTestHelper {
 
 	@Test
 	@DisplayName("로그인 요청을 하면 세션이 발급된다")
-	void whenLogInThenPublishSession() {
+	void whenLogInThenPublishSession() throws Exception {
 		//given
 		LoginRequestDto request = new LoginRequestDto("test@dduikka.com", "1234");
 		SessionMember sessionMember = new SessionMember(1L, "test@dduikka.com");
-		BDDMockito.given(loginService.login(request))
-			.willReturn(sessionMember);
-		MockHttpServletRequest httpServletRequest = new MockHttpServletRequest();
+		BDDMockito.given(loginService.login(request)).willReturn(sessionMember);
 
 		//when
-		loginController.login(request, httpServletRequest);
+		MvcResult result = mockMvc.perform(
+				post("/login").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(request)))
+			.andExpect(status().isOk())
+			.andDo(print())
+			.andReturn();
 
 		//then
-		HttpSession session = httpServletRequest.getSession();
+		HttpSession session = result.getRequest().getSession();
 		assert session != null;
 		Object attribute = session.getAttribute(SessionKey.LOGIN_USER.name());
 		then(attribute).isEqualTo(sessionMember);
@@ -51,18 +44,19 @@ class LoginControllerTest {
 
 	@Test
 	@DisplayName("잘못된 로그인 요청을 하면 세션을 발급하지 않는다")
-	void whenLoginThenDontPublishSession() {
+	void whenLoginThenDontPublishSession() throws Exception {
 		//given
 		LoginRequestDto request = new LoginRequestDto("test@dduikka.com", "1234");
-		BDDMockito.given(loginService.login(request))
-			.willReturn(null);
-		MockHttpServletRequest httpServletRequest = new MockHttpServletRequest();
+		BDDMockito.given(loginService.login(request)).willReturn(null);
 
 		//when
-		loginController.login(request, httpServletRequest);
+		MvcResult result = mockMvc.perform(post("/login").contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andDo(print())
+			.andReturn();
 
 		//then
-		HttpSession session = httpServletRequest.getSession();
+		HttpSession session = result.getRequest().getSession();
 		assert session != null;
 		Object attribute = session.getAttribute(SessionKey.LOGIN_USER.name());
 		then(attribute).isNull();
@@ -70,51 +64,49 @@ class LoginControllerTest {
 
 	@Test
 	@DisplayName("잘못된 로그인 요청을 하면 UNAUTHORIZED로 응답한다")
-	void whenLoginThenResponseUnauthorizedStatus() {
+	void whenLoginThenResponseUnauthorizedStatus() throws Exception {
 		//given
 		LoginRequestDto request = new LoginRequestDto("test@dduikka.com", "1234");
-		BDDMockito.given(loginService.login(request))
-			.willReturn(null);
-		MockHttpServletRequest httpServletRequest = new MockHttpServletRequest();
+		BDDMockito.given(loginService.login(request)).willReturn(null);
 
 		//when
-		ResponseEntity<Void> response = loginController.login(request, httpServletRequest);
-
-		//then
-		then(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+		mockMvc.perform(post("/login").contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isUnauthorized())
+			.andDo(print())
+			.andReturn();
 	}
 
 	@Test
 	@DisplayName("로그아웃을 하면 세션이 만료된다")
-	void whenLogOutThenSessionIsInvalid() {
+	void whenLogOutThenSessionIsInvalid() throws Exception {
 		//given
-		MockHttpServletRequest servletRequest = new MockHttpServletRequest();
+		LoginRequestDto request = new LoginRequestDto("test@dduikka.com", "1234");
+		SessionMember sessionMember = new SessionMember(1L, "test@dduikka.com");
+		BDDMockito.given(loginService.login(request)).willReturn(sessionMember);
 
 		//when
-		loginController.logout(servletRequest);
+		MvcResult result = mockMvc.perform(post("/logout").contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(request))
+				.sessionAttr(SessionKey.LOGIN_USER.name(), sessionMember))
+			.andExpect(status().isOk())
+			.andDo(print())
+			.andReturn();
 
 		//then
-		HttpSession session = servletRequest.getSession();
+		HttpSession session = result.getRequest().getSession();
 		assert session != null;
 		Object attribute = session.getAttribute(SessionKey.LOGIN_USER.name());
 		then(attribute).isNull();
 	}
 
 	@Test
-	@DisplayName("세션이 만료된 상태에서 로그아웃을 하면 BADREQUEST로 응답한다")
-	void whenLogOutThenResponseBADREQUESTStatus() throws ServletException {
-		//given
-		MockHttpServletRequest servletRequest = new MockHttpServletRequest();
-		HttpSession session = servletRequest.getSession();
-		assert session != null;
-		session.invalidate();
-
-		//when
-		ResponseEntity<Void> response = loginController.logout(servletRequest);
-
-		//then
-		then(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-
+	@DisplayName("세션이 만료된 상태에서 로그아웃을 하면 IllegalStateException 예외가 발생한다")
+	void whenLogOutThenThrowsIllegalStateExceptionException() throws Exception {
+		mockMvc.perform(post("/logout")
+				.contentType(MediaType.APPLICATION_JSON))
+			.andDo(print())
+			.andExpect(result -> assertInstanceOf(IllegalStateException.class, result.getResolvedException()))
+			.andExpect(status().isBadRequest());
 	}
 
 }
