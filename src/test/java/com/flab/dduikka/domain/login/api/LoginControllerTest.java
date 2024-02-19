@@ -45,7 +45,7 @@ class LoginControllerTest {
 		//then
 		HttpSession session = httpServletRequest.getSession();
 		assert session != null;
-		Object attribute = session.getAttribute(SessionKey.LOGIN_USER);
+		Object attribute = session.getAttribute(SessionKey.LOGIN_USER.name());
 		then(attribute).isEqualTo(sessionMember);
 	}
 
@@ -64,7 +64,7 @@ class LoginControllerTest {
 		//then
 		HttpSession session = httpServletRequest.getSession();
 		assert session != null;
-		Object attribute = session.getAttribute(SessionKey.LOGIN_USER);
+		Object attribute = session.getAttribute(SessionKey.LOGIN_USER.name());
 		then(attribute).isNull();
 	}
 
@@ -96,7 +96,7 @@ class LoginControllerTest {
 		//then
 		HttpSession session = servletRequest.getSession();
 		assert session != null;
-		Object attribute = session.getAttribute(SessionKey.LOGIN_USER);
+		Object attribute = session.getAttribute(SessionKey.LOGIN_USER.name());
 		then(attribute).isNull();
 	}
 

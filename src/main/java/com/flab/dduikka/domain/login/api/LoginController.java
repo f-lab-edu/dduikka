@@ -28,7 +28,7 @@ public class LoginController {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		}
 		HttpSession session = request.getSession(true);
-		session.setAttribute(SessionKey.LOGIN_USER, sessionMember);
+		session.setAttribute(SessionKey.LOGIN_USER.name(), sessionMember);
 		return ResponseEntity.ok()
 			.build();
 	}
@@ -37,8 +37,7 @@ public class LoginController {
 	public ResponseEntity<Void> logout(HttpServletRequest request) {
 		HttpSession session = request.getSession(false);
 		if (session == null) {
-			return ResponseEntity.badRequest()
-				.build();
+			throw new IllegalStateException("유효하지 않은 요청입니다.");
 		}
 		session.invalidate();
 		return ResponseEntity.ok()
