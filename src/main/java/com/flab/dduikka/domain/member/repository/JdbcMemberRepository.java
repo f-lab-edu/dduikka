@@ -1,6 +1,5 @@
 package com.flab.dduikka.domain.member.repository;
 
-import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -32,13 +31,6 @@ public class JdbcMemberRepository implements MemberRepository {
 		} catch (EmptyResultDataAccessException e) {
 			return Optional.empty();
 		}
-	}
-
-	@Override
-	public Boolean existsByEmailAndMemberStatus(String email) {
-		String sql = "select exists(select * from member where email =:email and member_status = 'JOIN')";
-		Map<String, String> param = Map.of("email", email);
-		return jdbcTemplate.queryForObject(sql, param, Boolean.class);
 	}
 
 	@Override

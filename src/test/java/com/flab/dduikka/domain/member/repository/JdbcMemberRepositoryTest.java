@@ -31,32 +31,6 @@ class JdbcMemberRepositoryTest extends SpringBootRepositoryTestHelper {
 	}
 
 	@Test
-	@DisplayName("등록된 회원의 이메일로 조회하면 true를 반환한다")
-	void whenNotExistsByEmailThenReturnsTure() {
-		//given
-		String email = "test@dduikka.net";
-
-		//when
-		boolean existsByEmail = memberRepository.existsByEmailAndMemberStatus(email);
-
-		//then
-		assertThat(existsByEmail).isTrue();
-	}
-
-	@Test
-	@DisplayName("등록된 회원의 이메일로 조회하면 true를 반환한다")
-	void whenExistsByEmailThenReturnsFalse() {
-		//given
-		String email = "email@dduikka.net";
-
-		//when
-		boolean existsByEmail = memberRepository.existsByEmailAndMemberStatus(email);
-
-		//then
-		assertThat(existsByEmail).isFalse();
-	}
-
-	@Test
 	@DisplayName("등록된 회원의 이메일을 조회하면 회원을 반환한다")
 	void whenFindByEmailThenMemberFound() {
 		//given
