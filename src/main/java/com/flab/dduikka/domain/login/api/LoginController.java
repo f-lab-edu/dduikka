@@ -1,6 +1,5 @@
 package com.flab.dduikka.domain.login.api;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.flab.dduikka.domain.login.application.LoginService;
 import com.flab.dduikka.domain.login.dto.LoginRequestDto;
 import com.flab.dduikka.domain.login.dto.SessionMember;
+import com.flab.dduikka.domain.login.exception.LoginException;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -25,7 +25,7 @@ public class LoginController {
 	public ResponseEntity<Void> login(@Valid @RequestBody LoginRequestDto loginRequestDto, HttpServletRequest request) {
 		SessionMember sessionMember = loginService.login(loginRequestDto);
 		if (sessionMember == null) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+			throw new LoginException.FailLoginException("찾을 수 없는 회원입니다.");
 		}
 		HttpSession session = request.getSession(true);
 		session.setAttribute(SessionKey.LOGIN_USER.name(), sessionMember);
