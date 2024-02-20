@@ -120,33 +120,12 @@ class MemberServiceTest {
 			.joinDate(LocalDate.now())
 			.createAt(LocalDateTime.now())
 			.build();
-		given(memberRepository.existsByEmailAndMemberStatus(email))
-			.willReturn(Boolean.TRUE);
+		given(memberRepository.findByEmailAndMemberStatus(email))
+			.willReturn(Optional.ofNullable(mockMember));
 		//when
 		boolean response = memberService.isEmailDuplicated(email);
 		//then
 		assertThat(response).isTrue();
-	}
-
-	@Test
-	@DisplayName("이메일이 중복되지 않으면 true를 반환한다")
-	void whenIsNotEmailDuplicatedThenReturnsTrue() {
-		//given
-		String email = "test@dduikka.com";
-		Member mockMember = Member.builder()
-			.memberId(1L)
-			.email("test@dduikka.com")
-			.password("1234")
-			.memberStatus(MemberStatus.LEAVE)
-			.joinDate(LocalDate.now())
-			.createAt(LocalDateTime.now())
-			.build();
-		given(memberRepository.existsByEmailAndMemberStatus(email))
-			.willReturn(Boolean.FALSE);
-		//when
-		boolean response = memberService.isEmailDuplicated(email);
-		//then
-		assertThat(response).isFalse();
 	}
 
 	@Test
@@ -155,8 +134,8 @@ class MemberServiceTest {
 		//given
 		String email = "test@dduikka.com";
 
-		given(memberRepository.existsByEmailAndMemberStatus(email))
-			.willReturn(Boolean.FALSE);
+		given(memberRepository.findByEmailAndMemberStatus(email))
+			.willReturn(Optional.empty());
 		//when
 		boolean response = memberService.isEmailDuplicated(email);
 		//then

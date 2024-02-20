@@ -42,4 +42,8 @@ public class Member extends Auditable {
 	public boolean isJoined() {
 		return memberStatus.equals(MemberStatus.JOIN);
 	}
+
+	public boolean isCorrectPassword(String password) {
+		return this.password.equals(password);
+	}
 }

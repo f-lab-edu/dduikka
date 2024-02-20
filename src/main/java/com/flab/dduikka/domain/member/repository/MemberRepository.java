@@ -7,5 +7,5 @@ import com.flab.dduikka.domain.member.domain.Member;
 public interface MemberRepository {
 	Optional<Member> findById(long userId);
 
-	Boolean existsByEmailAndMemberStatus(String email);
+	Optional<Member> findByEmailAndMemberStatus(String email);
 }

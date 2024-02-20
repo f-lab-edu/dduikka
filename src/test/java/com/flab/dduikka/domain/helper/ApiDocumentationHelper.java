@@ -9,6 +9,8 @@ import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.flab.dduikka.domain.login.api.LoginController;
+import com.flab.dduikka.domain.login.application.LoginService;
 import com.flab.dduikka.domain.member.api.MemberController;
 import com.flab.dduikka.domain.member.application.MemberService;
 import com.flab.dduikka.domain.vote.api.VoteController;
@@ -20,6 +22,7 @@ import com.flab.dduikka.domain.vote.application.VoteRecordService;
 	{
 		VoteController.class
 		, MemberController.class
+		, LoginController.class
 	})
 public abstract class ApiDocumentationHelper {
 
@@ -31,6 +34,9 @@ public abstract class ApiDocumentationHelper {
 
 	@MockBean
 	protected MemberService memberService;
+
+	@MockBean
+	protected LoginService loginService;
 
 	@Autowired
 	protected ObjectMapper objectMapper;
