@@ -6,7 +6,9 @@ import org.springframework.stereotype.Service;
 
 import com.flab.dduikka.common.validator.CustomValidator;
 import com.flab.dduikka.domain.member.domain.Member;
+import com.flab.dduikka.domain.member.dto.MemberRegisterRequestDto;
 import com.flab.dduikka.domain.member.dto.MemberResponseDto;
+import com.flab.dduikka.domain.member.exception.MemberException;
 import com.flab.dduikka.domain.member.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -30,5 +32,15 @@ public class MemberService {
 
 	public Boolean isEmailDuplicated(String email) {
 		return memberRepository.findByEmailAndMemberStatus(email).isPresent();
+	}
+
+	public void registerMember(final MemberRegisterRequestDto request) {
+		Boolean isDuplicated = isEmailDuplicated(request.getEmail());
+		if (Boolean.TRUE.equals(isDuplicated)) {
+			throw new MemberException.DuplicatedEmailException("기등록된 회원입니다. email" + request.getEmail());
+		}
+		Member newMember = MemberRegisterRequestDto.to(request);
+		validator.validateObject(newMember);
+		memberRepository.addMember(newMember);
 	}
 }
