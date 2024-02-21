@@ -19,7 +19,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.flab.dduikka.common.validator.CustomValidator;
 import com.flab.dduikka.domain.member.domain.Member;
 import com.flab.dduikka.domain.member.domain.MemberStatus;
+import com.flab.dduikka.domain.member.dto.MemberRegisterRequestDto;
 import com.flab.dduikka.domain.member.dto.MemberResponseDto;
+import com.flab.dduikka.domain.member.exception.MemberException;
 import com.flab.dduikka.domain.member.repository.MemberRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -140,6 +142,59 @@ class MemberServiceTest {
 		boolean response = memberService.isEmailDuplicated(email);
 		//then
 		assertThat(response).isFalse();
+	}
+
+	@Test
+	@DisplayName("회원이 이미 등록된 이메일로 회원가입하면 예외가 발생한다.")
+	void whenRegisterMemberThenThrowsDuplicatedEmailException() {
+		//given
+		MemberRegisterRequestDto request
+			= new MemberRegisterRequestDto(
+			"test@dduikka.net",
+			"1234",
+			MemberStatus.JOIN,
+			LocalDate.now());
+		Member mockMember = Member.builder()
+			.memberId(1L)
+			.email("test@dduikka.net")
+			.password("1234")
+			.joinDate(LocalDate.now())
+			.createAt(LocalDateTime.now())
+			.memberStatus(MemberStatus.JOIN)
+			.build();
+
+		given(memberRepository.findByEmailAndMemberStatus(anyString()))
+			.willReturn(Optional.ofNullable(mockMember));
+
+		//when,then
+		thenThrownBy(
+			() -> memberService.registerMember(request)
+		).isInstanceOf(MemberException.DuplicatedEmailException.class)
+			.hasMessageContaining("기등록된 회원입니다. email" + request.getEmail());
+	}
+
+	@Test
+	@DisplayName("회원이 회원가입 요청 하면 addMember를 호출한다")
+	void whenRegisterMemberThenCallAddMember() {
+		//given
+		MemberRegisterRequestDto request
+			= new MemberRegisterRequestDto(
+			"test@dduikka.net",
+			"1234",
+			MemberStatus.JOIN,
+			LocalDate.now());
+		Member newMember = MemberRegisterRequestDto.to(request);
+
+		given(memberRepository.findByEmailAndMemberStatus(anyString()))
+			.willReturn(Optional.empty());
+		given(memberRepository.addMember(any()))
+			.willReturn(newMember);
+
+		//when
+		memberService.registerMember(request);
+
+		//then
+		verify(memberRepository, times(1)).addMember(any(Member.class));
 	}
 
 }
