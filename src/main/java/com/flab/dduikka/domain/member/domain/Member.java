@@ -2,6 +2,7 @@ package com.flab.dduikka.domain.member.domain;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import com.flab.dduikka.domain.Auditable;
 
@@ -45,5 +46,21 @@ public class Member extends Auditable {
 
 	public boolean isCorrectPassword(String password) {
 		return this.password.equals(password);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+		Member member = (Member)o;
+		return memberId == member.memberId && Objects.equals(email, member.email)
+			&& memberStatus == member.memberStatus && Objects.equals(joinDate, member.joinDate);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(memberId);
 	}
 }

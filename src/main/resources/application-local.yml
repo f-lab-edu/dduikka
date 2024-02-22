@@ -29,3 +29,6 @@ logging:
 schedules:
   cron-expression:
     publisher: 0 0 23 * * *
+
+regexp:
+  password: ^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W]).{10,}$

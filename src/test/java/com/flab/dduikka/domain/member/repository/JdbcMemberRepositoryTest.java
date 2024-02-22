@@ -2,6 +2,8 @@ package com.flab.dduikka.domain.member.repository;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
@@ -10,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.flab.dduikka.domain.helper.SpringBootRepositoryTestHelper;
 import com.flab.dduikka.domain.member.domain.Member;
+import com.flab.dduikka.domain.member.domain.MemberStatus;
 
 class JdbcMemberRepositoryTest extends SpringBootRepositoryTestHelper {
 
@@ -21,10 +24,18 @@ class JdbcMemberRepositoryTest extends SpringBootRepositoryTestHelper {
 	void whenFindByIdThenMemberFound() {
 		//given
 		long memberId = 1L;
-		// TODO 회원가입 기능 추가 후 memberRepository.save 추가한다.
+		Member mockMember = Member.builder()
+			.memberId(1L)
+			.email("test@dduikka.net")
+			.password("1234")
+			.joinDate(LocalDate.now())
+			.createAt(LocalDateTime.now())
+			.memberStatus(MemberStatus.LEAVE)
+			.build();
+		memberRepository.addMember(mockMember);
 
 		//when
-		Member foundMember = memberRepository.findById(memberId).get();
+		Member foundMember = memberRepository.findById(memberId).orElseThrow();
 
 		//then
 		assertThat(foundMember.getMemberId()).isEqualTo(memberId);
@@ -35,12 +46,22 @@ class JdbcMemberRepositoryTest extends SpringBootRepositoryTestHelper {
 	void whenFindByEmailThenMemberFound() {
 		//given
 		String email = "test@dduikka.net";
+		Member mockMember = Member.builder()
+			.memberId(1L)
+			.email(email)
+			.password("1234")
+			.joinDate(LocalDate.now())
+			.createAt(LocalDateTime.now())
+			.memberStatus(MemberStatus.JOIN)
+			.build();
+		memberRepository.addMember(mockMember);
 
 		//when
 		Optional<Member> foundMember = memberRepository.findByEmailAndMemberStatus(email);
 
 		//then
 		assertThat(foundMember).isPresent();
+		assertThat(foundMember.orElse(null)).isEqualTo(mockMember);
 	}
 
 	@Test
@@ -60,12 +81,41 @@ class JdbcMemberRepositoryTest extends SpringBootRepositoryTestHelper {
 	@DisplayName("탈퇴한 회원의 이메일을 조회하면 empty를 반환한다")
 	void whenFindByEmailOfLeavedMemberThenResultIsEmpty() {
 		//given
-		String email = "test2@dduikka.net";
+		String email = "test@dduikka.net";
+		Member mockMember = Member.builder()
+			.memberId(1L)
+			.email(email)
+			.password("1234")
+			.joinDate(LocalDate.now())
+			.createAt(LocalDateTime.now())
+			.memberStatus(MemberStatus.LEAVE)
+			.build();
+		memberRepository.addMember(mockMember);
 
 		//when
 		Optional<Member> optionalMember = memberRepository.findByEmailAndMemberStatus(email);
 
 		//then
 		assertThat(optionalMember).isEmpty();
+	}
+
+	@Test
+	@DisplayName("회원을 등록한다")
+	void whenAddMemberThenReturnsMember() {
+		//given
+		Member mockMember = Member.builder()
+			.memberId(1L)
+			.email("test5@dduikka.net")
+			.password("1234")
+			.joinDate(LocalDate.now())
+			.createAt(LocalDateTime.now())
+			.memberStatus(MemberStatus.JOIN)
+			.build();
+
+		//when
+		Member createdMember = memberRepository.addMember(mockMember);
+
+		//then
+		assertThat(createdMember).isEqualTo(mockMember);
 	}
 }

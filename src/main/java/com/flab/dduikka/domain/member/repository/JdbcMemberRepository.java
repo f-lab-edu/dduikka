@@ -4,8 +4,11 @@ import java.util.Optional;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import com.flab.dduikka.domain.member.domain.Member;
@@ -45,6 +48,26 @@ public class JdbcMemberRepository implements MemberRepository {
 		} catch (EmptyResultDataAccessException e) {
 			return Optional.empty();
 		}
+	}
+
+	@Override
+	public Member addMember(Member member) {
+		SimpleJdbcInsert jdbcInsert = new SimpleJdbcInsert(jdbcTemplate.getJdbcTemplate());
+		SqlParameterSource param = new BeanPropertySqlParameterSource(member);
+
+		jdbcInsert
+			.withTableName("MEMBER")
+			.usingGeneratedKeyColumns("MEMBER_ID");
+		Long key = jdbcInsert.executeAndReturnKey(param).longValue();
+
+		return Member.builder()
+			.memberId(key)
+			.email(member.getEmail())
+			.password(member.getPassword())
+			.memberStatus(member.getMemberStatus())
+			.joinDate(member.getJoinDate())
+			.createAt(member.getCreatedAt())
+			.build();
 	}
 
 	private RowMapper<Member> memberRecordMapper() {
