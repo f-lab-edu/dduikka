@@ -145,19 +145,17 @@ class MemberServiceTest {
 	}
 
 	@Test
-	@DisplayName("회원이 이미 등록된 이메일로 회원가입하면 예외가 발생한다.")
+	@DisplayName("회원이 이미 등록된 이메일로 회원가입하면 예외가 발생한다")
 	void whenRegisterMemberThenThrowsDuplicatedEmailException() {
 		//given
 		MemberRegisterRequestDto request
 			= new MemberRegisterRequestDto(
 			"test@dduikka.net",
-			"1234",
-			MemberStatus.JOIN,
-			LocalDate.now());
+			"123456qW!@");
 		Member mockMember = Member.builder()
 			.memberId(1L)
 			.email("test@dduikka.net")
-			.password("1234")
+			.password("123456qW!@")
 			.joinDate(LocalDate.now())
 			.createAt(LocalDateTime.now())
 			.memberStatus(MemberStatus.JOIN)
@@ -180,9 +178,7 @@ class MemberServiceTest {
 		MemberRegisterRequestDto request
 			= new MemberRegisterRequestDto(
 			"test@dduikka.net",
-			"1234",
-			MemberStatus.JOIN,
-			LocalDate.now());
+			"123456qW!e");
 		Member newMember = MemberRegisterRequestDto.to(request);
 
 		given(memberRepository.findByEmailAndMemberStatus(anyString()))

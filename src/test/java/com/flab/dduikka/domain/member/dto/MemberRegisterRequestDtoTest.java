@@ -19,9 +19,7 @@ class MemberRegisterRequestDtoTest {
 		MemberRegisterRequestDto dto
 			= new MemberRegisterRequestDto(
 			"test@dduikka.net",
-			"1234",
-			MemberStatus.JOIN,
-			LocalDate.now());
+			"1234");
 
 		//when
 		Member createdMember = MemberRegisterRequestDto.to(dto);
@@ -29,7 +27,7 @@ class MemberRegisterRequestDtoTest {
 		//then
 		assertThat(createdMember.getEmail()).isEqualTo(dto.getEmail());
 		assertThat(createdMember.getPassword()).isEqualTo(dto.getPassword());
-		assertThat(createdMember.getMemberStatus()).isEqualTo(dto.getMemberStatus());
-		assertThat(createdMember.getJoinDate()).isEqualTo(dto.getJoinDate());
+		assertThat(createdMember.getMemberStatus()).isEqualTo(MemberStatus.JOIN);
+		assertThat(createdMember.getJoinDate()).isEqualTo(LocalDate.now());
 	}
 }
