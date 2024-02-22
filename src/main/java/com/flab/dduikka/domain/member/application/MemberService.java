@@ -18,8 +18,8 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class MemberService {
-	@Value("${validate.password}")
-	private String PASSWORD_REGEXP;
+	@Value("#{environment['regexp.password']}")
+	private String passwordRegexp;
 
 	private final MemberRepository memberRepository;
 	private final CustomValidator validator;
@@ -49,8 +49,7 @@ public class MemberService {
 	}
 
 	private void validatePassword(String password) {
-		boolean matches = Pattern.matches(PASSWORD_REGEXP, password);
-		if (!matches) {
+		if (!Pattern.matches(passwordRegexp, password)) {
 			throw new IllegalStateException("비밀번호를 다시 입력해주세요.");
 		}
 	}
