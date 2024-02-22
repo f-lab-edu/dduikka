@@ -34,14 +34,13 @@ public class MemberService {
 		return MemberResponseDto.from(foundUser);
 	}
 
-	public Boolean isEmailDuplicated(String email) {
+	public boolean isEmailDuplicated(String email) {
 		return memberRepository.findByEmailAndMemberStatus(email).isPresent();
 	}
 
 	public void registerMember(final MemberRegisterRequestDto request) {
 		validatePassword(request.getPassword());
-		Boolean isDuplicated = isEmailDuplicated(request.getEmail());
-		if (Boolean.TRUE.equals(isDuplicated)) {
+		if (isEmailDuplicated(request.getEmail())) {
 			throw new MemberException.DuplicatedEmailException("기등록된 회원입니다. email" + request.getEmail());
 		}
 		Member newMember = MemberRegisterRequestDto.to(request);
