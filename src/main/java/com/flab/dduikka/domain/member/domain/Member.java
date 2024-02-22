@@ -55,7 +55,8 @@ public class Member extends Auditable {
 		if (o == null || getClass() != o.getClass())
 			return false;
 		Member member = (Member)o;
-		return memberId == member.memberId;
+		return memberId == member.memberId && Objects.equals(email, member.email)
+			&& memberStatus == member.memberStatus && Objects.equals(joinDate, member.joinDate);
 	}
 
 	@Override
