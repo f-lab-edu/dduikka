@@ -1,7 +1,9 @@
 package com.flab.dduikka.domain.member.application;
 
 import java.util.NoSuchElementException;
+import java.util.regex.Pattern;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.flab.dduikka.common.validator.CustomValidator;
@@ -16,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class MemberService {
+	@Value("${validate.password}")
+	private String PASSWORD_REGEXP;
 
 	private final MemberRepository memberRepository;
 	private final CustomValidator validator;
@@ -35,6 +39,7 @@ public class MemberService {
 	}
 
 	public void registerMember(final MemberRegisterRequestDto request) {
+		validatePassword(request.getPassword());
 		Boolean isDuplicated = isEmailDuplicated(request.getEmail());
 		if (Boolean.TRUE.equals(isDuplicated)) {
 			throw new MemberException.DuplicatedEmailException("기등록된 회원입니다. email" + request.getEmail());
@@ -42,5 +47,12 @@ public class MemberService {
 		Member newMember = MemberRegisterRequestDto.to(request);
 		validator.validateObject(newMember);
 		memberRepository.addMember(newMember);
+	}
+
+	private void validatePassword(String password) {
+		boolean matches = Pattern.matches(PASSWORD_REGEXP, password);
+		if (!matches) {
+			throw new IllegalStateException("비밀번호를 다시 입력해주세요.");
+		}
 	}
 }
