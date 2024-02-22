@@ -1,5 +1,7 @@
 package com.flab.dduikka.domain.member.api;
 
+import java.net.URI;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,7 +44,7 @@ public class MemberController {
 	@PostMapping
 	public ResponseEntity<Void> registerMember(@RequestBody @Valid MemberRegisterRequestDto request) {
 		memberService.registerMember(request);
-		return ResponseEntity.ok().build();
+		return ResponseEntity.created(URI.create("/login")).build();
 	}
 
 }
