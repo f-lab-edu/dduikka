@@ -4,6 +4,7 @@ import static org.assertj.core.api.BDDAssertions.then;
 import static org.assertj.core.api.BDDAssertions.*;
 import static org.mockito.BDDMockito.*;
 
+import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
@@ -23,6 +24,8 @@ import com.flab.dduikka.domain.member.dto.MemberRegisterRequestDto;
 import com.flab.dduikka.domain.member.dto.MemberResponseDto;
 import com.flab.dduikka.domain.member.exception.MemberException;
 import com.flab.dduikka.domain.member.repository.MemberRepository;
+
+import lombok.SneakyThrows;
 
 @ExtendWith(MockitoExtension.class)
 class MemberServiceTest {
@@ -145,6 +148,24 @@ class MemberServiceTest {
 	}
 
 	@Test
+	@DisplayName("회원가입 시 비밀번호 조건을 충족하지 못하면 예외를 반환한다")
+	void whenRegisterMemberIllegalPasswordThenThrowsIllegalStateException() {
+		//given
+		MemberRegisterRequestDto request
+			= new MemberRegisterRequestDto(
+			"test@dduikka.net",
+			"1234");
+		setProperties();
+
+		//when, then
+		thenThrownBy(
+			() -> memberService.registerMember(request))
+			.isInstanceOf(IllegalStateException.class)
+			.hasMessageContaining("비밀번호를 다시 입력해주세요.");
+	}
+
+	//TODO 한글명 수정
+	@Test
 	@DisplayName("회원이 이미 등록된 이메일로 회원가입하면 예외가 발생한다")
 	void whenRegisterMemberThenThrowsDuplicatedEmailException() {
 		//given
@@ -155,11 +176,12 @@ class MemberServiceTest {
 		Member mockMember = Member.builder()
 			.memberId(1L)
 			.email("test@dduikka.net")
-			.password("123456qW!@")
+			.password("1234")
 			.joinDate(LocalDate.now())
 			.createAt(LocalDateTime.now())
 			.memberStatus(MemberStatus.JOIN)
 			.build();
+		setProperties();
 
 		given(memberRepository.findByEmailAndMemberStatus(anyString()))
 			.willReturn(Optional.ofNullable(mockMember));
@@ -178,7 +200,8 @@ class MemberServiceTest {
 		MemberRegisterRequestDto request
 			= new MemberRegisterRequestDto(
 			"test@dduikka.net",
-			"123456qW!e");
+			"123456qW!@");
+		setProperties();
 		Member newMember = MemberRegisterRequestDto.to(request);
 
 		given(memberRepository.findByEmailAndMemberStatus(anyString()))
@@ -191,6 +214,14 @@ class MemberServiceTest {
 
 		//then
 		verify(memberRepository, times(1)).addMember(any(Member.class));
+	}
+
+	@SneakyThrows
+	private void setProperties() {
+		Class<? extends MemberService> memberServiceClass = memberService.getClass();
+		Field passwordRegexp = memberServiceClass.getDeclaredField("PASSWORD_REGEXP");
+		passwordRegexp.setAccessible(true);
+		passwordRegexp.set(memberService, "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[\\W]).{10,}$");
 	}
 
 }
