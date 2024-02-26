@@ -35,7 +35,7 @@ class JdbcMemberRepositoryTest extends SpringBootRepositoryTestHelper {
 		memberRepository.addMember(mockMember);
 
 		//when
-		Member foundMember = memberRepository.findById(memberId).orElseThrow();
+		Member foundMember = memberRepository.findById(memberId).get();
 
 		//then
 		assertThat(foundMember.getMemberId()).isEqualTo(memberId);
@@ -117,5 +117,30 @@ class JdbcMemberRepositoryTest extends SpringBootRepositoryTestHelper {
 
 		//then
 		assertThat(createdMember).isEqualTo(mockMember);
+	}
+
+	@Test
+	@DisplayName("회원이 탈퇴를 요청하면 회원상태를 변경한다")
+	void whenLeaveMemberThenChangesMemberStatusAndJoinDate() {
+		//given
+		Member member = Member.builder()
+			.memberId(1L)
+			.email("test@dduikka.net")
+			.password("1234")
+			.memberStatus(MemberStatus.JOIN)
+			.joinDate(LocalDate.now().minusDays(1))
+			.createAt(LocalDateTime.now())
+			.build();
+		Member createdMember = memberRepository.addMember(member);
+		createdMember.leave();
+
+		//when
+		memberRepository.leaveMember(createdMember);
+		Optional<Member> optionalMember = memberRepository.findById(member.getMemberId());
+
+		Member foundMember = optionalMember.orElse(null);
+		assert foundMember != null;
+		assertThat(foundMember.isJoined()).isFalse();
+		assertThat(foundMember.getLeaveDate()).isNotNull();
 	}
 }

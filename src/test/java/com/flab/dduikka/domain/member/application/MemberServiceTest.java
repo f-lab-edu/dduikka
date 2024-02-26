@@ -216,6 +216,33 @@ class MemberServiceTest {
 		verify(memberRepository, times(1)).addMember(any(Member.class));
 	}
 
+	@Test
+	@DisplayName("회원이 탈퇴하면 회원조회 되지 않는다")
+	void whenLeaveMemberThenNotFoundMember() {
+		//given
+		long memberId = 1L;
+		Member mockMember = Member.builder()
+			.memberId(1L)
+			.email("test@dduikka.com")
+			.password("1234")
+			.memberStatus(MemberStatus.JOIN)
+			.joinDate(LocalDate.now())
+			.createAt(LocalDateTime.now())
+			.build();
+
+		given(memberRepository.findById(anyLong()))
+			.willReturn(Optional.ofNullable(mockMember))
+			.willReturn(Optional.empty());
+
+		//when
+		memberService.leaveMember(memberId);
+
+		//then
+		thenThrownBy(() -> memberService.findMember(anyLong()))
+			.isInstanceOf(NoSuchElementException.class)
+			.hasMessageContaining("해당 유저가 존재하지 않습니다.");
+	}
+
 	@SneakyThrows
 	private void setProperties() {
 		Class<? extends MemberService> memberServiceClass = memberService.getClass();
