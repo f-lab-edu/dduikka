@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 import com.flab.dduikka.domain.Auditable;
+import com.flab.dduikka.domain.member.exception.MemberException;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -49,6 +50,9 @@ public class Member extends Auditable {
 	}
 
 	public void leave() {
+		if (memberStatus != MemberStatus.JOIN) {
+			throw new MemberException("유효하지 않은 회원입니다.");
+		}
 		memberStatus = MemberStatus.LEAVE;
 		leaveDate = LocalDate.now();
 	}
