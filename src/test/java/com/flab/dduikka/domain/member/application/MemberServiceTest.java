@@ -161,7 +161,6 @@ class MemberServiceTest {
 			= new MemberRegisterRequestDto(
 			"test@dduikka.net",
 			"1234");
-		//TODO: 수정
 		//when, then
 		thenThrownBy(
 			() -> memberService.registerMember(request))
@@ -185,7 +184,6 @@ class MemberServiceTest {
 			.createAt(LocalDateTime.now())
 			.memberStatus(MemberStatus.JOIN)
 			.build();
-		//TODO: 수정
 
 		given(memberRepository.findByEmailAndMemberStatus(anyString()))
 			.willReturn(Optional.ofNullable(mockMember));
@@ -205,7 +203,6 @@ class MemberServiceTest {
 			= new MemberRegisterRequestDto(
 			"test@dduikka.net",
 			"123456qW!@");
-		//TODO: 수정
 		Member newMember = MemberRegisterRequestDto.to(request);
 
 		given(memberRepository.findByEmailAndMemberStatus(anyString()))
