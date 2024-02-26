@@ -75,7 +75,7 @@ class MemberServiceTest {
 
 		//when,then
 		thenThrownBy(
-			() -> memberService.findMember(memberId)).isInstanceOf(MemberException.NotFoundMemberException.class);
+			() -> memberService.findMember(memberId)).isInstanceOf(MemberException.MemberNotFoundException.class);
 	}
 
 	@Test
@@ -240,8 +240,30 @@ class MemberServiceTest {
 
 		//then
 		thenThrownBy(() -> memberService.findMember(anyLong()))
-			.isInstanceOf(MemberException.NotFoundMemberException.class)
-			.hasMessageContaining("해당 유저가 존재하지 않습니다.");
+			.isInstanceOf(MemberException.MemberNotFoundException.class)
+			.hasMessageContaining("해당 회원이 존재하지 않습니다.");
+	}
+
+	@Test
+	@DisplayName("이미 탈퇴한 회원이 탈퇴 요청 시 MemberNotJoinedException 예외가 발생한다")
+	void whenLeaveMemberThenThrowsMemberNotJoinedException() {
+		//given
+		Member mockMember = Member.builder()
+			.memberId(1L)
+			.email("test@dduikka.com")
+			.password("1234")
+			.memberStatus(MemberStatus.LEAVE)
+			.joinDate(LocalDate.now())
+			.createAt(LocalDateTime.now())
+			.build();
+
+		given(memberRepository.findById(anyLong()))
+			.willReturn(Optional.ofNullable(mockMember));
+
+		//when, then
+		thenThrownBy(() -> memberService.leaveMember(anyLong()))
+			.isInstanceOf(MemberException.MemberNotJoinedException.class)
+			.hasMessageContaining("이미 탈퇴하거나 탈퇴할 수 없는 회원입니다.");
 	}
 
 }

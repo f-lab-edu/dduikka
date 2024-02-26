@@ -32,7 +32,7 @@ public class MemberService {
 
 	public MemberResponseDto findMember(final long memberId) {
 		Member foundUser = memberRepository.findById(memberId)
-			.orElseThrow(() -> new MemberException.NotFoundMemberException("해당 유저가 존재하지 않습니다. memberId: " + memberId));
+			.orElseThrow(() -> new MemberException.MemberNotFoundException("해당 회원이 존재하지 않습니다. memberId: " + memberId));
 		validator.validateObject(foundUser);
 		if (!foundUser.isJoined()) {
 			throw new IllegalStateException("탈퇴한 회원입니다. memberId:" + memberId);
@@ -56,8 +56,11 @@ public class MemberService {
 
 	public void leaveMember(final long memberId) {
 		Member foundMember = memberRepository.findById(memberId)
-			.orElseThrow(() -> new MemberException.NotFoundMemberException("해당 유저가 존재하지 않습니다. userId: " + memberId));
+			.orElseThrow(() -> new MemberException.MemberNotFoundException("해당 회원이 존재하지 않습니다. memberId: " + memberId));
 		validator.validateObject(foundMember);
+		if (!foundMember.isJoined()) {
+			throw new MemberException.MemberNotJoinedException("이미 탈퇴하거나 탈퇴할 수 없는 회원입니다. memberId" + memberId);
+		}
 		foundMember.leave();
 		memberRepository.leaveMember(foundMember);
 	}

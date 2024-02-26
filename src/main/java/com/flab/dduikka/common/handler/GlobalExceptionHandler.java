@@ -26,8 +26,13 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 	}
 
-	@ExceptionHandler(MemberException.NotFoundMemberException.class)
-	public ResponseEntity<String> handleNotFoundMemberException(MemberException.NotFoundMemberException e) {
+	@ExceptionHandler(MemberException.MemberNotFoundException.class)
+	public ResponseEntity<String> handleNotFoundMemberException(MemberException.MemberNotFoundException e) {
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+	}
+
+	@ExceptionHandler(MemberException.MemberNotJoinedException.class)
+	public ResponseEntity<String> handleMemberNotJoinedException(MemberException.MemberNotJoinedException e) {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 	}
 }
