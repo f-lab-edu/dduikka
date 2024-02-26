@@ -26,7 +26,7 @@ public class MemberService {
 
 	public MemberResponseDto findMember(final long memberId) {
 		Member foundUser = memberRepository.findById(memberId)
-			.orElseThrow(() -> new NoSuchElementException("해당 유저가 존재하지 않습니다. userId: " + memberId));
+			.orElseThrow(() -> new NoSuchElementException("해당 유저가 존재하지 않습니다. memberId: " + memberId));
 		validator.validateObject(foundUser);
 		if (!foundUser.isJoined()) {
 			throw new IllegalStateException("탈퇴한 회원입니다. memberId:" + memberId);
@@ -46,6 +46,14 @@ public class MemberService {
 		Member newMember = MemberRegisterRequestDto.to(request);
 		validator.validateObject(newMember);
 		memberRepository.addMember(newMember);
+	}
+
+	public void leaveMember(final long memberId) {
+		Member foundMember = memberRepository.findById(memberId)
+			.orElseThrow(() -> new NoSuchElementException("해당 유저가 존재하지 않습니다. userId: " + memberId));
+		validator.validateObject(foundMember);
+		foundMember.leave();
+		memberRepository.leaveMember(foundMember);
 	}
 
 	private void validatePassword(String password) {

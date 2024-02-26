@@ -5,6 +5,7 @@ import java.net.URI;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -45,6 +46,13 @@ public class MemberController {
 	public ResponseEntity<Void> registerMember(@RequestBody @Valid MemberRegisterRequestDto request) {
 		memberService.registerMember(request);
 		return ResponseEntity.created(URI.create("/login")).build();
+	}
+
+	@PatchMapping("/{memberId}")
+	public ResponseEntity<Void> leaveMember(@PathVariable final long memberId) {
+		memberService.leaveMember(memberId);
+		return ResponseEntity.ok()
+			.build();
 	}
 
 }

@@ -70,6 +70,17 @@ public class JdbcMemberRepository implements MemberRepository {
 			.build();
 	}
 
+	@Override
+	public void leaveMember(Member member) {
+		String sql = "update member set member_status = :memberStatus, leave_date = :leaveDate where member_id = :memberId ";
+		MapSqlParameterSource param = new MapSqlParameterSource()
+			.addValue("memberId", member.getMemberId())
+			.addValue("memberStatus", member.getMemberStatus().name())
+			.addValue("leaveDate", member.getLeaveDate());
+
+		jdbcTemplate.update(sql, param);
+	}
+
 	private RowMapper<Member> memberRecordMapper() {
 		return (rs, rowNum) ->
 			Member.builder()

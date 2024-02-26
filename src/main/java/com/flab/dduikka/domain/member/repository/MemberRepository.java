@@ -10,4 +10,6 @@ public interface MemberRepository {
 	Optional<Member> findByEmailAndMemberStatus(String email);
 
 	Member addMember(Member member);
+
+	void leaveMember(Member member);
 }
