@@ -1,6 +1,5 @@
 package com.flab.dduikka.domain.member.application;
 
-import java.util.NoSuchElementException;
 import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -26,7 +25,7 @@ public class MemberService {
 
 	public MemberResponseDto findMember(final long memberId) {
 		Member foundUser = memberRepository.findById(memberId)
-			.orElseThrow(() -> new NoSuchElementException("해당 유저가 존재하지 않습니다. memberId: " + memberId));
+			.orElseThrow(() -> new MemberException.NotFoundMemberException("해당 유저가 존재하지 않습니다. memberId: " + memberId));
 		validator.validateObject(foundUser);
 		if (!foundUser.isJoined()) {
 			throw new IllegalStateException("탈퇴한 회원입니다. memberId:" + memberId);
@@ -50,7 +49,7 @@ public class MemberService {
 
 	public void leaveMember(final long memberId) {
 		Member foundMember = memberRepository.findById(memberId)
-			.orElseThrow(() -> new NoSuchElementException("해당 유저가 존재하지 않습니다. userId: " + memberId));
+			.orElseThrow(() -> new MemberException.NotFoundMemberException("해당 유저가 존재하지 않습니다. userId: " + memberId));
 		validator.validateObject(foundMember);
 		foundMember.leave();
 		memberRepository.leaveMember(foundMember);

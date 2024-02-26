@@ -25,4 +25,9 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<String> handleDuplicatedEmailException(MemberException.DuplicatedEmailException e) {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 	}
+
+	@ExceptionHandler(MemberException.NotFoundMemberException.class)
+	public ResponseEntity<String> handleNotFoundMemberException(MemberException.NotFoundMemberException e) {
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+	}
 }

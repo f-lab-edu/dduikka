@@ -7,7 +7,6 @@ import static org.mockito.BDDMockito.*;
 import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
@@ -69,7 +68,7 @@ class MemberServiceTest {
 
 		//when,then
 		thenThrownBy(
-			() -> memberService.findMember(memberId)).isInstanceOf(NoSuchElementException.class);
+			() -> memberService.findMember(memberId)).isInstanceOf(MemberException.NotFoundMemberException.class);
 	}
 
 	@Test
@@ -238,7 +237,7 @@ class MemberServiceTest {
 
 		//then
 		thenThrownBy(() -> memberService.findMember(anyLong()))
-			.isInstanceOf(NoSuchElementException.class)
+			.isInstanceOf(MemberException.NotFoundMemberException.class)
 			.hasMessageContaining("해당 유저가 존재하지 않습니다.");
 	}
 
