@@ -4,11 +4,11 @@ import static org.assertj.core.api.BDDAssertions.then;
 import static org.assertj.core.api.BDDAssertions.*;
 import static org.mockito.BDDMockito.*;
 
-import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,8 +24,6 @@ import com.flab.dduikka.domain.member.dto.MemberResponseDto;
 import com.flab.dduikka.domain.member.exception.MemberException;
 import com.flab.dduikka.domain.member.repository.MemberRepository;
 
-import lombok.SneakyThrows;
-
 @ExtendWith(MockitoExtension.class)
 class MemberServiceTest {
 
@@ -35,6 +33,15 @@ class MemberServiceTest {
 	private MemberRepository memberRepository;
 	@Mock
 	private CustomValidator validator;
+
+	@BeforeEach
+	void setUp() {
+		memberService = new MemberService(
+			"^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[\\W]).{10,}$",
+			memberRepository,
+			validator
+		);
+	}
 
 	@Test
 	void 회원_가입을_하면_유저가_등록된다() {
@@ -154,8 +161,7 @@ class MemberServiceTest {
 			= new MemberRegisterRequestDto(
 			"test@dduikka.net",
 			"1234");
-		setProperties();
-
+		//TODO: 수정
 		//when, then
 		thenThrownBy(
 			() -> memberService.registerMember(request))
@@ -179,7 +185,7 @@ class MemberServiceTest {
 			.createAt(LocalDateTime.now())
 			.memberStatus(MemberStatus.JOIN)
 			.build();
-		setProperties();
+		//TODO: 수정
 
 		given(memberRepository.findByEmailAndMemberStatus(anyString()))
 			.willReturn(Optional.ofNullable(mockMember));
@@ -199,7 +205,7 @@ class MemberServiceTest {
 			= new MemberRegisterRequestDto(
 			"test@dduikka.net",
 			"123456qW!@");
-		setProperties();
+		//TODO: 수정
 		Member newMember = MemberRegisterRequestDto.to(request);
 
 		given(memberRepository.findByEmailAndMemberStatus(anyString()))
@@ -239,14 +245,6 @@ class MemberServiceTest {
 		thenThrownBy(() -> memberService.findMember(anyLong()))
 			.isInstanceOf(MemberException.NotFoundMemberException.class)
 			.hasMessageContaining("해당 유저가 존재하지 않습니다.");
-	}
-
-	@SneakyThrows
-	private void setProperties() {
-		Class<? extends MemberService> memberServiceClass = memberService.getClass();
-		Field passwordRegexp = memberServiceClass.getDeclaredField("passwordRegexp");
-		passwordRegexp.setAccessible(true);
-		passwordRegexp.set(memberService, "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[\\W]).{10,}$");
 	}
 
 }

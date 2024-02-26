@@ -2,6 +2,7 @@ package com.flab.dduikka.domain.member.application;
 
 import java.util.regex.Pattern;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -12,16 +13,22 @@ import com.flab.dduikka.domain.member.dto.MemberResponseDto;
 import com.flab.dduikka.domain.member.exception.MemberException;
 import com.flab.dduikka.domain.member.repository.MemberRepository;
 
-import lombok.RequiredArgsConstructor;
-
 @Service
-@RequiredArgsConstructor
 public class MemberService {
-	@Value("#{environment['regexp.password']}")
-	private String passwordRegexp;
 
+	private final String passwordRegexp;
 	private final MemberRepository memberRepository;
 	private final CustomValidator validator;
+
+	@Autowired
+	public MemberService(
+		@Value("#{environment['regexp.password']}") String passwordRegexp,
+		MemberRepository memberRepository,
+		CustomValidator validator) {
+		this.passwordRegexp = passwordRegexp;
+		this.memberRepository = memberRepository;
+		this.validator = validator;
+	}
 
 	public MemberResponseDto findMember(final long memberId) {
 		Member foundUser = memberRepository.findById(memberId)
