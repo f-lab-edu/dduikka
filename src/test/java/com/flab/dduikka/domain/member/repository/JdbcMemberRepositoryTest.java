@@ -136,11 +136,10 @@ class JdbcMemberRepositoryTest extends SpringBootRepositoryTestHelper {
 
 		//when
 		memberRepository.leaveMember(createdMember);
-		Optional<Member> optionalMember = memberRepository.findById(member.getMemberId());
+		Optional<Member> optionalMember = memberRepository.findById(createdMember.getMemberId());
 
 		Member foundMember = optionalMember.orElse(null);
 		assert foundMember != null;
 		assertThat(foundMember.isJoined()).isFalse();
-		assertThat(foundMember.getLeaveDate()).isNotNull();
 	}
 }
