@@ -164,9 +164,8 @@ class MemberServiceTest {
 			.hasMessageContaining("비밀번호를 다시 입력해주세요.");
 	}
 
-	//TODO 한글명 수정
 	@Test
-	@DisplayName("회원이 이미 등록된 이메일로 회원가입하면 예외가 발생한다")
+	@DisplayName("회원이 이미 등록된 이메일로 회원가입하면 예외를 반환한다")
 	void whenRegisterMemberThenThrowsDuplicatedEmailException() {
 		//given
 		MemberRegisterRequestDto request
@@ -246,7 +245,7 @@ class MemberServiceTest {
 	@SneakyThrows
 	private void setProperties() {
 		Class<? extends MemberService> memberServiceClass = memberService.getClass();
-		Field passwordRegexp = memberServiceClass.getDeclaredField("PASSWORD_REGEXP");
+		Field passwordRegexp = memberServiceClass.getDeclaredField("passwordRegexp");
 		passwordRegexp.setAccessible(true);
 		passwordRegexp.set(memberService, "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[\\W]).{10,}$");
 	}
