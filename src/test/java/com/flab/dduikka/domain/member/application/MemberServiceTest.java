@@ -4,12 +4,11 @@ import static org.assertj.core.api.BDDAssertions.then;
 import static org.assertj.core.api.BDDAssertions.*;
 import static org.mockito.BDDMockito.*;
 
-import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,8 +24,6 @@ import com.flab.dduikka.domain.member.dto.MemberResponseDto;
 import com.flab.dduikka.domain.member.exception.MemberException;
 import com.flab.dduikka.domain.member.repository.MemberRepository;
 
-import lombok.SneakyThrows;
-
 @ExtendWith(MockitoExtension.class)
 class MemberServiceTest {
 
@@ -36,6 +33,15 @@ class MemberServiceTest {
 	private MemberRepository memberRepository;
 	@Mock
 	private CustomValidator validator;
+
+	@BeforeEach
+	void setUp() {
+		memberService = new MemberService(
+			"^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[\\W]).{10,}$",
+			memberRepository,
+			validator
+		);
+	}
 
 	@Test
 	void 회원_가입을_하면_유저가_등록된다() {
@@ -69,7 +75,7 @@ class MemberServiceTest {
 
 		//when,then
 		thenThrownBy(
-			() -> memberService.findMember(memberId)).isInstanceOf(NoSuchElementException.class);
+			() -> memberService.findMember(memberId)).isInstanceOf(MemberException.MemberNotFoundException.class);
 	}
 
 	@Test
@@ -155,8 +161,6 @@ class MemberServiceTest {
 			= new MemberRegisterRequestDto(
 			"test@dduikka.net",
 			"1234");
-		setProperties();
-
 		//when, then
 		thenThrownBy(
 			() -> memberService.registerMember(request))
@@ -164,9 +168,8 @@ class MemberServiceTest {
 			.hasMessageContaining("비밀번호를 다시 입력해주세요.");
 	}
 
-	//TODO 한글명 수정
 	@Test
-	@DisplayName("회원이 이미 등록된 이메일로 회원가입하면 예외가 발생한다")
+	@DisplayName("회원이 이미 등록된 이메일로 회원가입하면 예외를 반환한다")
 	void whenRegisterMemberThenThrowsDuplicatedEmailException() {
 		//given
 		MemberRegisterRequestDto request
@@ -181,7 +184,6 @@ class MemberServiceTest {
 			.createAt(LocalDateTime.now())
 			.memberStatus(MemberStatus.JOIN)
 			.build();
-		setProperties();
 
 		given(memberRepository.findByEmailAndMemberStatus(anyString()))
 			.willReturn(Optional.ofNullable(mockMember));
@@ -201,7 +203,6 @@ class MemberServiceTest {
 			= new MemberRegisterRequestDto(
 			"test@dduikka.net",
 			"123456qW!@");
-		setProperties();
 		Member newMember = MemberRegisterRequestDto.to(request);
 
 		given(memberRepository.findByEmailAndMemberStatus(anyString()))
@@ -216,12 +217,53 @@ class MemberServiceTest {
 		verify(memberRepository, times(1)).addMember(any(Member.class));
 	}
 
-	@SneakyThrows
-	private void setProperties() {
-		Class<? extends MemberService> memberServiceClass = memberService.getClass();
-		Field passwordRegexp = memberServiceClass.getDeclaredField("PASSWORD_REGEXP");
-		passwordRegexp.setAccessible(true);
-		passwordRegexp.set(memberService, "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[\\W]).{10,}$");
+	@Test
+	@DisplayName("회원이 탈퇴하면 회원조회 되지 않는다")
+	void whenLeaveMemberThenNotFoundMember() {
+		//given
+		long memberId = 1L;
+		Member mockMember = Member.builder()
+			.memberId(1L)
+			.email("test@dduikka.com")
+			.password("1234")
+			.memberStatus(MemberStatus.JOIN)
+			.joinDate(LocalDate.now())
+			.createAt(LocalDateTime.now())
+			.build();
+
+		given(memberRepository.findById(anyLong()))
+			.willReturn(Optional.ofNullable(mockMember))
+			.willReturn(Optional.empty());
+
+		//when
+		memberService.leaveMember(memberId);
+
+		//then
+		thenThrownBy(() -> memberService.findMember(anyLong()))
+			.isInstanceOf(MemberException.MemberNotFoundException.class)
+			.hasMessageContaining("해당 회원이 존재하지 않습니다.");
+	}
+
+	@Test
+	@DisplayName("이미 탈퇴한 회원이 탈퇴 요청 시 MemberNotJoinedException 예외가 발생한다")
+	void whenLeaveMemberThenThrowsMemberNotJoinedException() {
+		//given
+		Member mockMember = Member.builder()
+			.memberId(1L)
+			.email("test@dduikka.com")
+			.password("1234")
+			.memberStatus(MemberStatus.LEAVE)
+			.joinDate(LocalDate.now())
+			.createAt(LocalDateTime.now())
+			.build();
+
+		given(memberRepository.findById(anyLong()))
+			.willReturn(Optional.ofNullable(mockMember));
+
+		//when, then
+		thenThrownBy(() -> memberService.leaveMember(anyLong()))
+			.isInstanceOf(MemberException.MemberNotJoinedException.class)
+			.hasMessageContaining("이미 탈퇴하거나 탈퇴할 수 없는 회원입니다.");
 	}
 
 }

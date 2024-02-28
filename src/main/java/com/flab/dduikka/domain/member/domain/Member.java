@@ -48,6 +48,11 @@ public class Member extends Auditable {
 		return this.password.equals(password);
 	}
 
+	public void leave() {
+		memberStatus = MemberStatus.LEAVE;
+		leaveDate = LocalDate.now();
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o)

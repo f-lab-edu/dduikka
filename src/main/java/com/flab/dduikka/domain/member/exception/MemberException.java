@@ -11,4 +11,16 @@ public class MemberException extends RuntimeException {
 			super(message);
 		}
 	}
+
+	public static class MemberNotFoundException extends MemberException {
+		public MemberNotFoundException(String message) {
+			super(message);
+		}
+	}
+
+	public static class MemberNotJoinedException extends MemberException {
+		public MemberNotJoinedException(String message) {
+			super(message);
+		}
+	}
 }
