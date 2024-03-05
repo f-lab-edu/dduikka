@@ -5,6 +5,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
+import com.flab.dduikka.domain.livechat.repository.LiveChatRepository;
 import com.flab.dduikka.domain.member.repository.MemberRepository;
 import com.flab.dduikka.domain.vote.repository.VoteRecordRepository;
 import com.flab.dduikka.domain.vote.repository.VoteRepository;
@@ -21,6 +22,9 @@ public abstract class SpringBootRepositoryTestHelper {
 	protected VoteRecordRepository voteRecordRepository;
 
 	@Autowired
-	private MemberRepository memberRepository;
+	protected MemberRepository memberRepository;
+
+	@Autowired
+	protected LiveChatRepository liveChatRepository;
 
 }
