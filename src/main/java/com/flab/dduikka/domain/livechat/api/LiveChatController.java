@@ -12,6 +12,8 @@ import com.flab.dduikka.domain.livechat.application.LiveChatService;
 import com.flab.dduikka.domain.livechat.dto.LiveChatResponse;
 import com.flab.dduikka.domain.livechat.dto.LiveChatsResponse;
 import com.flab.dduikka.domain.livechat.dto.Message;
+import com.flab.dduikka.domain.login.api.SessionKey;
+import com.flab.dduikka.domain.login.dto.SessionMember;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,9 +31,10 @@ public class LiveChatController {
 		@Payload final Message request,
 		SimpMessageHeaderAccessor messageHeaderAccessor
 	) {
-		Long sessionId = (Long)messageHeaderAccessor.getSessionAttributes().get("sessionId");
-		log.info("sessionId = {}", sessionId);
-		return liveChatService.createMessage(sessionId, request);
+		SessionMember sessionMember =
+			(SessionMember)messageHeaderAccessor.getSessionAttributes().get(SessionKey.LOGIN_USER.name());
+		log.info("sessionMember = {}", sessionMember.getMemberId());
+		return liveChatService.createMessage(sessionMember.getMemberId(), request);
 	}
 
 	@MessageMapping("/list/{lastMessageId}")
