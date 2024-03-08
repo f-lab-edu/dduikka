@@ -32,3 +32,13 @@ schedules:
 
 regexp:
   password: ^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W]).{10,}$
+
+# websocket broker 설정
+websocket:
+  broker:
+    topic: /topic
+    queue: /queue
+  app:
+    destination:
+      prefix: /app
+  endpoint: /chats
