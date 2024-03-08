@@ -6,7 +6,7 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
-import com.flab.dduikka.common.interceptor.HttpHandShakeInterceptor;
+import com.flab.dduikka.common.interceptor.CustomHttpSessionHandshakeInterceptor;
 
 @Configuration
 @EnableWebSocketMessageBroker   // STOMP 사용
@@ -22,7 +22,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
 		registry
 			.addEndpoint("/chats")
-			.addInterceptors(new HttpHandShakeInterceptor())
+			.addInterceptors(new CustomHttpSessionHandshakeInterceptor())
 			.setAllowedOriginPatterns("*").withSockJS();
 	}
 
