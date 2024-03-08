@@ -9,16 +9,18 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 
-@Getter
 public class LiveChat extends Auditable {
 
+	@Getter
 	private long liveChatId;
+	@Getter
 	@NotNull
 	private long memberId;
+	@Getter
 	@NotBlank
 	private String message;
 	@NotNull
-	private Boolean isDeleted;
+	private boolean isDeleted;
 
 	protected LiveChat(LocalDateTime createdAt) {
 		super(createdAt);
@@ -41,5 +43,10 @@ public class LiveChat extends Auditable {
 			", message='" + message + '\'' +
 			", isDeleted=" + isDeleted +
 			'}';
+	}
+
+	// BeanPropertySqlParameterSource로 변환 시 변수를 delete로 인식하는 문제가 있어, 별도로 정의한다.
+	public boolean getIsDeleted() {
+		return isDeleted;
 	}
 }
