@@ -1,4 +1,4 @@
-package com.flab.dduikka.domain;
+package com.flab.dduikka.common.domain;
 
 import java.time.LocalDateTime;
 
