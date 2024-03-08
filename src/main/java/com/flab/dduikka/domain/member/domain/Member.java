@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-import com.flab.dduikka.domain.Auditable;
+import com.flab.dduikka.common.domain.Auditable;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

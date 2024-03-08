@@ -2,7 +2,7 @@ package com.flab.dduikka.domain.vote.domain;
 
 import java.time.LocalDateTime;
 
-import com.flab.dduikka.domain.Auditable;
+import com.flab.dduikka.common.domain.Auditable;
 
 import lombok.Builder;
 import lombok.Getter;
