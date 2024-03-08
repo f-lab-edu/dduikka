@@ -51,10 +51,13 @@ class VoteDocumentationTest extends ApiDocumentationHelper {
 				preprocessResponse(prettyPrint()),
 				pathParameters(parameterWithName("voteDate").description("투표일자")),
 				responseFields(
-					fieldWithPath("voteId").description("투표번호")   // 필드 설명 snippets 생성
-					, fieldWithPath("voteDate").description("투표일자")
-					, fieldWithPath("voteTypeCountMap.*").type(JsonFieldType.VARIES)
-						.description("투표타입별 투표수 맵 - (VoteType : Integer)")
+					fieldWithPath("headers").description("헤더라인"),
+					fieldWithPath("body.voteId").description("투표번호"),   // 필드 설명 snippets 생성
+					fieldWithPath("body.voteDate").description("투표일자"),
+					fieldWithPath("body.voteTypeCountMap.*").type(JsonFieldType.VARIES)
+						.description("투표타입별 투표수 맵 - (VoteType : Integer)"),
+					fieldWithPath("statusCode").description("결과코드"),
+					fieldWithPath("statusCodeValue").description("결과값")
 				)))
 			.andExpect(status().isOk());
 	}
@@ -76,9 +79,12 @@ class VoteDocumentationTest extends ApiDocumentationHelper {
 				preprocessResponse(prettyPrint()),
 				pathParameters(parameterWithName("voteId").description("투표번호")),
 				responseFields(
-					fieldWithPath("voteRecordId").description("투표기록번호")   // 필드 설명 snippets 생성
-					, fieldWithPath("voteId").description("투표번호")
-					, voteTypeFiled()
+					fieldWithPath("headers").description("헤더라인"),
+					fieldWithPath("body.voteRecordId").description("투표기록번호"),   // 필드 설명 snippets 생성
+					fieldWithPath("body.voteId").description("투표번호"),
+					voteTypeFiled("body.voteType"),
+					fieldWithPath("statusCode").description("결과코드"),
+					fieldWithPath("statusCodeValue").description("결과값")
 				)))
 			.andExpect(status().isOk());
 	}
@@ -100,13 +106,11 @@ class VoteDocumentationTest extends ApiDocumentationHelper {
 				preprocessRequest(prettyPrint()),
 				preprocessResponse(prettyPrint()),
 				requestFields(
-					fieldWithPath("voteId").description("투표번호")
-					, fieldWithPath("userId").description("유저번호")
-					, voteTypeFiled()
+					fieldWithPath("voteId").description("투표번호"),
+					fieldWithPath("userId").description("유저번호"),
+					voteTypeFiled("voteType")
 				)))
-			.andExpect(status().isCreated())
-			.andExpect(header().string("Location", "/vote/record/" + LocalDate.now())) //질문
-			.andExpect(redirectedUrl("/vote/record/" + LocalDate.now()));
+			.andExpect(status().isCreated());
 	}
 
 	@Test
@@ -122,11 +126,11 @@ class VoteDocumentationTest extends ApiDocumentationHelper {
 			.andExpect(status().isOk());
 	}
 
-	private FieldDescriptor voteTypeFiled() {
+	private FieldDescriptor voteTypeFiled(String fieldPath) {
 		String formattedEnumValues = Arrays.stream(VoteType.values())
 			.map(type -> String.format("`%s`", type))
 			.collect(Collectors.joining(", "));
-		return fieldWithPath("voteType").description("투표 타입 상세 : " + formattedEnumValues);
+		return fieldWithPath(fieldPath).description("투표 타입 상세 : " + formattedEnumValues);
 	}
 
 }

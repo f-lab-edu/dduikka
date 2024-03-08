@@ -2,6 +2,7 @@ package com.flab.dduikka.domain.member.api;
 
 import static org.mockito.BDDMockito.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.*;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.restdocs.request.RequestDocumentation.*;
@@ -13,10 +14,12 @@ import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 
 import com.flab.dduikka.domain.helper.ApiDocumentationHelper;
 import com.flab.dduikka.domain.member.domain.Member;
+import com.flab.dduikka.domain.member.dto.MemberRegisterRequestDto;
 import com.flab.dduikka.domain.member.dto.MemberResponseDto;
 
 class MemberDocumentationTest extends ApiDocumentationHelper {
@@ -33,8 +36,9 @@ class MemberDocumentationTest extends ApiDocumentationHelper {
 			.joinDate(LocalDate.now())
 			.createAt(LocalDateTime.now())
 			.build();
+		MemberResponseDto response = MemberResponseDto.from(mockMember);
 		given(memberService.findMember(anyLong()))
-			.willReturn(MemberResponseDto.from(mockMember));
+			.willReturn(response);
 
 		//when,then
 		mockMvc.perform(RestDocumentationRequestBuilders.get("/members/{memberId}", memberId))
@@ -44,9 +48,12 @@ class MemberDocumentationTest extends ApiDocumentationHelper {
 				preprocessResponse(prettyPrint()),
 				pathParameters(parameterWithName("memberId").description("회원아이디")),
 				responseFields(
-					fieldWithPath("memberId").description("회원아이디")
-					, fieldWithPath("email").description("이메일")
-					, fieldWithPath("joinDate").description("가입일자")
+					fieldWithPath("headers").description("헤더")
+					, fieldWithPath("body.memberId").description("회원아이디")
+					, fieldWithPath("body.email").description("이메일")
+					, fieldWithPath("body.joinDate").description("가입일자")
+					, fieldWithPath("statusCodeValue").description("결과코드값")
+					, fieldWithPath("statusCode").description("결과코드")
 				)))
 			.andExpect(status().isOk());
 	}
@@ -70,5 +77,27 @@ class MemberDocumentationTest extends ApiDocumentationHelper {
 				// )
 			))
 			.andExpect(status().isOk());
+	}
+
+	@Test
+	@DisplayName("회원가입을 한다")
+	void registerMember() throws Exception {
+		MemberRegisterRequestDto request = new MemberRegisterRequestDto(
+			"test@dduikka.net",
+			"12345678Qw!@"
+		);
+
+		mockMvc.perform(post("/members")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(request)))
+			.andDo(print())
+			.andDo(document("members/create",
+				preprocessRequest(prettyPrint()),
+				preprocessResponse(prettyPrint()),
+				requestFields(
+					fieldWithPath("email").description("이메일"),
+					fieldWithPath("password").description("비밀번호")
+				)))
+			.andExpect(status().isCreated());
 	}
 }
