@@ -6,9 +6,9 @@ import org.springframework.stereotype.Service;
 
 import com.flab.dduikka.common.validator.CustomValidator;
 import com.flab.dduikka.domain.livechat.domain.LiveChat;
+import com.flab.dduikka.domain.livechat.dto.LiveChatMessage;
 import com.flab.dduikka.domain.livechat.dto.LiveChatResponse;
 import com.flab.dduikka.domain.livechat.dto.LiveChatsResponse;
-import com.flab.dduikka.domain.livechat.dto.Message;
 import com.flab.dduikka.domain.livechat.repository.LiveChatRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -20,8 +20,8 @@ public class LiveChatService {
 	private final LiveChatRepository liveChatRepository;
 	private final CustomValidator validator;
 
-	public LiveChatResponse createMessage(long sessionId, Message message) {
-		LiveChat newLiveChat = Message.to(sessionId, message);
+	public LiveChatResponse createMessage(long sessionId, LiveChatMessage message) {
+		LiveChat newLiveChat = LiveChatMessage.to(sessionId, message);
 		validator.validateObject(newLiveChat);
 		LiveChat createdLiveChat = liveChatRepository.addLiveChat(newLiveChat);
 		return LiveChatResponse.from(createdLiveChat);

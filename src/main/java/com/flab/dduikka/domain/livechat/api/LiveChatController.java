@@ -9,9 +9,9 @@ import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.flab.dduikka.domain.livechat.application.LiveChatService;
+import com.flab.dduikka.domain.livechat.dto.LiveChatMessage;
 import com.flab.dduikka.domain.livechat.dto.LiveChatResponse;
 import com.flab.dduikka.domain.livechat.dto.LiveChatsResponse;
-import com.flab.dduikka.domain.livechat.dto.Message;
 import com.flab.dduikka.domain.login.api.SessionKey;
 import com.flab.dduikka.domain.login.dto.SessionMember;
 
@@ -28,7 +28,7 @@ public class LiveChatController {
 	@MessageMapping("/chat")
 	@SendTo("/topic/messages")
 	public LiveChatResponse sendMessage(
-		@Payload final Message request,
+		@Payload final LiveChatMessage request,
 		SimpMessageHeaderAccessor messageHeaderAccessor
 	) {
 		SessionMember sessionMember =

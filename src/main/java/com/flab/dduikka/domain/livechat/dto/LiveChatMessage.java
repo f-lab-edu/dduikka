@@ -9,14 +9,14 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class Message {
+public class LiveChatMessage {
 	private String text;
 
-	public Message(String text) {
+	public LiveChatMessage(String text) {
 		this.text = text;
 	}
 
-	public static LiveChat to(long sessionId, Message message) {
+	public static LiveChat to(long sessionId, LiveChatMessage message) {
 		return LiveChat.builder()
 			.memberId(sessionId)
 			.message(message.getText())

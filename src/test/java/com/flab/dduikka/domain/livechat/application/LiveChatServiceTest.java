@@ -17,9 +17,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.flab.dduikka.common.validator.CustomValidator;
 import com.flab.dduikka.domain.livechat.domain.LiveChat;
+import com.flab.dduikka.domain.livechat.dto.LiveChatMessage;
 import com.flab.dduikka.domain.livechat.dto.LiveChatResponse;
 import com.flab.dduikka.domain.livechat.dto.LiveChatsResponse;
-import com.flab.dduikka.domain.livechat.dto.Message;
 import com.flab.dduikka.domain.livechat.repository.LiveChatRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -38,8 +38,8 @@ class LiveChatServiceTest {
 	@DisplayName("메세지를 생성하면 addLiveChat을 호출한다")
 	void whenCreateMessageThenCallAddLiveChat() {
 		//given
-		Message request =
-			new Message("send Message!");
+		LiveChatMessage request =
+			new LiveChatMessage("send Message!");
 
 		LiveChat mockLiveChat =
 			LiveChat.builder()
