@@ -1,7 +1,8 @@
 package com.flab.dduikka.domain.livechat.dto;
 
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.flab.dduikka.domain.livechat.domain.LiveChat;
 
 import lombok.AllArgsConstructor;
@@ -13,13 +14,14 @@ public class LiveChatResponse {
 
 	private long liveChatId;
 	private String text;
-	private String time;
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
+	private LocalDateTime time;
 
 	public static LiveChatResponse from(LiveChat liveChat) {
 		return new LiveChatResponse(
 			liveChat.getLiveChatId(),
 			liveChat.getMessage(),
-			DateTimeFormatter.ofPattern("HH:mm").format(liveChat.getCreatedAt())
+			liveChat.getCreatedAt()
 		);
 	}
 }
