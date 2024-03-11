@@ -1,8 +1,6 @@
 package com.flab.dduikka.domain.member.api;
 
-import java.net.URI;
-
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -10,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.flab.dduikka.domain.member.application.MemberService;
@@ -29,30 +28,27 @@ public class MemberController {
 	private final MemberService memberService;
 
 	@GetMapping("/{memberId}")
-	public ResponseEntity<MemberResponseDto> findMember(@PathVariable final long memberId) {
-		MemberResponseDto foundMember = memberService.findMember(memberId);
-		return ResponseEntity.ok()
-			.body(foundMember);
+	@ResponseStatus(HttpStatus.OK)
+	public MemberResponseDto findMember(@PathVariable final long memberId) {
+		return memberService.findMember(memberId);
 	}
 
 	@GetMapping("/{email}/duplicated")
-	public ResponseEntity<Boolean> isEmailDuplicated(@PathVariable @Email final String email) {
-		boolean response = memberService.isEmailDuplicated(email);
-		return ResponseEntity.ok()
-			.body(response);
+	@ResponseStatus(HttpStatus.OK)
+	public Boolean isEmailDuplicated(@PathVariable @Email final String email) {
+		return memberService.isEmailDuplicated(email);
 	}
 
 	@PostMapping
-	public ResponseEntity<Void> registerMember(@RequestBody @Valid MemberRegisterRequestDto request) {
+	@ResponseStatus(HttpStatus.CREATED)
+	public void registerMember(@RequestBody @Valid MemberRegisterRequestDto request) {
 		memberService.registerMember(request);
-		return ResponseEntity.created(URI.create("/login")).build();
 	}
 
 	@PatchMapping("/{memberId}")
-	public ResponseEntity<Void> leaveMember(@PathVariable final long memberId) {
+	@ResponseStatus(HttpStatus.OK)
+	public void leaveMember(@PathVariable final long memberId) {
 		memberService.leaveMember(memberId);
-		return ResponseEntity.ok()
-			.build();
 	}
 
 }
