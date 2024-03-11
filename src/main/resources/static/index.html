@@ -1,0 +1,41 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Chat WebSocket</title>
+
+    <script src="/js/sockjs-0.3.4.js"></script>
+    <script src="/js/stomp.js"></script>
+    <script charset="utf-8" src="/js/custom-script.js" type="text/javascript"></script>
+
+</head>
+
+<body onload="disconnect()">
+
+<div>
+    <div id="loginDiv">
+        <label for="email"></label><input id="email" placeholder="Write email..." type="text"/> <br/>
+        <label for="password"></label><input id="password" placeholder="Write password..." type="password"/>
+    </div>
+    <div>
+        <button id="login" onclick="login();" type="button">login</button>
+        <button id="logout" onclick="logout();" style="display:none" type="button">logout</button>
+    </div>
+    <br/>
+    <div>
+        <button id="connect" onclick="connect();">Socket Connect</button>
+        <button disabled="disabled" id="disconnect" onclick="disconnect();">Disconnect</button>
+        <p id="connect-error"></p>
+    </div>
+    <br/>
+    <div id="conversationDiv">
+        <input id="text" placeholder="Write a message..." type="text"/>
+        <button id="sendMessage" onclick="sendMessage();">Send</button>
+        <p id="response"></p>
+    </div>
+    <div id="listDiv">
+        <button id="list" onclick="findAllLiveChat();">Scroll</button>
+    </div>
+</div>
+
+</body>
+</html>
