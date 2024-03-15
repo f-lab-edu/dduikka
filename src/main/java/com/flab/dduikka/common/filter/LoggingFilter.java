@@ -1,6 +1,6 @@
 package com.flab.dduikka.common.filter;
 
-import static com.flab.dduikka.common.util.LogFormatter.*;
+import static com.flab.dduikka.common.util.HttpRequestResponseLogger.*;
 
 import java.io.IOException;
 

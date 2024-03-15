@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class LogFormatter {
+public class HttpRequestResponseLogger {
 	public static void logRequest(ContentCachingRequestWrapper request) {
 		log.info("Request HTTPMethod = [{}], RequestURI = [{}]", request.getMethod(), request.getRequestURI());
 		log.info("IP = [{}]", request.getRemoteAddr());
