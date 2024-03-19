@@ -11,8 +11,13 @@ import lombok.extern.slf4j.Slf4j;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SHA256Encryptor {
 
-	public static String hashSHA256(String data) throws NoSuchAlgorithmException {
-		MessageDigest md = MessageDigest.getInstance("SHA-256");
+	public static String hashSHA256(String data) {
+		MessageDigest md = null;
+		try {
+			md = MessageDigest.getInstance("SHA-256");
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException("암호화 시 오류가 발생하였습니다.");
+		}
 		md.update(data.getBytes());
 		return bytesToHex(md.digest());
 	}
