@@ -1,4 +1,5 @@
 var stompClient = null;
+var eid = null;
 
 function setConnected(connected) {
 
@@ -78,6 +79,11 @@ function findAllLiveChat() {
     stompClient.send("/app/list/" + getMinId(), {});
 }
 
+function deleteLiveChat(data) {
+    console.log(data);
+    stompClient.send("/app/chat/" + data, {});
+}
+
 function showMessageOutput(messageOutput) {
     var response = document.getElementById('response');
     var p = document.createElement('p');
@@ -100,8 +106,29 @@ function showList(messageOutputList) {
         p.appendChild(span);
         p.appendChild(document.createTextNode(" : " + messageOutput.text + " (" + messageOutput.time + ")"));
 
+        if (messageOutput.eid === eid) {
+            // 버튼 요소 생성
+            var button = document.createElement('button');
+            button.innerHTML = 'X'; // 버튼에 표시될 텍스트 설정
+
+            // 버튼 클릭 이벤트를 처리할 함수 정의 및 할당
+            button.onclick = function () {
+                deleteLiveChat(messageOutput.liveChatId);
+            };
+
+            // 생성된 버튼을 p 태그에 추가
+            p.appendChild(button);
+        }
+
+        // p 태그를 문서에 추가
         response.insertBefore(p, response.firstChild);
     });
+}
+
+function getCookie(name) {
+    var value = "; " + document.cookie;
+    var parts = value.split("; " + name + "=");
+    if (parts.length == 2) return parts.pop().split(";").shift();
 }
 
 function login() {
@@ -128,6 +155,8 @@ function login() {
             email.value = '';
             password.value = '';
             console.log('login success');
+            eid = getCookie("EID");
+            console.log(eid);
         } else {
             // 요청이 실패한 경우의 동작을 작성합니다.
             console.log('login fail');
@@ -149,7 +178,8 @@ function logout() {
             document.getElementById('loginDiv').style.display = "block";
             document.getElementById('login').style.display = "block";
             document.getElementById('logout').style.display = "none";
-            console.log('logout success')
+            console.log('logout success');
+            eid = null;
         }
     }
     xhr.send();
