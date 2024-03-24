@@ -1,38 +1,67 @@
 package com.flab.dduikka.domain.livechat.domain;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
-import com.flab.dduikka.domain.Auditable;
+import com.flab.dduikka.common.domain.Auditable;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 
+@Getter
 public class LiveChat extends Auditable {
 
-	@Getter
 	private long liveChatId;
-	@Getter
 	@NotNull
 	private long memberId;
-	@Getter
 	@NotBlank
 	private String message;
 	@NotNull
-	private boolean isDeleted;
+	private boolean deletedFlag;
 
 	protected LiveChat(LocalDateTime createdAt) {
 		super(createdAt);
 	}
 
 	@Builder
-	public LiveChat(LocalDateTime createdAt, long liveChatId, long memberId, String message, Boolean isDeleted) {
+	public LiveChat(LocalDateTime createdAt, long liveChatId, long memberId, String message, boolean deletedFlag) {
 		super(createdAt);
 		this.liveChatId = liveChatId;
 		this.memberId = memberId;
 		this.message = message;
-		this.isDeleted = isDeleted;
+		this.deletedFlag = deletedFlag;
+	}
+
+	public void delete() {
+		this.deletedFlag = true;
+	}
+
+	public boolean isSameWriter(long memberId) {
+		return this.memberId == memberId;
+	}
+
+	public boolean isDeleted() {
+		return this.deletedFlag;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+		if (!super.equals(o))
+			return false;
+		LiveChat liveChat = (LiveChat)o;
+		return liveChatId == liveChat.liveChatId && memberId == liveChat.memberId && deletedFlag
+			== liveChat.deletedFlag;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(liveChatId, memberId, deletedFlag);
 	}
 
 	@Override
@@ -41,12 +70,7 @@ public class LiveChat extends Auditable {
 			"messageId=" + liveChatId +
 			", memberId=" + memberId +
 			", message='" + message + '\'' +
-			", isDeleted=" + isDeleted +
+			", isDeleted=" + deletedFlag +
 			'}';
-	}
-
-	// BeanPropertySqlParameterSource로 변환 시 변수를 delete로 인식하는 문제가 있어, 별도로 정의한다.
-	public boolean getIsDeleted() {
-		return isDeleted;
 	}
 }
