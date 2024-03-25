@@ -43,9 +43,15 @@ public class LiveChatController {
 	}
 
 	@MessageMapping("/list/{lastMessageId}")
-	public void getLiveChatList(@DestinationVariable final long lastMessageId) {
+	public void getLiveChatList(
+		@DestinationVariable final long lastMessageId,
+		SimpMessageHeaderAccessor messageHeaderAccessor) {
 		LiveChatsResponse liveChat = liveChatService.findAllLiveChat(lastMessageId);
-		simpMessagingTemplate.convertAndSend("/queue/chats", liveChat);
+		simpMessagingTemplate.convertAndSendToUser(
+			messageHeaderAccessor.getSessionId(),
+			"/queue/chats",
+			liveChat,
+			messageHeaderAccessor.getMessageHeaders());
 	}
 
 	@MessageMapping("/chat/{liveChatId}")
