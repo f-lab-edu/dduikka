@@ -8,12 +8,16 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.flab.dduikka.domain.helper.SpringBootRepositoryTestHelper;
 import com.flab.dduikka.domain.member.domain.Member;
 import com.flab.dduikka.domain.member.domain.MemberStatus;
 
 class JdbcMemberRepositoryTest extends SpringBootRepositoryTestHelper {
+
+	@Autowired
+	private MemberRepository memberRepository;
 
 	@Test
 	@DisplayName("등록된 아이디로 회원을 조회하면 회원이 조회된다")
