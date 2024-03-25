@@ -4,12 +4,14 @@ import java.time.LocalDateTime;
 
 import com.flab.dduikka.domain.livechat.domain.LiveChat;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
 public class LiveChatMessage {
+	@NotBlank
 	private String text;
 
 	public LiveChatMessage(String text) {
@@ -20,7 +22,7 @@ public class LiveChatMessage {
 		return LiveChat.builder()
 			.memberId(sessionId)
 			.message(message.getText())
-			.isDeleted(false)
+			.deletedFlag(false)
 			.createdAt(LocalDateTime.now())
 			.build();
 	}
