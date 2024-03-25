@@ -16,13 +16,25 @@ function connect() {
             setConnected(true);
             console.log('Connected: ' + frame);
             stompClient.subscribe('/topic/messages', function (messageOutput) {
+                var headers = messageOutput.headers;
+                var customHeaderValue = headers['event-type'];
+                console.log('customHeaderValue: ' + customHeaderValue);
+                if (customHeaderValue === 'create') {
+                    createMessage(JSON.parse(messageOutput.body));
+                } else if (customHeaderValue === 'delete') {
+                    deleteMessage(messageOutput.body);
+                }
                 console.log(messageOutput);
-                showMessageOutput(JSON.parse(messageOutput.body));
             });
 
             stompClient.subscribe('/user/queue/chats', function (messageOutput) {
                 console.log(messageOutput);
-                showList(JSON.parse(messageOutput.body));
+                createMessageList(JSON.parse(messageOutput.body));
+            });
+
+            stompClient.subscribe('/user/queue/errors', function (messageOutput) {
+                console.log(messageOutput);
+                generateErrorElement(messageOutput.body);
             });
 
             // 최초 로딩 시 목록을 조회해온다
@@ -40,7 +52,6 @@ function connect() {
 }
 
 function disconnect() {
-
     if (stompClient != null) {
         stompClient.disconnect();
     }
@@ -50,6 +61,9 @@ function disconnect() {
 }
 
 function sendMessage() {
+    var error = document.getElementById('error');
+    var pTag = error.getElementsByTagName('p');
+    if (error.getElementsByTagName('p').length > 0) error.removeChild(pTag[0]);
     var text = document.getElementById('text').value;
     stompClient.send("/app/chat", {}, JSON.stringify({'text': text}));
     document.getElementById('text').value = '';
@@ -57,7 +71,7 @@ function sendMessage() {
 
 function getMinId() {
     var elements = document.getElementsByClassName('liveChatId');
-    var min = 999999;
+    min = 999999;
 
     if (elements.length === 0) {
         return min; // 최초 조회 시, 기준이 될 임의의 최댓값
@@ -71,7 +85,6 @@ function getMinId() {
             min = value;
         }
     }
-
     return min;
 }
 
@@ -84,51 +97,74 @@ function deleteLiveChat(data) {
     stompClient.send("/app/chat/" + data, {});
 }
 
-function showMessageOutput(messageOutput) {
+function deleteMessage(data) {
     var response = document.getElementById('response');
-    var p = document.createElement('p');
-    p.style.wordWrap = 'break-word';
-    p.appendChild(document.createTextNode(messageOutput.liveChatId + " : " + messageOutput.text + " (" + messageOutput.time + ")"));
+    var messages = response.getElementsByTagName('p');
+
+    Array.from(messages).forEach(function (message) {
+        var liveChatElements = message.getElementsByClassName('liveChatId');
+        if (liveChatElements.length > 0) {
+            var liveChatId = message.getElementsByClassName('liveChatId')[0].textContent;
+            if (liveChatId === data)
+                message.innerText = '삭제된 메세지입니다.';
+        }
+    });
+}
+
+function createMessage(messageOutput) {
+    var response = document.getElementById('response');
+    var p = generateMessageElement(messageOutput);
     response.appendChild(p);
 }
 
-function showList(messageOutputList) {
+function createMessageList(messageOutputList) {
     var response = document.getElementById('response');
-
     var liveChatsResponseList = messageOutputList.liveChatsResponseList;
 
     liveChatsResponseList.forEach(function (messageOutput) {
-        var span = document.createElement('span');
-        span.classList.add('liveChatId');
-        span.appendChild(document.createTextNode(messageOutput.liveChatId));
-
-        var p = document.createElement('p');
-        p.appendChild(span);
-        p.appendChild(document.createTextNode(" : " + messageOutput.text + " (" + messageOutput.time + ")"));
-
-        if (messageOutput.eid === eid) {
-            // 버튼 요소 생성
-            var button = document.createElement('button');
-            button.innerHTML = 'X'; // 버튼에 표시될 텍스트 설정
-
-            // 버튼 클릭 이벤트를 처리할 함수 정의 및 할당
-            button.onclick = function () {
-                deleteLiveChat(messageOutput.liveChatId);
-            };
-
-            // 생성된 버튼을 p 태그에 추가
-            p.appendChild(button);
-        }
-
+        var p = generateMessageElement(messageOutput);
         // p 태그를 문서에 추가
         response.insertBefore(p, response.firstChild);
     });
 }
 
+function generateMessageElement(messageOutput) {
+    var span = document.createElement('span');
+    span.classList.add('liveChatId');
+    span.appendChild(document.createTextNode(messageOutput.liveChatId));
+
+    var p = document.createElement('p');
+    p.appendChild(span);
+    p.appendChild(document.createTextNode(" : " + messageOutput.text + " (" + messageOutput.time + ")"));
+    if (messageOutput.eid === eid) {
+        // 버튼 요소 생성
+        var button = document.createElement('button');
+        button.innerHTML = 'X'; // 버튼에 표시될 텍스트 설정
+
+        button.onclick = function () {
+            deleteLiveChat(messageOutput.liveChatId);
+        };
+
+        // 생성된 버튼을 p 태그에 추가
+        p.appendChild(button);
+    }
+    return p;
+}
+
+function generateErrorElement(messageOutput) {
+    var error = document.getElementById('error');
+    var pTag = error.getElementsByTagName('p');
+    if (error.getElementsByTagName('p').length > 0) error.removeChild(pTag[0]);
+    var p = document.createElement('p');
+    p.appendChild(document.createTextNode(messageOutput));
+    p.style.color = 'red';
+    error.appendChild(p);
+}
+
 function getCookie(name) {
     var value = "; " + document.cookie;
     var parts = value.split("; " + name + "=");
-    if (parts.length == 2) return parts.pop().split(";").shift();
+    if (parts.length === 2) return parts.pop().split(";").shift();
 }
 
 function login() {
