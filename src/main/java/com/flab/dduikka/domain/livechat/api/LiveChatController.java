@@ -25,6 +25,8 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class LiveChatController {
 
+	private static final String EVENT_TYPE = "event-type";
+
 	private final LiveChatService liveChatService;
 	private final SimpMessagingTemplate simpMessagingTemplate;
 
@@ -37,7 +39,7 @@ public class LiveChatController {
 			(SessionMember)messageHeaderAccessor.getSessionAttributes().get(SessionKey.LOGIN_USER.name());
 		LiveChatResponse liveChatResponse = liveChatService.createMessage(sessionMember.getMemberId(), request);
 		//header 설정
-		Map<String, Object> headers = Map.of("event-type", "create");
+		Map<String, Object> headers = Map.of(EVENT_TYPE, EventType.CREATE.name());
 		simpMessagingTemplate.convertAndSend("/topic/messages", liveChatResponse,
 			headers);
 	}
@@ -62,7 +64,7 @@ public class LiveChatController {
 		SessionMember sessionMember =
 			(SessionMember)messageHeaderAccessor.getSessionAttributes().get(SessionKey.LOGIN_USER.name());
 		liveChatService.deleteLiveChat(liveChatId, sessionMember.getMemberId());
-		Map<String, Object> headers = Map.of("event-type", "delete");
+		Map<String, Object> headers = Map.of(EVENT_TYPE, EventType.DELETE.name());
 		simpMessagingTemplate.convertAndSend("/topic/messages", liveChatId, headers);
 	}
 }
