@@ -7,17 +7,21 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.util.Arrays;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 
+import com.flab.dduikka.common.util.SHA256Encryptor;
 import com.flab.dduikka.domain.helper.IntegrationTestHelper;
 import com.flab.dduikka.domain.login.dto.LoginRequestDto;
 import com.flab.dduikka.domain.login.dto.SessionMember;
 import com.flab.dduikka.domain.login.exception.LoginException;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpSession;
 
 class LoginControllerTest extends IntegrationTestHelper {
@@ -95,6 +99,33 @@ class LoginControllerTest extends IntegrationTestHelper {
 			.andDo(print())
 			.andExpect(result -> assertInstanceOf(IllegalStateException.class, result.getResolvedException()))
 			.andExpect(status().isBadRequest());
+	}
+
+	@Test
+	@DisplayName("로그인을 하면 쿠키가 생성된다")
+	void whenLogInThenAddCookies() throws Exception {
+		//given
+		LoginRequestDto request = new LoginRequestDto("test@dduikka.com", "1234");
+		SessionMember sessionMember = new SessionMember(1L, "test@dduikka.com");
+		BDDMockito.given(loginService.login(any())).willReturn(sessionMember);
+		Cookie createdCookie =
+			new Cookie("EID",
+				SHA256Encryptor.hashSHA256(String.valueOf(sessionMember.getMemberId())));
+
+		//when
+		MvcResult result = mockMvc.perform(
+				post("/login")
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(objectMapper.writeValueAsString(request)))
+			.andExpect(status().isOk())
+			.andDo(print())
+			.andReturn();
+		boolean match =
+			Arrays.asList(result.getResponse().getCookies())
+				.contains(createdCookie);
+
+		//then
+		assertThat(match).isTrue();
 	}
 
 }

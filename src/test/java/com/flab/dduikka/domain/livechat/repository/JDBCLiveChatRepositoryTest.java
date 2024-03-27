@@ -24,7 +24,7 @@ class JDBCLiveChatRepositoryTest extends SpringBootRepositoryTestHelper {
 			LiveChat.builder()
 				.memberId(1L)
 				.message("테스트용 메세지")
-				.isDeleted(false)
+				.deletedFlag(false)
 				.createdAt(LocalDateTime.now())
 				.build();
 		//when
@@ -32,6 +32,50 @@ class JDBCLiveChatRepositoryTest extends SpringBootRepositoryTestHelper {
 		//then
 		List<LiveChat> liveChats = liveChatRepository.findAllLiveChat(CURSOR);
 		assertThat(liveChats).hasSize(1);
+	}
+
+	@Test
+	@DisplayName("채팅번호로 조회하면 채팅이 조회된다")
+	void whenFindByIdThenReturnsLiveChat() {
+		//given
+		LiveChat newLiveChat =
+			LiveChat.builder()
+				.memberId(1L)
+				.message("테스트용 메세지")
+				.deletedFlag(false)
+				.createdAt(LocalDateTime.now())
+				.build();
+		LiveChat createdLiveChat = liveChatRepository.addLiveChat(newLiveChat);
+
+		//when
+		LiveChat foundLiveChat =
+			liveChatRepository.findById(createdLiveChat.getLiveChatId()).get();
+
+		//then
+		assertThat(createdLiveChat).isEqualTo(foundLiveChat);
+	}
+
+	@Test
+	@DisplayName("삭제된 채팅으로 변경하면 채팅이 삭제된다")
+	void whenDeleteLiveChatThenRemovesLiveChat() {
+		//given
+		LiveChat newLiveChat =
+			LiveChat.builder()
+				.memberId(1L)
+				.message("테스트용 메세지")
+				.deletedFlag(false)
+				.createdAt(LocalDateTime.now())
+				.build();
+		LiveChat createdLiveChat = liveChatRepository.addLiveChat(newLiveChat);
+		createdLiveChat.delete();
+
+		//when
+		liveChatRepository.deleteLiveChat(createdLiveChat);
+
+		//then
+		LiveChat foundLiveChat =
+			liveChatRepository.findById(createdLiveChat.getLiveChatId()).get();
+		assertThat(createdLiveChat).isEqualTo(foundLiveChat);
 	}
 
 	@Nested
@@ -46,7 +90,7 @@ class JDBCLiveChatRepositoryTest extends SpringBootRepositoryTestHelper {
 				LiveChat liveChat = LiveChat.builder()
 					.memberId(1L)
 					.message("테스트용 메세지")
-					.isDeleted(false)
+					.deletedFlag(false)
 					.createdAt(LocalDateTime.now())
 					.build();
 				liveChatRepository.addLiveChat(liveChat);
@@ -68,7 +112,7 @@ class JDBCLiveChatRepositoryTest extends SpringBootRepositoryTestHelper {
 				LiveChat liveChat = LiveChat.builder()
 					.memberId(1L)
 					.message("테스트용 메세지")
-					.isDeleted(false)
+					.deletedFlag(false)
 					.createdAt(LocalDateTime.now())
 					.build();
 				liveChatRepository.addLiveChat(liveChat);
@@ -90,7 +134,7 @@ class JDBCLiveChatRepositoryTest extends SpringBootRepositoryTestHelper {
 				LiveChat liveChat = LiveChat.builder()
 					.memberId(1L)
 					.message("테스트용 메세지")
-					.isDeleted(false)
+					.deletedFlag(false)
 					.createdAt(LocalDateTime.now())
 					.build();
 				liveChatRepository.addLiveChat(liveChat);
