@@ -6,9 +6,9 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.flab.dduikka.common.util.WebSocketMessageSender;
 import com.flab.dduikka.domain.livechat.application.LiveChatService;
 import com.flab.dduikka.domain.livechat.dto.LiveChatMessage;
 import com.flab.dduikka.domain.livechat.dto.LiveChatResponse;
@@ -28,7 +28,7 @@ public class LiveChatController {
 	private static final String EVENT_TYPE = "event-type";
 
 	private final LiveChatService liveChatService;
-	private final SimpMessagingTemplate simpMessagingTemplate;
+	private final WebSocketMessageSender webSocketMessageSender;
 
 	@MessageMapping("/chat")
 	public void sendMessage(
@@ -37,23 +37,23 @@ public class LiveChatController {
 	) {
 		SessionMember sessionMember =
 			(SessionMember)messageHeaderAccessor.getSessionAttributes().get(SessionKey.LOGIN_USER.name());
-		LiveChatResponse liveChatResponse = liveChatService.createMessage(sessionMember.getMemberId(), request);
 		//header 설정
 		Map<String, Object> headers = Map.of(EVENT_TYPE, EventType.CREATE.name());
-		simpMessagingTemplate.convertAndSend("/topic/messages", liveChatResponse,
-			headers);
+		LiveChatResponse response = liveChatService.createMessage(sessionMember.getMemberId(), request);
+		webSocketMessageSender.sendTo("/topic/messages", response, headers);
 	}
 
 	@MessageMapping("/list/{lastMessageId}")
-	public void getLiveChatList(
+	public void findLiveChatList(
 		@DestinationVariable final long lastMessageId,
 		SimpMessageHeaderAccessor messageHeaderAccessor) {
-		LiveChatsResponse liveChat = liveChatService.findAllLiveChat(lastMessageId);
-		simpMessagingTemplate.convertAndSendToUser(
+		LiveChatsResponse response = liveChatService.findAllLiveChat(lastMessageId);
+		webSocketMessageSender.sendToUser(
 			messageHeaderAccessor.getSessionId(),
 			"/queue/chats",
-			liveChat,
-			messageHeaderAccessor.getMessageHeaders());
+			response,
+			messageHeaderAccessor.getMessageHeaders()
+		);
 	}
 
 	@MessageMapping("/chat/{liveChatId}")
@@ -63,8 +63,8 @@ public class LiveChatController {
 	) {
 		SessionMember sessionMember =
 			(SessionMember)messageHeaderAccessor.getSessionAttributes().get(SessionKey.LOGIN_USER.name());
-		liveChatService.deleteLiveChat(liveChatId, sessionMember.getMemberId());
 		Map<String, Object> headers = Map.of(EVENT_TYPE, EventType.DELETE.name());
-		simpMessagingTemplate.convertAndSend("/topic/messages", liveChatId, headers);
+		liveChatService.deleteLiveChat(liveChatId, sessionMember.getMemberId());
+		webSocketMessageSender.sendTo("/topic/messages", liveChatId, headers);
 	}
 }
