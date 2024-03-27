@@ -1,9 +1,11 @@
 package com.flab.dduikka.domain.livechat.application;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.flab.dduikka.common.util.SHA256Encryptor;
 import com.flab.dduikka.common.validator.CustomValidator;
 import com.flab.dduikka.domain.livechat.domain.LiveChat;
 import com.flab.dduikka.domain.livechat.dto.LiveChatMessage;
@@ -19,18 +21,26 @@ import lombok.RequiredArgsConstructor;
 public class LiveChatService {
 
 	private final LiveChatRepository liveChatRepository;
+	private final SHA256Encryptor sha256Encryptor;
 	private final CustomValidator validator;
 
 	public LiveChatResponse createMessage(long sessionId, LiveChatMessage message) {
 		LiveChat newLiveChat = LiveChatMessage.to(sessionId, message);
 		validator.validateObject(newLiveChat);
 		LiveChat createdLiveChat = liveChatRepository.addLiveChat(newLiveChat);
-		return LiveChatResponse.from(createdLiveChat);
+		String encryptSessionId = sha256Encryptor.hashSHA256(String.valueOf(sessionId));
+		return LiveChatResponse.from(createdLiveChat, encryptSessionId);
 	}
 
 	public LiveChatsResponse findAllLiveChat(long lastMessageId) {
-		List<LiveChat> liveChat = liveChatRepository.findAllLiveChat(lastMessageId);
-		return LiveChatsResponse.from(liveChat);
+		List<LiveChat> liveChats = liveChatRepository.findAllLiveChat(lastMessageId);
+		return new LiveChatsResponse(
+			liveChats.stream()
+				.map(liveChat -> LiveChatResponse.from(
+					liveChat,
+					sha256Encryptor.hashSHA256(String.valueOf(liveChat.getMemberId()))
+				))
+				.collect(Collectors.toList()));
 	}
 
 	public void deleteLiveChat(long liveChatId, long memberId) {

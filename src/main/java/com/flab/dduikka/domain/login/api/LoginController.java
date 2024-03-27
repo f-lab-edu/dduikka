@@ -24,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 public class LoginController {
 
 	private final LoginService loginService;
+	private final SHA256Encryptor sha256Encryptor;
 
 	@PostMapping("/login")
 	@ResponseStatus(HttpStatus.OK)
@@ -39,7 +40,7 @@ public class LoginController {
 		HttpSession session = request.getSession(true);
 		session.setAttribute(SessionKey.LOGIN_USER.name(), sessionMember);
 		Cookie cookie =
-			new Cookie("EID", SHA256Encryptor.hashSHA256(String.valueOf(sessionMember.getMemberId())));
+			new Cookie("EID", sha256Encryptor.hashSHA256(String.valueOf(sessionMember.getMemberId())));
 		response.addCookie(cookie);
 
 	}

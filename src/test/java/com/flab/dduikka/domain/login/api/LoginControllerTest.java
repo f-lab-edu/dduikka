@@ -15,7 +15,6 @@ import org.mockito.BDDMockito;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 
-import com.flab.dduikka.common.util.SHA256Encryptor;
 import com.flab.dduikka.domain.helper.IntegrationTestHelper;
 import com.flab.dduikka.domain.login.dto.LoginRequestDto;
 import com.flab.dduikka.domain.login.dto.SessionMember;
@@ -107,10 +106,12 @@ class LoginControllerTest extends IntegrationTestHelper {
 		//given
 		LoginRequestDto request = new LoginRequestDto("test@dduikka.com", "1234");
 		SessionMember sessionMember = new SessionMember(1L, "test@dduikka.com");
+		String eid = "1234";
 		BDDMockito.given(loginService.login(any())).willReturn(sessionMember);
+		BDDMockito.given(sha256Encryptor.hashSHA256(any())).willReturn(eid);
 		Cookie createdCookie =
 			new Cookie("EID",
-				SHA256Encryptor.hashSHA256(String.valueOf(sessionMember.getMemberId())));
+				sha256Encryptor.hashSHA256(String.valueOf(sessionMember.getMemberId())));
 
 		//when
 		MvcResult result = mockMvc.perform(

@@ -6,20 +6,31 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(classes = SHA256EncryptorTest.TestConfig.class)
 class SHA256EncryptorTest {
+
+	@Autowired
+	private SHA256Encryptor sha256Encryptor;
 
 	@Test
 	@DisplayName("salting 하지 않은 암호화 결과의 동일성을 검증한다")
 	void testSHA256Consistency() {
 		String password = "12345";
-		String initialHash = SHA256Encryptor.hashSHA256(password);
+		String initialHash = sha256Encryptor.hashSHA256(password);
 
 		for (int i = 1; i < 3; i++) {
-			String currentHash = SHA256Encryptor.hashSHA256(password);
+			String currentHash = sha256Encryptor.hashSHA256(password);
 			assertThat(initialHash).isEqualTo(currentHash);
 		}
 	}
@@ -33,11 +44,19 @@ class SHA256EncryptorTest {
 		long startTime = System.nanoTime();
 		//when
 		for (int i = 0; i < loopCnt; i++)
-			SHA256Encryptor.hashSHA256(data);
+			sha256Encryptor.hashSHA256(data);
 		long latency = TimeUnit.NANOSECONDS.toSeconds(System.nanoTime() - startTime);
 		log.info("Test execute Time : {}", latency);
 		//then
 		assertThat(latency).isLessThanOrEqualTo(1);
+	}
+
+	@Configuration
+	static class TestConfig {
+		@Bean
+		public SHA256Encryptor sha256Encryptor() {
+			return new SHA256Encryptor();
+		}
 	}
 
 }
