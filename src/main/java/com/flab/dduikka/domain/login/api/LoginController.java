@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.flab.dduikka.common.util.SHA256Encryptor;
+import com.flab.dduikka.common.encryption.EncryptedMemberIdentifierCache;
 import com.flab.dduikka.domain.login.application.LoginService;
 import com.flab.dduikka.domain.login.dto.LoginRequestDto;
 import com.flab.dduikka.domain.login.dto.SessionMember;
@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 public class LoginController {
 
 	private final LoginService loginService;
-	private final SHA256Encryptor sha256Encryptor;
+	private final EncryptedMemberIdentifierCache cachedEncryptor;
 
 	@PostMapping("/login")
 	@ResponseStatus(HttpStatus.OK)
@@ -40,7 +40,8 @@ public class LoginController {
 		HttpSession session = request.getSession(true);
 		session.setAttribute(SessionKey.LOGIN_USER.name(), sessionMember);
 		Cookie cookie =
-			new Cookie("EID", sha256Encryptor.hashSHA256(String.valueOf(sessionMember.getMemberId())));
+			new Cookie("EID",
+				cachedEncryptor.cacheEncryptedMemberIdentifier(String.valueOf(sessionMember.getMemberId())));
 		response.addCookie(cookie);
 
 	}

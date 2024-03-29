@@ -1,17 +1,15 @@
-package com.flab.dduikka.common.util;
+package com.flab.dduikka.common.encryption;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import org.springframework.stereotype.Component;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
-@Component
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SHA256Encryptor {
 
-	public String hashSHA256(String data) {
+	public static String hashSHA256(String data) {
 		MessageDigest md = null;
 		try {
 			md = MessageDigest.getInstance("SHA-256");
@@ -22,7 +20,7 @@ public class SHA256Encryptor {
 		return bytesToHex(md.digest());
 	}
 
-	private String bytesToHex(byte[] bytes) {
+	private static String bytesToHex(byte[] bytes) {
 		StringBuilder builder = new StringBuilder();
 		for (byte b : bytes) {
 			builder.append(String.format("%02x", b));
