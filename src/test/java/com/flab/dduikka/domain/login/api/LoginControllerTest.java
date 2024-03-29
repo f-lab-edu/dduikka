@@ -112,6 +112,8 @@ class LoginControllerTest extends IntegrationTestHelper {
 		Cookie createdCookie =
 			new Cookie("EID",
 				cachedEncryptor.cacheEncryptedMemberIdentifier(String.valueOf(sessionMember.getMemberId())));
+		createdCookie.setSecure(false);
+		createdCookie.setHttpOnly(false);
 
 		//when
 		MvcResult result = mockMvc.perform(

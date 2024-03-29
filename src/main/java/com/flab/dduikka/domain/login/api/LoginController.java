@@ -42,6 +42,8 @@ public class LoginController {
 		Cookie cookie =
 			new Cookie("EID",
 				cachedEncryptor.cacheEncryptedMemberIdentifier(String.valueOf(sessionMember.getMemberId())));
+		cookie.setSecure(false);
+		cookie.setHttpOnly(false);
 		response.addCookie(cookie);
 
 	}
