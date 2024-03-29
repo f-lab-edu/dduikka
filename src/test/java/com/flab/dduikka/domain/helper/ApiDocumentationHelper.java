@@ -9,7 +9,7 @@ import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.flab.dduikka.common.util.SHA256Encryptor;
+import com.flab.dduikka.common.encryption.EncryptedMemberIdentifierCache;
 import com.flab.dduikka.domain.login.api.LoginController;
 import com.flab.dduikka.domain.login.application.LoginService;
 import com.flab.dduikka.domain.member.api.MemberController;
@@ -43,6 +43,6 @@ public abstract class ApiDocumentationHelper {
 	protected ObjectMapper objectMapper;
 
 	@MockBean
-	protected SHA256Encryptor sha256Encryptor;
+	protected EncryptedMemberIdentifierCache cachedEncryptor;
 
 }

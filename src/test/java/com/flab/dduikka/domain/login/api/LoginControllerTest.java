@@ -108,10 +108,10 @@ class LoginControllerTest extends IntegrationTestHelper {
 		SessionMember sessionMember = new SessionMember(1L, "test@dduikka.com");
 		String eid = "1234";
 		BDDMockito.given(loginService.login(any())).willReturn(sessionMember);
-		BDDMockito.given(sha256Encryptor.hashSHA256(any())).willReturn(eid);
+		BDDMockito.given(cachedEncryptor.cacheEncryptedMemberIdentifier(any())).willReturn(eid);
 		Cookie createdCookie =
 			new Cookie("EID",
-				sha256Encryptor.hashSHA256(String.valueOf(sessionMember.getMemberId())));
+				cachedEncryptor.cacheEncryptedMemberIdentifier(String.valueOf(sessionMember.getMemberId())));
 
 		//when
 		MvcResult result = mockMvc.perform(

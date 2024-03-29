@@ -17,7 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.flab.dduikka.common.util.SHA256Encryptor;
+import com.flab.dduikka.common.encryption.EncryptedMemberIdentifierCache;
 import com.flab.dduikka.common.validator.CustomValidator;
 import com.flab.dduikka.domain.livechat.domain.LiveChat;
 import com.flab.dduikka.domain.livechat.dto.LiveChatMessage;
@@ -39,7 +39,7 @@ class LiveChatServiceTest {
 	private CustomValidator validator;
 
 	@Mock
-	private SHA256Encryptor sha256Encryptor;
+	private EncryptedMemberIdentifierCache cachedEncryptor;
 
 	@Test
 	@DisplayName("메세지를 생성하면 addLiveChat을 호출한다")
