@@ -13,13 +13,15 @@ import lombok.Getter;
 public class LiveChatResponse {
 
 	private long liveChatId;
+	private String eid;
 	private String text;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
 	private LocalDateTime time;
 
-	public static LiveChatResponse from(LiveChat liveChat) {
+	public static LiveChatResponse from(LiveChat liveChat, String encryptId) {
 		return new LiveChatResponse(
 			liveChat.getLiveChatId(),
+			encryptId,
 			liveChat.getMessage(),
 			liveChat.getCreatedAt()
 		);
