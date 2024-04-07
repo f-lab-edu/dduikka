@@ -10,11 +10,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.flab.dduikka.domain.helper.SpringBootRepositoryTestHelper;
+import com.flab.dduikka.domain.helper.JDBCRepositoryTestHelper;
 import com.flab.dduikka.domain.member.domain.Member;
 import com.flab.dduikka.domain.member.domain.MemberStatus;
 
-class JdbcMemberRepositoryTest extends SpringBootRepositoryTestHelper {
+class JdbcMemberRepositoryTest extends JDBCRepositoryTestHelper {
 
 	@Autowired
 	private MemberRepository memberRepository;

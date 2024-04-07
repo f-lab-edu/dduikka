@@ -9,12 +9,12 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
-import com.flab.dduikka.domain.helper.SpringBootRepositoryTestHelper;
+import com.flab.dduikka.domain.helper.JDBCRepositoryTestHelper;
 import com.flab.dduikka.domain.vote.domain.Vote;
 import com.flab.dduikka.domain.vote.domain.VoteRecord;
 import com.flab.dduikka.domain.vote.domain.VoteType;
 
-class JdbcVoteRecordRepositoryTest extends SpringBootRepositoryTestHelper {
+class JdbcVoteRecordRepositoryTest extends JDBCRepositoryTestHelper {
 
 	@Test
 	void 유저가_투표하면_투표기록이_생성된다() {

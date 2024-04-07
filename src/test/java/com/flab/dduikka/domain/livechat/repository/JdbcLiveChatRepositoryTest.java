@@ -9,10 +9,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import com.flab.dduikka.domain.helper.SpringBootRepositoryTestHelper;
+import com.flab.dduikka.domain.helper.JDBCRepositoryTestHelper;
 import com.flab.dduikka.domain.livechat.domain.LiveChat;
 
-class JDBCLiveChatRepositoryTest extends SpringBootRepositoryTestHelper {
+class JdbcLiveChatRepositoryTest extends JDBCRepositoryTestHelper {
 
 	private final static int CURSOR = 999999;
 
