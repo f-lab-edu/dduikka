@@ -8,7 +8,6 @@ import java.time.Duration;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
 @SpringBootTest(
@@ -16,7 +15,6 @@ import org.springframework.test.context.jdbc.Sql;
 		"schedules.cron-expression.publisher= 0/2 * * * * *"
 	}
 )
-@ActiveProfiles(profiles = "local")
 @Sql(scripts = "classpath:h2/teardown.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 class VoteSchedulerTest {
 
