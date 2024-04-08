@@ -7,6 +7,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.util.Arrays;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
@@ -18,6 +20,7 @@ import com.flab.dduikka.domain.login.dto.LoginRequestDto;
 import com.flab.dduikka.domain.login.dto.SessionMember;
 import com.flab.dduikka.domain.login.exception.LoginException;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpSession;
 
 class LoginControllerTest extends IntegrationTestHelper {
@@ -95,6 +98,37 @@ class LoginControllerTest extends IntegrationTestHelper {
 			.andDo(print())
 			.andExpect(result -> assertInstanceOf(IllegalStateException.class, result.getResolvedException()))
 			.andExpect(status().isBadRequest());
+	}
+
+	@Test
+	@DisplayName("로그인을 하면 쿠키가 생성된다")
+	void whenLogInThenAddCookies() throws Exception {
+		//given
+		LoginRequestDto request = new LoginRequestDto("test@dduikka.com", "1234");
+		SessionMember sessionMember = new SessionMember(1L, "test@dduikka.com");
+		String eid = "1234";
+		BDDMockito.given(loginService.login(any())).willReturn(sessionMember);
+		BDDMockito.given(cachedEncryptor.cacheEncryptedMemberIdentifier(any())).willReturn(eid);
+		Cookie createdCookie =
+			new Cookie("EID",
+				cachedEncryptor.cacheEncryptedMemberIdentifier(String.valueOf(sessionMember.getMemberId())));
+		createdCookie.setSecure(false);
+		createdCookie.setHttpOnly(false);
+
+		//when
+		MvcResult result = mockMvc.perform(
+				post("/login")
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(objectMapper.writeValueAsString(request)))
+			.andExpect(status().isOk())
+			.andDo(print())
+			.andReturn();
+		boolean match =
+			Arrays.asList(result.getResponse().getCookies())
+				.contains(createdCookie);
+
+		//then
+		assertThat(match).isTrue();
 	}
 
 }

@@ -6,6 +6,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.flab.dduikka.common.encryption.EncryptedMemberIdentifierCache;
 import com.flab.dduikka.domain.login.api.LoginController;
 import com.flab.dduikka.domain.login.application.LoginService;
 
@@ -22,4 +23,7 @@ public abstract class IntegrationTestHelper {
 
 	@Autowired
 	protected ObjectMapper objectMapper;
+
+	@MockBean
+	protected EncryptedMemberIdentifierCache cachedEncryptor;
 }
