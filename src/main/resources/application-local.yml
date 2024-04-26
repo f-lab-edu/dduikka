@@ -42,3 +42,9 @@ websocket:
     destination:
       prefix: /app
   endpoint: /chats
+
+# feign 설정
+external:
+  feign-endpoint:
+    kma: http://apis.data.go.kr
+    accu-weather: http://dataservice.accuweather.com
