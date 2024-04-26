@@ -92,6 +92,8 @@ public class KMAWeatherClientResponse {
 			public static class WeatherItems {
 				private List<WeatherItem> item;
 
+				@Getter
+				@NoArgsConstructor
 				public static class WeatherItem {
 					private WeatherCode category;
 					private String baseDate;
