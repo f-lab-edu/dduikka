@@ -1,6 +1,7 @@
 package com.flab.dduikka.domain.weather.domain;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import com.flab.dduikka.domain.location.domain.Location;
 
@@ -29,5 +30,34 @@ public class Weather {
 		this.rainfall = rainfall;
 		this.snowfall = snowfall;
 		this.requestDateTime = requestDateTime;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+		Weather weather = (Weather)o;
+		return Objects.equals(forecastDateTime, weather.forecastDateTime) && Objects.equals(location,
+			weather.location);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(forecastDateTime, location);
+	}
+
+	@Override
+	public String toString() {
+		return "Weather{" +
+			"forecastDateTime=" + forecastDateTime +
+			", location=" + location +
+			", temperature=" + temperature +
+			", relativeHumidity=" + relativeHumidity +
+			", rainfall=" + rainfall +
+			", snowfall=" + snowfall +
+			", requestDateTime=" + requestDateTime +
+			'}';
 	}
 }
