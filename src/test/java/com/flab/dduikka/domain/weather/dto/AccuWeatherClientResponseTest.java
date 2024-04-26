@@ -35,6 +35,8 @@ class AccuWeatherClientResponseTest {
 	@DisplayName("응답 객체를 전달하면 weather 객체를 정상적으로 생성한다")
 	void whenDtoFromWeather_thenWeatherIsCorrectlyCreated() throws IOException {
 		//given
+		Location location = new Location("55", "127");
+		LocalDateTime localDateTime = LocalDateTime.now();
 		Weather weather =
 			Weather.builder()
 				.forecastDateTime(DateTimeUtil.toLocalDateTime("2024-04-26T22:00:00+09:00"))
@@ -42,11 +44,11 @@ class AccuWeatherClientResponseTest {
 				.relativeHumidity(61)
 				.rainfall(0.0)
 				.snowfall(0.0)
+				.location(location)
+				.requestDateTime(localDateTime)
 				.build();
 		AccuWeatherClientResponse response =
 			readJSONFile("/payload/weather/accu-weather-response.json");
-		Location location = new Location("55", "127");
-		LocalDateTime localDateTime = LocalDateTime.now();
 
 		//when
 		Weather newWeather =
