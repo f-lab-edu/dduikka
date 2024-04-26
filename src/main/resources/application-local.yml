@@ -48,3 +48,16 @@ external:
   feign-endpoint:
     kma: http://apis.data.go.kr
     accu-weather: http://dataservice.accuweather.com
+  api-key:
+    kma: test
+    accu-weather: test
+  variable:
+    kma:
+      pageNo: 1
+      numOfRows: 8
+      dataType: JSON
+    accu-weahter:
+      language: ko-kr
+      details: true
+      metric: true
+
