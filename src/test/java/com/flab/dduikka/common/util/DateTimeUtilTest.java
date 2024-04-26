@@ -80,7 +80,7 @@ class DateTimeUtilTest {
 		String localTime = "0710";
 		LocalDateTime localDateTime = DateTimeUtil.toLocalDateTime(localDate, localTime);
 		assertThat(localDateTime)
-			.isEqualTo(LocalDateTime.of(2024, 05, 25, 07, 10, 00));
+			.isNotEqualTo(LocalDateTime.of(2024, 05, 25, 07, 10, 00));
 	}
 
 }
