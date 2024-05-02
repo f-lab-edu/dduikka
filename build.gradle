@@ -77,6 +77,12 @@ dependencies {
     testImplementation("org.springframework.cloud:spring-cloud-contract-wiremock")
 }
 
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:2022.0.5"
+    }
+}
+
 ext {
     snippetsDir = file("build/generated-snippets") // snippets 파일이 저장될 경로
 }
