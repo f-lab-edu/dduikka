@@ -39,7 +39,7 @@ class WeatherServiceTest extends WireMockServerHelper {
 		String dataType = "JSON";
 		LocalDateTime localDateTime = LocalDateTime.now();
 		String localDateString = DateTimeUtil.toLocalDateString(localDateTime);
-		String localTimeString = DateTimeUtil.toLocalTimeString(localDateTime);
+		String localTimeString = DateTimeUtil.toLocalTimeString(localDateTime.minusMinutes(10));
 		String nx = "55";
 		String ny = "127";
 		MultiValueMap<String, String> params = new LinkedMultiValueMap<>();

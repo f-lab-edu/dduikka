@@ -15,8 +15,8 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import org.springframework.web.util.UriBuilderFactory;
 
-import com.flab.dduikka.domain.weather.application.AccuWeatherClient;
-import com.flab.dduikka.domain.weather.application.KMAWeatherClient;
+import com.flab.dduikka.domain.weather.application.AccuWeatherFeignClient;
+import com.flab.dduikka.domain.weather.application.KMAWeatherFeignClient;
 import com.github.tomakehurst.wiremock.WireMockServer;
 
 import wiremock.com.fasterxml.jackson.databind.JsonNode;
@@ -51,10 +51,10 @@ public abstract class WireMockServerHelper {
 	protected WireMockServer wireMockServer;
 
 	@Autowired
-	protected KMAWeatherClient kmaWeatherClient;
+	protected KMAWeatherFeignClient kmaWeatherFeignClient;
 
 	@Autowired
-	protected AccuWeatherClient accuWeatherClient;
+	protected AccuWeatherFeignClient accuWeatherFeignClient;
 
 	protected JsonNode readJsonFile(String path) throws IOException {
 		Resource resource = resourceLoader.getResource(CLASSPATH_URL_PREFIX + path);

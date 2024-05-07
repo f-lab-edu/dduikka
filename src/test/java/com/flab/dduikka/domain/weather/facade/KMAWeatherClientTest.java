@@ -16,23 +16,23 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.flab.dduikka.common.util.DateTimeUtil;
 import com.flab.dduikka.domain.helper.JSONFileReader;
 import com.flab.dduikka.domain.location.domain.Location;
-import com.flab.dduikka.domain.weather.application.KMAWeatherClient;
+import com.flab.dduikka.domain.weather.application.KMAWeatherFeignClient;
 import com.flab.dduikka.domain.weather.domain.Weather;
 import com.flab.dduikka.domain.weather.dto.KMAWeatherClientResponse;
 
 import jakarta.validation.ValidationException;
 
 @ExtendWith(MockitoExtension.class)
-class KMAWeatherFacadeTest {
+class KMAWeatherClientTest {
 
-	private KMAWeatherFacade kmaWeatherFacade;
+	private KMAWeatherClient kmaWeatherFacade;
 	@Mock
-	private KMAWeatherClient kmaWeatherClient;
+	private KMAWeatherFeignClient kmaWeatherFeignClient;
 
 	@BeforeEach
 	void setUp() {
-		kmaWeatherFacade = new KMAWeatherFacade(
-			kmaWeatherClient,
+		kmaWeatherFacade = new KMAWeatherClient(
+			kmaWeatherFeignClient,
 			"testKey",
 			1,
 			8,
@@ -47,7 +47,7 @@ class KMAWeatherFacadeTest {
 		KMAWeatherClientResponse mockResponse = JSONFileReader.readJSONFile(
 			"/payload/weather/kma-weather-response.json",
 			KMAWeatherClientResponse.class);
-		given(kmaWeatherClient.getWeather(anyString(), anyInt(), anyInt(), anyString(), anyString(), anyString(),
+		given(kmaWeatherFeignClient.getWeather(anyString(), anyInt(), anyInt(), anyString(), anyString(), anyString(),
 			anyString(), anyString()))
 			.willReturn(mockResponse);
 		LocalDateTime dateTime = LocalDateTime.now();
@@ -59,7 +59,7 @@ class KMAWeatherFacadeTest {
 		kmaWeatherFacade.getWeather(dateTime, latitude, longitude, cityCode);
 
 		//then
-		verify(kmaWeatherClient, times(1))
+		verify(kmaWeatherFeignClient, times(1))
 			.getWeather(anyString(), anyInt(), anyInt(), anyString(), anyString(), anyString(),
 				anyString(), anyString());
 	}
@@ -71,7 +71,7 @@ class KMAWeatherFacadeTest {
 		KMAWeatherClientResponse mockResponse = JSONFileReader.readJSONFile(
 			"/payload/weather/kma-weather-response.json",
 			KMAWeatherClientResponse.class);
-		given(kmaWeatherClient.getWeather(anyString(), anyInt(), anyInt(), anyString(), anyString(), anyString(),
+		given(kmaWeatherFeignClient.getWeather(anyString(), anyInt(), anyInt(), anyString(), anyString(), anyString(),
 			anyString(), anyString()))
 			.willReturn(mockResponse);
 
@@ -125,7 +125,7 @@ class KMAWeatherFacadeTest {
 		KMAWeatherClientResponse mockResponse = JSONFileReader.readJSONFile(
 			"/payload/weather/kma-weather-response.json",
 			KMAWeatherClientResponse.class);
-		given(kmaWeatherClient.getWeather(anyString(), anyInt(), anyInt(), anyString(), anyString(), anyString(),
+		given(kmaWeatherFeignClient.getWeather(anyString(), anyInt(), anyInt(), anyString(), anyString(), anyString(),
 			anyString(), anyString()))
 			.willReturn(mockResponse);
 

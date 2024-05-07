@@ -16,7 +16,7 @@ import com.flab.dduikka.common.util.DateTimeUtil;
 import com.flab.dduikka.domain.location.domain.Location;
 import com.flab.dduikka.domain.weather.domain.Weather;
 
-class AccuWeatherClientResponseTest {
+class AccuWeatherFeignClientResponseTest {
 
 	@Test
 	@DisplayName("json 응답이 객체로 역직렬화된다")
@@ -61,7 +61,7 @@ class AccuWeatherClientResponseTest {
 
 	private AccuWeatherClientResponse readJSONFile(String path) throws IOException {
 		ObjectMapper mapper = new ObjectMapper();
-		Class clazz = AccuWeatherClientResponseTest.class;
+		Class clazz = AccuWeatherFeignClientResponseTest.class;
 		InputStream stream = clazz.getResourceAsStream(path);
 		JsonNode jsonNode = mapper.readTree(stream);
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);

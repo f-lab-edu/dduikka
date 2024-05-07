@@ -58,7 +58,7 @@ class WeatherClientTest extends WireMockServerHelper {
 		);
 		//when
 		KMAWeatherClientResponse response =
-			kmaWeatherClient.getWeather(
+			kmaWeatherFeignClient.getWeather(
 				serviceKey,
 				pageNo,
 				numOfRows,
@@ -98,7 +98,7 @@ class WeatherClientTest extends WireMockServerHelper {
 
 		//when, then
 		assertThatThrownBy(() ->
-			kmaWeatherClient.getWeather(
+			kmaWeatherFeignClient.getWeather(
 				serviceKey,
 				pageNo,
 				numOfRows,
@@ -135,7 +135,7 @@ class WeatherClientTest extends WireMockServerHelper {
 
 		//when
 		AccuWeatherClientResponse response =
-			accuWeatherClient.getWeather(
+			accuWeatherFeignClient.getWeather(
 				cityCode,
 				apikey,
 				language,

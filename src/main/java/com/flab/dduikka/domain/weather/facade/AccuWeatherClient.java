@@ -8,7 +8,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import com.flab.dduikka.domain.location.domain.Location;
-import com.flab.dduikka.domain.weather.application.AccuWeatherClient;
+import com.flab.dduikka.domain.weather.application.AccuWeatherFeignClient;
 import com.flab.dduikka.domain.weather.domain.Weather;
 import com.flab.dduikka.domain.weather.dto.AccuWeatherClientResponse;
 
@@ -16,23 +16,23 @@ import jakarta.validation.ValidationException;
 
 @Component
 @Order(value = 2)
-public class AccuWeatherFacade implements WeatherFacade {
+public class AccuWeatherClient implements WeatherClient {
 
-	private final AccuWeatherClient weatherClient;
+	private final AccuWeatherFeignClient weatherFeignClient;
 	private final String serviceKey;
 	private final String language;
 	private final boolean details;
 	private final boolean metric;
 
 	@Autowired
-	public AccuWeatherFacade(
-		AccuWeatherClient weatherClient,
+	public AccuWeatherClient(
+		AccuWeatherFeignClient weatherFeignClient,
 		@Value("#{environment['external.api-key.accu-weather']}") String serviceKey,
 		@Value("#{environment['external.variable.accu-weather.language']}") String language,
 		@Value("#{environment['external.variable.accu-weather.details']}") boolean details,
 		@Value("#{environment['external.variable.accu-weather.metric']}") boolean metric
 	) {
-		this.weatherClient = weatherClient;
+		this.weatherFeignClient = weatherFeignClient;
 		this.serviceKey = serviceKey;
 		this.language = language;
 		this.details = details;
@@ -43,7 +43,7 @@ public class AccuWeatherFacade implements WeatherFacade {
 	public Weather getWeather(LocalDateTime dateTime, String latitude, String longitude, String cityCode) {
 		validated(latitude, longitude, cityCode);
 		return AccuWeatherClientResponse.from(
-			weatherClient.getWeather(
+			weatherFeignClient.getWeather(
 				cityCode,
 				serviceKey,
 				language,

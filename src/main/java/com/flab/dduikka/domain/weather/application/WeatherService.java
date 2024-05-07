@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.flab.dduikka.domain.weather.dto.WeatherResponse;
 import com.flab.dduikka.domain.weather.exception.WeatherException;
-import com.flab.dduikka.domain.weather.facade.WeatherFacade;
+import com.flab.dduikka.domain.weather.facade.WeatherClient;
 
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
@@ -18,14 +18,13 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class WeatherService {
 
-	private final List<WeatherFacade> weatherFacadelist;
+	private final List<WeatherClient> weatherClients;
 
 	public WeatherResponse getWeather(LocalDateTime dateTime, String latitude, String longitude, String cityCode) {
 		dateTime = dateTime.minusMinutes(10);
-		log.info("요청 dataTime : {}", dateTime);
-		for (WeatherFacade weatherFacade : weatherFacadelist) {
+		for (WeatherClient weatherClient : weatherClients) {
 			try {
-				return WeatherResponse.from(weatherFacade.getWeather(dateTime, latitude, longitude, cityCode));
+				return WeatherResponse.from(weatherClient.getWeather(dateTime, latitude, longitude, cityCode));
 			} catch (FeignException | WeatherException e) {
 				log.error("날씨 API 요청 중 에러 발생 : {}", e.getMessage());
 			}

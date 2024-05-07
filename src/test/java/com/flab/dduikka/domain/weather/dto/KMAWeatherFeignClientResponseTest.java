@@ -13,7 +13,7 @@ import com.flab.dduikka.domain.helper.JSONFileReader;
 import com.flab.dduikka.domain.location.domain.Location;
 import com.flab.dduikka.domain.weather.domain.Weather;
 
-class KMAWeatherClientResponseTest {
+class KMAWeatherFeignClientResponseTest {
 
 	@Test
 	@DisplayName("json 응답이 객체로 역직렬화된다")

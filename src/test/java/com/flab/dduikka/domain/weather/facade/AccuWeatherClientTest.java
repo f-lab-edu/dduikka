@@ -17,24 +17,24 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.flab.dduikka.common.util.DateTimeUtil;
 import com.flab.dduikka.domain.helper.JSONFileReader;
 import com.flab.dduikka.domain.location.domain.Location;
-import com.flab.dduikka.domain.weather.application.AccuWeatherClient;
+import com.flab.dduikka.domain.weather.application.AccuWeatherFeignClient;
 import com.flab.dduikka.domain.weather.domain.Weather;
 import com.flab.dduikka.domain.weather.dto.AccuWeatherClientResponse;
 
 import jakarta.validation.ValidationException;
 
 @ExtendWith(MockitoExtension.class)
-class AccuWeatherFacadeTest {
-	private AccuWeatherFacade accuWeatherFacade;
+class AccuWeatherClientTest {
+	private AccuWeatherClient accuWeatherFacade;
 	@Mock
-	private AccuWeatherClient accuWeatherClient;
+	private AccuWeatherFeignClient accuWeatherFeignClient;
 
 	@BeforeEach
 	void setUp() {
 		accuWeatherFacade =
-			new AccuWeatherFacade
+			new AccuWeatherClient
 				(
-					accuWeatherClient,
+					accuWeatherFeignClient,
 					"testKey",
 					"ko-kr",
 					true,
@@ -53,7 +53,7 @@ class AccuWeatherFacadeTest {
 					AccuWeatherClientResponse[].class
 				);
 		LocalDateTime dateTime = LocalDateTime.now();
-		given(accuWeatherClient.getWeather(anyString(), anyString(), anyString(), anyBoolean(), anyBoolean()))
+		given(accuWeatherFeignClient.getWeather(anyString(), anyString(), anyString(), anyBoolean(), anyBoolean()))
 			.willReturn(List.of(mockResponse));
 
 		//when
@@ -63,7 +63,7 @@ class AccuWeatherFacadeTest {
 		accuWeatherFacade.getWeather(dateTime, latitude, longitude, cityCode);
 
 		//then
-		verify(accuWeatherClient, times(1))
+		verify(accuWeatherFeignClient, times(1))
 			.getWeather(anyString(), anyString(), anyString(), anyBoolean(), anyBoolean());
 	}
 
@@ -89,7 +89,7 @@ class AccuWeatherFacadeTest {
 				.location(location)
 				.requestDateTime(localDateTime)
 				.build();
-		given(accuWeatherClient.getWeather(anyString(), anyString(), anyString(), anyBoolean(), anyBoolean()))
+		given(accuWeatherFeignClient.getWeather(anyString(), anyString(), anyString(), anyBoolean(), anyBoolean()))
 			.willReturn(List.of(mockResponse));
 
 		//when
