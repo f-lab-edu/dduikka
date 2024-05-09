@@ -1,9 +1,7 @@
-package com.flab.dduikka.domain.weather.facade;
+package com.flab.dduikka.domain.weather.client;
 
 import java.time.LocalDateTime;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -13,32 +11,18 @@ import com.flab.dduikka.domain.weather.application.KMAWeatherFeignClient;
 import com.flab.dduikka.domain.weather.domain.KMAWeatherResultCode;
 import com.flab.dduikka.domain.weather.domain.Weather;
 import com.flab.dduikka.domain.weather.dto.KMAWeatherClientResponse;
+import com.flab.dduikka.domain.weather.property.KMAWeatherProperty;
 
 import jakarta.validation.ValidationException;
+import lombok.RequiredArgsConstructor;
 
 @Component
 @Order(value = 1)
+@RequiredArgsConstructor
 public class KMAWeatherClient implements WeatherClient {
 
 	private final KMAWeatherFeignClient weatherFeignClient;
-	private final String serviceKey;
-	private final int pageNo;
-	private final int numOfRows;
-	private final String dataType;
-
-	@Autowired
-	public KMAWeatherClient(
-		KMAWeatherFeignClient weatherFeignClient,
-		@Value("#{environment['external.api-key.kma']}") String serviceKey,
-		@Value("#{environment['external.variable.kma.pageNo']}") int pageNo,
-		@Value("#{environment['external.variable.kma.numOfRows']}") int numOfRows,
-		@Value("#{environment['external.variable.kma.dataType']}") String dataType) {
-		this.weatherFeignClient = weatherFeignClient;
-		this.serviceKey = serviceKey;
-		this.pageNo = pageNo;
-		this.numOfRows = numOfRows;
-		this.dataType = dataType;
-	}
+	private final KMAWeatherProperty kmaWeatherProperty;
 
 	@Override
 	public Weather getWeather(LocalDateTime dateTime, String latitude, String longitude, String cityCode) {
@@ -46,10 +30,10 @@ public class KMAWeatherClient implements WeatherClient {
 		KMAWeatherClientResponse response =
 			weatherFeignClient.getWeather
 				(
-					serviceKey,
-					pageNo,
-					numOfRows,
-					dataType,
+					kmaWeatherProperty.getServiceKey(),
+					kmaWeatherProperty.getPageNo(),
+					kmaWeatherProperty.getNumOfRows(),
+					kmaWeatherProperty.getDataType(),
 					DateTimeUtil.toLocalDateString(dateTime),
 					DateTimeUtil.toLocalTimeString(dateTime),
 					latitude,
