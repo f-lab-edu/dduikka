@@ -7,6 +7,11 @@ spring:
     username: dduikka           # H2 DB 접속 ID
     password:                   # H2 DB 접속 패스워드
 
+  config:
+    import:
+      - optional:classpath:/property/weather/kma-weather-client.yml
+      - optional:classpath:/property/weather/accu-weather-client.yml
+
   # H2 콘솔 설정
   h2:
     console:

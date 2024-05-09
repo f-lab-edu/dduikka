@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.flab.dduikka.domain.weather.dto.AccuWeatherClientResponse;
 
-@FeignClient(name = "AccuWeatherClient", url = "${external.feign-endpoint.accu-weather}")
+@FeignClient(name = "AccuWeatherClient", url = "${accu.end-point}")
 public interface AccuWeatherFeignClient {
 
 	@GetMapping("/forecasts/v1/hourly/1hour/{cityCode}")

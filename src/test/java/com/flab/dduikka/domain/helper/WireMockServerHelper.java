@@ -10,7 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import org.springframework.web.util.UriBuilderFactory;
@@ -22,21 +21,7 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import wiremock.com.fasterxml.jackson.databind.JsonNode;
 import wiremock.com.fasterxml.jackson.databind.ObjectMapper;
 
-@ActiveProfiles("local")
-@SpringBootTest(
-	properties = {
-		"external.feign-endpoint.kma=http://localhost:${wiremock.server.port}",
-		"external.feign-endpoint.accu-weather=http://localhost:${wiremock.server.port}",
-		"external.api-key.kma=KMAWeatherKey",
-		"external.api-key.accu-weather=accuWeatherKey",
-		"external.variable.kma.pageNo=1",
-		"external.variable.kma.numOfRows=8",
-		"external.variable.kma.dataType=JSON",
-		"external.variable.accu-weather.language=ko-kr",
-		"external.variable.accu-weather.details=true",
-		"external.variable.accu-weather.metric=true"
-	}
-)
+@SpringBootTest
 @AutoConfigureWireMock(port = 0)
 public abstract class WireMockServerHelper {
 
