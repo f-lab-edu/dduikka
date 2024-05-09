@@ -10,10 +10,10 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.springframework.dao.DuplicateKeyException;
 
-import com.flab.dduikka.domain.helper.SpringBootRepositoryTestHelper;
+import com.flab.dduikka.domain.helper.JDBCRepositoryTestHelper;
 import com.flab.dduikka.domain.vote.domain.Vote;
 
-class JdbcVoteRepositoryTest extends SpringBootRepositoryTestHelper {
+class JdbcVoteRepositoryTest extends JDBCRepositoryTestHelper {
 
 	@Test
 	void 투표가_생성된다() {
