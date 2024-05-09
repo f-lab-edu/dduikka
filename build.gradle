@@ -71,6 +71,16 @@ dependencies {
 
     //WebSocket
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
+    //Feign Client
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+    testImplementation("org.springframework.cloud:spring-cloud-contract-wiremock")
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:2022.0.5"
+    }
 }
 
 ext {
