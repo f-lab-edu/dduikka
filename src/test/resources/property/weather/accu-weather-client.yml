@@ -1,7 +1,0 @@
-accu:
-  end-point: http://localhost:${wiremock.server.port}
-  value:
-    api-key: accuWeatherKey
-    language: ko-kr
-    details: true
-    metric: true

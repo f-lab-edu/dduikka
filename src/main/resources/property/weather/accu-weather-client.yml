@@ -1,8 +1,0 @@
-accu:
-  end-point: http://dataservice.accuweather.com
-  value:
-    api-key: test
-    language: ko-kr
-    details: true
-    metric: true
-

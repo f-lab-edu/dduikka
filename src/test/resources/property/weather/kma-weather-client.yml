@@ -1,7 +1,0 @@
-kma:
-  end-point: http://localhost:${wiremock.server.port}
-  value:
-    service-key: KMAWeatherKey
-    page-no: 1
-    num-of-rows: 8
-    data-type: JSON
