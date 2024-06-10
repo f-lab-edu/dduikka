@@ -118,28 +118,6 @@ bootJar {
     dependsOn copyDocument
 }
 
-// build 시 Hello world!를 출력하는 other task
-tasks.register('helloTask') {
-    // task chaining : task 작업 실행 순서를 지정할 때 사용된다.
-    dependsOn superTask // superTask -> helloTask
-    finalizedBy subTask // helloTask -> subTask
-//	println 'Do onConfiguration' // Configuration 단계에서 수행
-    doFirst { // task 목록 시작에 추가한다.
-        println 'hello print first' // Execution 단계에서 수행
-    }
-    doLast { // task 목록 끝에 추가한다.
-        println 'hello print last'
-    }
-}
-
-tasks.register('superTask') {
-    doFirst {
-        println 'superTask'
-    }
-}
-
-tasks.register('subTask') {
-    doFirst {
-        println 'subTask'
-    }
+tasks.processResources {
+    dependsOn copyDocument
 }
