@@ -117,7 +117,3 @@ tasks.register('copyDocument', Copy) { // 디렉토리에 생성된 html 문서�
 bootJar {
     dependsOn copyDocument
 }
-
-tasks.processResources {
-    dependsOn copyDocument
-}
