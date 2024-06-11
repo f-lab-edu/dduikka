@@ -1,4 +1,4 @@
-package com.flab.dduikka.domain.weather.facade;
+package com.flab.dduikka.domain.weather.client;
 
 import java.time.LocalDateTime;
 

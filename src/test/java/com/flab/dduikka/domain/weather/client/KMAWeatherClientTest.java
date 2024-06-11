@@ -1,4 +1,4 @@
-package com.flab.dduikka.domain.weather.facade;
+package com.flab.dduikka.domain.weather.client;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
@@ -19,25 +19,24 @@ import com.flab.dduikka.domain.location.domain.Location;
 import com.flab.dduikka.domain.weather.application.KMAWeatherFeignClient;
 import com.flab.dduikka.domain.weather.domain.Weather;
 import com.flab.dduikka.domain.weather.dto.KMAWeatherClientResponse;
+import com.flab.dduikka.domain.weather.property.KMAWeatherProperty;
 
 import jakarta.validation.ValidationException;
 
 @ExtendWith(MockitoExtension.class)
 class KMAWeatherClientTest {
 
-	private KMAWeatherClient kmaWeatherFacade;
+	private KMAWeatherClient kmaWeatherClient;
 	@Mock
 	private KMAWeatherFeignClient kmaWeatherFeignClient;
 
 	@BeforeEach
 	void setUp() {
-		kmaWeatherFacade = new KMAWeatherClient(
+		kmaWeatherClient = new KMAWeatherClient(
 			kmaWeatherFeignClient,
-			"testKey",
-			1,
-			8,
-			"JSON"
+			new KMAWeatherProperty("test", 1, 8, "JSON")
 		);
+
 	}
 
 	@Test
@@ -56,7 +55,7 @@ class KMAWeatherClientTest {
 		String latitude = "55";
 		String longitude = "127";
 		String cityCode = "123456";
-		kmaWeatherFacade.getWeather(dateTime, latitude, longitude, cityCode);
+		kmaWeatherClient.getWeather(dateTime, latitude, longitude, cityCode);
 
 		//then
 		verify(kmaWeatherFeignClient, times(1))
@@ -92,7 +91,7 @@ class KMAWeatherClientTest {
 		String latitude = "55";
 		String longitude = "127";
 		String cityCode = "123456";
-		Weather response = kmaWeatherFacade.getWeather(localDateTime, latitude, longitude, cityCode);
+		Weather response = kmaWeatherClient.getWeather(localDateTime, latitude, longitude, cityCode);
 
 		//then
 		assertThat(weather).isEqualTo(response);
@@ -107,13 +106,13 @@ class KMAWeatherClientTest {
 		String longitude = "27";
 		String cityCode = "123467";
 		//when, then
-		assertThatThrownBy(() -> kmaWeatherFacade.getWeather(localDateTime, "", longitude, cityCode))
+		assertThatThrownBy(() -> kmaWeatherClient.getWeather(localDateTime, "", longitude, cityCode))
 			.isInstanceOf(ValidationException.class)
 			.hasMessageContaining("blank일 수 없습니다.");
-		assertThatThrownBy(() -> kmaWeatherFacade.getWeather(localDateTime, latitude, "", cityCode))
+		assertThatThrownBy(() -> kmaWeatherClient.getWeather(localDateTime, latitude, "", cityCode))
 			.isInstanceOf(ValidationException.class)
 			.hasMessageContaining("blank일 수 없습니다.");
-		assertThatThrownBy(() -> kmaWeatherFacade.getWeather(localDateTime, "", "", cityCode))
+		assertThatThrownBy(() -> kmaWeatherClient.getWeather(localDateTime, "", "", cityCode))
 			.isInstanceOf(ValidationException.class)
 			.hasMessageContaining("blank일 수 없습니다.");
 	}
@@ -146,7 +145,7 @@ class KMAWeatherClientTest {
 		String latitude = "55";
 		String longitude = "127";
 		String cityCode = "";
-		Weather response = kmaWeatherFacade.getWeather(localDateTime, latitude, longitude, cityCode);
+		Weather response = kmaWeatherClient.getWeather(localDateTime, latitude, longitude, cityCode);
 
 		//then
 		assertThat(weather).isEqualTo(response);

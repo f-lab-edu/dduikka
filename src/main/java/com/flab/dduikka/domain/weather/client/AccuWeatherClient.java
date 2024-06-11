@@ -1,9 +1,7 @@
-package com.flab.dduikka.domain.weather.facade;
+package com.flab.dduikka.domain.weather.client;
 
 import java.time.LocalDateTime;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -11,33 +9,18 @@ import com.flab.dduikka.domain.location.domain.Location;
 import com.flab.dduikka.domain.weather.application.AccuWeatherFeignClient;
 import com.flab.dduikka.domain.weather.domain.Weather;
 import com.flab.dduikka.domain.weather.dto.AccuWeatherClientResponse;
+import com.flab.dduikka.domain.weather.property.AccuWeatherProperty;
 
 import jakarta.validation.ValidationException;
+import lombok.RequiredArgsConstructor;
 
 @Component
 @Order(value = 2)
+@RequiredArgsConstructor
 public class AccuWeatherClient implements WeatherClient {
 
 	private final AccuWeatherFeignClient weatherFeignClient;
-	private final String serviceKey;
-	private final String language;
-	private final boolean details;
-	private final boolean metric;
-
-	@Autowired
-	public AccuWeatherClient(
-		AccuWeatherFeignClient weatherFeignClient,
-		@Value("#{environment['external.api-key.accu-weather']}") String serviceKey,
-		@Value("#{environment['external.variable.accu-weather.language']}") String language,
-		@Value("#{environment['external.variable.accu-weather.details']}") boolean details,
-		@Value("#{environment['external.variable.accu-weather.metric']}") boolean metric
-	) {
-		this.weatherFeignClient = weatherFeignClient;
-		this.serviceKey = serviceKey;
-		this.language = language;
-		this.details = details;
-		this.metric = metric;
-	}
+	private final AccuWeatherProperty accuWeatherProperty;
 
 	@Override
 	public Weather getWeather(LocalDateTime dateTime, String latitude, String longitude, String cityCode) {
@@ -45,10 +28,10 @@ public class AccuWeatherClient implements WeatherClient {
 		return AccuWeatherClientResponse.from(
 			weatherFeignClient.getWeather(
 				cityCode,
-				serviceKey,
-				language,
-				details,
-				metric
+				accuWeatherProperty.getApiKey(),
+				accuWeatherProperty.getLanguage(),
+				accuWeatherProperty.isDetails(),
+				accuWeatherProperty.isMetric()
 			).get(0),
 			new Location(latitude, longitude),
 			dateTime

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.flab.dduikka.domain.weather.dto.KMAWeatherClientResponse;
 
-@FeignClient(name = "KMAWeatherClient", url = "${external.feign-endpoint.kma}")
+@FeignClient(name = "KMAWeatherClient", url = "${kma.end-point}")
 public interface KMAWeatherFeignClient {
 
 	@GetMapping(value = "/getUltraSrtNcst")

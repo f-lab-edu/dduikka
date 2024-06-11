@@ -5,9 +5,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.flab.dduikka.domain.weather.client.WeatherClient;
 import com.flab.dduikka.domain.weather.dto.WeatherResponse;
 import com.flab.dduikka.domain.weather.exception.WeatherException;
-import com.flab.dduikka.domain.weather.facade.WeatherClient;
 
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;

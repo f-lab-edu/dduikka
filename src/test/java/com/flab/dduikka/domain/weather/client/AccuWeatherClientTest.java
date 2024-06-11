@@ -1,4 +1,4 @@
-package com.flab.dduikka.domain.weather.facade;
+package com.flab.dduikka.domain.weather.client;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
@@ -20,6 +20,7 @@ import com.flab.dduikka.domain.location.domain.Location;
 import com.flab.dduikka.domain.weather.application.AccuWeatherFeignClient;
 import com.flab.dduikka.domain.weather.domain.Weather;
 import com.flab.dduikka.domain.weather.dto.AccuWeatherClientResponse;
+import com.flab.dduikka.domain.weather.property.AccuWeatherProperty;
 
 import jakarta.validation.ValidationException;
 
@@ -35,10 +36,7 @@ class AccuWeatherClientTest {
 			new AccuWeatherClient
 				(
 					accuWeatherFeignClient,
-					"testKey",
-					"ko-kr",
-					true,
-					true
+					new AccuWeatherProperty("test", "ko-kr", true, true)
 				);
 	}
 
