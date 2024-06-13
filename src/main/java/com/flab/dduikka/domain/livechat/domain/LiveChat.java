@@ -52,16 +52,14 @@ public class LiveChat extends Auditable {
 			return true;
 		if (o == null || getClass() != o.getClass())
 			return false;
-		if (!super.equals(o))
-			return false;
 		LiveChat liveChat = (LiveChat)o;
-		return liveChatId == liveChat.liveChatId && memberId == liveChat.memberId && deletedFlag
-			== liveChat.deletedFlag;
+		return liveChatId == liveChat.liveChatId && memberId == liveChat.memberId && deletedFlag == liveChat.deletedFlag
+			&& Objects.equals(message, liveChat.message);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(liveChatId, memberId, deletedFlag);
+		return Objects.hash(liveChatId, memberId, message, deletedFlag);
 	}
 
 	@Override
