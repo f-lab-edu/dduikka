@@ -33,7 +33,7 @@ class JdbcVoteRecordRepositoryTest extends JDBCRepositoryTestHelper {
 		//then
 		VoteRecord foundVoteRecord = voteRecordRepository
 			.findByUserAndVoteAndIsCanceled(1L, 1L).get();
-		assertThat(foundVoteRecord.getVoteType()).isEqualTo(newVote.getVoteType());
+		assertThat(foundVoteRecord).isEqualTo(createdVote);
 	}
 
 	@Test
@@ -53,7 +53,7 @@ class JdbcVoteRecordRepositoryTest extends JDBCRepositoryTestHelper {
 			.findByUserAndVoteAndIsCanceled(1L, 1L).get();
 
 		//then
-		assertThat(foundVoteRecord.getVoteType()).isEqualTo(newVote.getVoteType());
+		assertThat(foundVoteRecord).isEqualTo(createdVote);
 	}
 
 	@Test
@@ -109,8 +109,7 @@ class JdbcVoteRecordRepositoryTest extends JDBCRepositoryTestHelper {
 			.get();
 
 		// then
-		assertThat(foundVoteRecord.getVoteId()).isEqualTo(createdVoteRecord.getVoteId());
-		assertThat(foundVoteRecord.getCreatedAt()).isEqualTo(createdVoteRecord.getCreatedAt());
+		assertThat(foundVoteRecord).isEqualTo(createdVoteRecord);
 	}
 
 	@Test
