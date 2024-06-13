@@ -60,12 +60,12 @@ public class Member extends Auditable {
 		if (o == null || getClass() != o.getClass())
 			return false;
 		Member member = (Member)o;
-		return memberId == member.memberId && Objects.equals(email, member.email)
-			&& memberStatus == member.memberStatus && Objects.equals(joinDate, member.joinDate);
+		return memberId == member.memberId && Objects.equals(email, member.email) && Objects.equals(
+			password, member.password) && memberStatus == member.memberStatus;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(memberId);
+		return Objects.hash(memberId, email, password, memberStatus);
 	}
 }
