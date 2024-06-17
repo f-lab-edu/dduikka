@@ -1,0 +1,19 @@
+= WEATHER API
+== /weathers
+
+== 날씨 조회
+
+=== curl-request
+
+include::{snippets}/weathers/findWeather/curl-request.adoc[]
+
+=== REQUEST
+
+include::{snippets}/weathers/findWeather/query-parameters.adoc[]
+include::{snippets}/weathers/findWeather/http-request.adoc[]
+
+=== RESPONSE
+
+include::{snippets}/weathers/findWeather/response-fields.adoc[]
+include::{snippets}/weathers/findWeather/http-response.adoc[]
+

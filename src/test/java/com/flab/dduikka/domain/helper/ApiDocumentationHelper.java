@@ -16,6 +16,8 @@ import com.flab.dduikka.domain.member.api.MemberController;
 import com.flab.dduikka.domain.member.application.MemberService;
 import com.flab.dduikka.domain.vote.api.VoteController;
 import com.flab.dduikka.domain.vote.application.VoteRecordService;
+import com.flab.dduikka.domain.weather.api.WeatherController;
+import com.flab.dduikka.domain.weather.application.WeatherService;
 
 @ExtendWith({RestDocumentationExtension.class})
 @AutoConfigureRestDocs
@@ -24,6 +26,7 @@ import com.flab.dduikka.domain.vote.application.VoteRecordService;
 		VoteController.class
 		, MemberController.class
 		, LoginController.class
+		, WeatherController.class
 	})
 public abstract class ApiDocumentationHelper {
 
@@ -38,6 +41,9 @@ public abstract class ApiDocumentationHelper {
 
 	@MockBean
 	protected LoginService loginService;
+
+	@MockBean
+	protected WeatherService weatherService;
 
 	@Autowired
 	protected ObjectMapper objectMapper;

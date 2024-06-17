@@ -10,3 +10,4 @@ endif::[]
 
 include::member.adoc[]
 include::vote.adoc[]
+include::weather.adoc[]
