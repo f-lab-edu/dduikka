@@ -14,7 +14,7 @@ import com.flab.dduikka.domain.weather.dto.WeatherResponse;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/weather")
+@RequestMapping("/weathers")
 @RequiredArgsConstructor
 public class WeatherController {
 
@@ -26,7 +26,6 @@ public class WeatherController {
 		@RequestParam String latitude,
 		@RequestParam String longitude,
 		@RequestParam String cityCode
-
 	) {
 		return weatherService.getWeather(dateTime, latitude, longitude, cityCode);
 	}
