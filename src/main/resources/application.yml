@@ -1,0 +1,30 @@
+#H2 DataBase 설정
+datasource:
+  driver-class-name: com.mysql.cj.jdbc.Driver
+  url: ENC(7ux4AiYYRKpm9nGdPP+Y9UGcH6ScdrwjgiQU17dySmHqwr6yESU+8iQ8r/+LJkCmc6CHg3+NjDxSL1zGRdldvzT5p5VfFeTkVgWYw1W3MVkqJWddxfviOqIRFJFIv6gTschtHRSS7LxxAdoDpTdDX1FrKFOfL7St+SVmZ92L4C3HChrjhdJGMnmzJ6Oasuz2)
+  username: ENC(l0geYI6uhNgrVdoByJTOnQ==)             # MYSQL DB 접속 ID
+  password: ENC(HD9wqq4DkgDW1Iu9EWL/z/bDCQ8oXybd)     # MYSQL DB 접속 패스워드
+logging:
+  level:
+    org:
+      springframework:
+        jdbc: debug             # jdbc 로그 설정
+
+regexp:
+  password: ^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W]).{10,}$
+
+
+schedules:
+  cron-expression:
+    publisher: 0 0 23 * * *
+
+
+# websocket broker 설정
+websocket:
+  broker:
+    topic: /topic
+    queue: /queue
+  app:
+    destination:
+      prefix: /app
+  endpoint: /chats
