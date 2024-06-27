@@ -56,7 +56,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-cache'
     implementation 'org.awaitility:awaitility:4.2.0'
     runtimeOnly 'com.h2database:h2' // h2 database
-    runtimeOnly 'com.mysql:mysql-connector-j' // mysql용 jdbc 타입 드라이버
+    runtimeOnly 'com.mysql:mysql-connector-j:8.4.0' // mysql용 jdbc 타입 드라이버
     compileOnly 'org.projectlombok:lombok' // 보일러 플레이트 코드를 자동화하는 java 라이브러리
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test' // Spring Boot 애플리케이션 테스트 스타터
@@ -97,6 +97,8 @@ tasks.named('bootBuildImage') {
 // - gradle 프로젝트의 작업단위. Configuration과 Execution 단계에서 수행된다.
 tasks.named('test') {
     useJUnitPlatform() // 테스크에서 사용할 프레임워크를 옵션을 지정한다.
+    systemProperty "jasypt.encryptor.password", System.getProperty("jasypt.encryptor.password")
+    // VM options 에서 jasypt 설정을 가져와서 테스트 로딩한다.
     outputs.dir snippetsDir // 출력할 디렉토리
 }
 

@@ -1,9 +1,9 @@
 #H2 DataBase 설정
 datasource:
   driver-class-name: com.mysql.cj.jdbc.Driver
-  url: jdbc:mysql://ENC(o3IXzDM5TfCA/TMMFOI/vb3v6v8Px9ip9odMC0/BYk92ZO2iLSHuCg==)?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+  url: ENC(7ux4AiYYRKpm9nGdPP+Y9UGcH6ScdrwjgiQU17dySmHqwr6yESU+8iQ8r/+LJkCmc6CHg3+NjDxSL1zGRdldvzT5p5VfFeTkVgWYw1W3MVkqJWddxfviOqIRFJFIv6gTschtHRSS7LxxAdoDpTdDX1FrKFOfL7St+SVmZ92L4C3HChrjhdJGMnmzJ6Oasuz2)
   username: ENC(l0geYI6uhNgrVdoByJTOnQ==)             # MYSQL DB 접속 ID
-  password: ENC(TaqxKoowZZiNQweWQveI10BEtDiFWxjA)     # H2 DB 접속 패스워드
+  password: ENC(HD9wqq4DkgDW1Iu9EWL/z/bDCQ8oXybd)     # MYSQL DB 접속 패스워드
 logging:
   level:
     org:
