@@ -4,8 +4,8 @@ spring:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:mem:test_db     # H2 DB 연결 주소 (인메모리)
     #    url: 'jdbc:h2:~/test'     # H2 DB 연결 주소 (임베디드 모드)
-    username: dduikka           # H2 DB 접속 ID
-    password:                   # H2 DB 접속 패스워드
+    username: ENC(cC4XCWzInWFSQGRp/1THIg==)    # H2 DB 접속 ID
+    password:                                  # H2 DB 접속 패스워드
 
   # H2 콘솔 설정
   h2:
