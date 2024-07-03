@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.flab.dduikka.common.validator.CustomValidator;
 import com.flab.dduikka.domain.member.domain.Member;
-import com.flab.dduikka.domain.member.dto.MemberRegisterRequestDto;
-import com.flab.dduikka.domain.member.dto.MemberResponseDto;
+import com.flab.dduikka.domain.member.dto.MemberRegisterRequestDTO;
+import com.flab.dduikka.domain.member.dto.MemberResponseDTO;
 import com.flab.dduikka.domain.member.exception.MemberException;
 import com.flab.dduikka.domain.member.repository.MemberRepository;
 
@@ -30,26 +30,26 @@ public class MemberService {
 		this.validator = validator;
 	}
 
-	public MemberResponseDto findMember(final long memberId) {
+	public MemberResponseDTO findMember(final long memberId) {
 		Member foundUser = memberRepository.findById(memberId)
 			.orElseThrow(() -> new MemberException.MemberNotFoundException("해당 회원이 존재하지 않습니다. memberId: " + memberId));
 		validator.validateObject(foundUser);
 		if (!foundUser.isJoined()) {
 			throw new IllegalStateException("탈퇴한 회원입니다. memberId:" + memberId);
 		}
-		return MemberResponseDto.from(foundUser);
+		return MemberResponseDTO.from(foundUser);
 	}
 
 	public boolean isEmailDuplicated(String email) {
 		return memberRepository.findByEmailAndMemberStatus(email).isPresent();
 	}
 
-	public void registerMember(final MemberRegisterRequestDto request) {
+	public void registerMember(final MemberRegisterRequestDTO request) {
 		validatePassword(request.getPassword());
 		if (isEmailDuplicated(request.getEmail())) {
 			throw new MemberException.DuplicatedEmailException("기등록된 회원입니다. email" + request.getEmail());
 		}
-		Member newMember = MemberRegisterRequestDto.to(request);
+		Member newMember = MemberRegisterRequestDTO.to(request);
 		validator.validateObject(newMember);
 		memberRepository.addMember(newMember);
 	}

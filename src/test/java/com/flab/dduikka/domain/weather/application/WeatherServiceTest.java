@@ -15,7 +15,7 @@ import org.springframework.util.MultiValueMap;
 
 import com.flab.dduikka.common.util.DateTimeUtil;
 import com.flab.dduikka.domain.helper.WireMockServerHelper;
-import com.flab.dduikka.domain.weather.dto.WeatherResponse;
+import com.flab.dduikka.domain.weather.dto.WeatherResponseDTO;
 import com.flab.dduikka.domain.weather.exception.WeatherException;
 
 class WeatherServiceTest extends WireMockServerHelper {
@@ -60,7 +60,7 @@ class WeatherServiceTest extends WireMockServerHelper {
 		);
 
 		//when
-		WeatherResponse response = weatherService.getWeather(
+		WeatherResponseDTO response = weatherService.getWeather(
 			localDateTime,
 			nx,
 			ny,
@@ -100,7 +100,7 @@ class WeatherServiceTest extends WireMockServerHelper {
 		String ny = "127";
 
 		//when
-		WeatherResponse response = weatherService.getWeather(
+		WeatherResponseDTO response = weatherService.getWeather(
 			localDateTime,
 			nx,
 			ny,

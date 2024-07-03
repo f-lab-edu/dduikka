@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.flab.dduikka.common.encryption.EncryptedMemberIdentifierCache;
 import com.flab.dduikka.domain.login.application.LoginService;
-import com.flab.dduikka.domain.login.dto.LoginRequestDto;
+import com.flab.dduikka.domain.login.dto.LoginRequestDTO;
 import com.flab.dduikka.domain.login.dto.SessionMember;
 import com.flab.dduikka.domain.login.exception.LoginException;
 
@@ -29,7 +29,7 @@ public class LoginController {
 	@PostMapping("/login")
 	@ResponseStatus(HttpStatus.OK)
 	public void login(
-		@Valid @RequestBody LoginRequestDto loginRequestDto,
+		@Valid @RequestBody LoginRequestDTO loginRequestDto,
 		HttpServletRequest request,
 		HttpServletResponse response
 	) {

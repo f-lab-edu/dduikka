@@ -20,9 +20,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.flab.dduikka.common.encryption.EncryptedMemberIdentifierCache;
 import com.flab.dduikka.common.validator.CustomValidator;
 import com.flab.dduikka.domain.livechat.domain.LiveChat;
-import com.flab.dduikka.domain.livechat.dto.LiveChatMessage;
-import com.flab.dduikka.domain.livechat.dto.LiveChatResponse;
-import com.flab.dduikka.domain.livechat.dto.LiveChatsResponse;
+import com.flab.dduikka.domain.livechat.dto.LiveChatMessageDTO;
+import com.flab.dduikka.domain.livechat.dto.LiveChatResponseDTO;
+import com.flab.dduikka.domain.livechat.dto.LiveChatsResponseDTO;
 import com.flab.dduikka.domain.livechat.exception.LiveChatException;
 import com.flab.dduikka.domain.livechat.repository.LiveChatRepository;
 
@@ -45,8 +45,8 @@ class LiveChatServiceTest {
 	@DisplayName("메세지를 생성하면 addLiveChat을 호출한다")
 	void whenCreateMessageThenCallAddLiveChat() {
 		//given
-		LiveChatMessage request =
-			new LiveChatMessage("send Message!");
+		LiveChatMessageDTO request =
+			new LiveChatMessageDTO("send Message!");
 
 		LiveChat mockLiveChat =
 			LiveChat.builder()
@@ -61,11 +61,11 @@ class LiveChatServiceTest {
 			.willReturn(mockLiveChat);
 
 		//when
-		LiveChatResponse createdLiveChatResponse = liveChatService.createMessage(1L, request);
+		LiveChatResponseDTO createdLiveChatResponseDTO = liveChatService.createMessage(1L, request);
 
 		//then
 		verify(liveChatRepository, times(1)).addLiveChat(any());
-		assertThat(createdLiveChatResponse.getText()).isEqualTo(mockLiveChat.getMessage());
+		assertThat(createdLiveChatResponseDTO.getText()).isEqualTo(mockLiveChat.getMessage());
 	}
 
 	@Test
@@ -113,7 +113,7 @@ class LiveChatServiceTest {
 		given(liveChatRepository.findAllLiveChat(anyLong())).willReturn(liveChatList);
 
 		//when, then
-		LiveChatsResponse response = liveChatService.findAllLiveChat(4L);
+		LiveChatsResponseDTO response = liveChatService.findAllLiveChat(4L);
 
 		assertThat(response.getLiveChatsResponseList()).hasSize(4);
 	}

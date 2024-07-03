@@ -17,7 +17,7 @@ import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import com.flab.dduikka.domain.helper.ApiDocumentationHelper;
 import com.flab.dduikka.domain.location.domain.Location;
 import com.flab.dduikka.domain.weather.domain.Weather;
-import com.flab.dduikka.domain.weather.dto.WeatherResponse;
+import com.flab.dduikka.domain.weather.dto.WeatherResponseDTO;
 
 class WeatherDocumentationTest extends ApiDocumentationHelper {
 
@@ -40,7 +40,7 @@ class WeatherDocumentationTest extends ApiDocumentationHelper {
 				.requestDateTime(requestDateTime)
 				.build();
 		given(weatherService.getWeather(any(), anyString(), anyString(), anyString()))
-			.willReturn(WeatherResponse.from(response));
+			.willReturn(WeatherResponseDTO.from(response));
 
 		// when
 		mockMvc.perform(

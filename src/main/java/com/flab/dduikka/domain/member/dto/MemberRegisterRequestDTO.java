@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class MemberRegisterRequestDto {
+public class MemberRegisterRequestDTO {
 
 	@Email(message = "email 형식이 알맞지 않습니다.")
 	@NotBlank(message = "email은 비어있거나 null일 수 없습니다.")
@@ -26,7 +26,7 @@ public class MemberRegisterRequestDto {
 	@NotBlank(message = "비밀번호는 비어있거나 null일 수 없습니다.")
 	private String password;
 
-	public static Member to(MemberRegisterRequestDto request) {
+	public static Member to(MemberRegisterRequestDTO request) {
 		return Member.builder()
 			.email(request.email)
 			.password(request.password)

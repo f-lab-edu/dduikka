@@ -19,8 +19,8 @@ import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 
 import com.flab.dduikka.domain.helper.ApiDocumentationHelper;
 import com.flab.dduikka.domain.member.domain.Member;
-import com.flab.dduikka.domain.member.dto.MemberRegisterRequestDto;
-import com.flab.dduikka.domain.member.dto.MemberResponseDto;
+import com.flab.dduikka.domain.member.dto.MemberRegisterRequestDTO;
+import com.flab.dduikka.domain.member.dto.MemberResponseDTO;
 
 class MemberDocumentationTest extends ApiDocumentationHelper {
 
@@ -36,7 +36,7 @@ class MemberDocumentationTest extends ApiDocumentationHelper {
 			.joinDate(LocalDate.now())
 			.createAt(LocalDateTime.now())
 			.build();
-		MemberResponseDto response = MemberResponseDto.from(mockMember);
+		MemberResponseDTO response = MemberResponseDTO.from(mockMember);
 		given(memberService.findMember(anyLong()))
 			.willReturn(response);
 
@@ -82,7 +82,7 @@ class MemberDocumentationTest extends ApiDocumentationHelper {
 	@Test
 	@DisplayName("회원가입을 한다")
 	void registerMember() throws Exception {
-		MemberRegisterRequestDto request = new MemberRegisterRequestDto(
+		MemberRegisterRequestDTO request = new MemberRegisterRequestDTO(
 			"test@dduikka.net",
 			"12345678Qw!@"
 		);

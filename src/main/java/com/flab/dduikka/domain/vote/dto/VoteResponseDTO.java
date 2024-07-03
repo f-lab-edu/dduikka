@@ -11,13 +11,13 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class VoteResponseDto {
+public class VoteResponseDTO {
 	private Long voteId;
 	private LocalDate voteDate;
 	private Map<VoteType, Integer> voteTypeCountMap;
 
-	public static VoteResponseDto toDto(Vote vote, Map<VoteType, Integer> voteTypeCountMap) {
-		return new VoteResponseDto(
+	public static VoteResponseDTO toDto(Vote vote, Map<VoteType, Integer> voteTypeCountMap) {
+		return new VoteResponseDTO(
 			vote.getVoteId()
 			, vote.getVoteDate()
 			, voteTypeCountMap)

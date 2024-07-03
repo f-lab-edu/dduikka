@@ -18,7 +18,7 @@ import com.flab.dduikka.domain.helper.JSONFileReader;
 import com.flab.dduikka.domain.location.domain.Location;
 import com.flab.dduikka.domain.weather.application.KMAWeatherFeignClient;
 import com.flab.dduikka.domain.weather.domain.Weather;
-import com.flab.dduikka.domain.weather.dto.KMAWeatherClientResponse;
+import com.flab.dduikka.domain.weather.dto.KMAWeatherClientResponseDTO;
 import com.flab.dduikka.domain.weather.property.KMAWeatherProperty;
 
 import jakarta.validation.ValidationException;
@@ -43,9 +43,9 @@ class KMAWeatherClientTest {
 	@DisplayName("날씨 조회를 요청하면 webClient가 한 번 호출된다")
 	void whenGetWeather_thenWebClientIsCalledOnce() throws IOException {
 		//given
-		KMAWeatherClientResponse mockResponse = JSONFileReader.readJSONFile(
+		KMAWeatherClientResponseDTO mockResponse = JSONFileReader.readJSONFile(
 			"/payload/weather/kma-weather-response.json",
-			KMAWeatherClientResponse.class);
+			KMAWeatherClientResponseDTO.class);
 		given(kmaWeatherFeignClient.getWeather(anyString(), anyInt(), anyInt(), anyString(), anyString(), anyString(),
 			anyString(), anyString()))
 			.willReturn(mockResponse);
@@ -67,9 +67,9 @@ class KMAWeatherClientTest {
 	@DisplayName("날씨 조회를 요청하면 weather가 반환된다")
 	void whenGetWeather_thenReturnsWeather() throws IOException {
 		//given
-		KMAWeatherClientResponse mockResponse = JSONFileReader.readJSONFile(
+		KMAWeatherClientResponseDTO mockResponse = JSONFileReader.readJSONFile(
 			"/payload/weather/kma-weather-response.json",
-			KMAWeatherClientResponse.class);
+			KMAWeatherClientResponseDTO.class);
 		given(kmaWeatherFeignClient.getWeather(anyString(), anyInt(), anyInt(), anyString(), anyString(), anyString(),
 			anyString(), anyString()))
 			.willReturn(mockResponse);
@@ -121,9 +121,9 @@ class KMAWeatherClientTest {
 	@DisplayName("날씨를 요청할 때 citycode가 blank여도 정상으로 weather가 반환된다")
 	void whenCodeCityIsBlank_thenReturnsWeather() throws IOException {
 		//given
-		KMAWeatherClientResponse mockResponse = JSONFileReader.readJSONFile(
+		KMAWeatherClientResponseDTO mockResponse = JSONFileReader.readJSONFile(
 			"/payload/weather/kma-weather-response.json",
-			KMAWeatherClientResponse.class);
+			KMAWeatherClientResponseDTO.class);
 		given(kmaWeatherFeignClient.getWeather(anyString(), anyInt(), anyInt(), anyString(), anyString(), anyString(),
 			anyString(), anyString()))
 			.willReturn(mockResponse);

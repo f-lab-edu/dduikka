@@ -9,14 +9,14 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class MemberResponseDto {
+public class MemberResponseDTO {
 
 	private final Long memberId;
 	private final String email;
 	private final LocalDate joinDate;
 
-	public static MemberResponseDto from(Member member) {
-		return new MemberResponseDto(
+	public static MemberResponseDTO from(Member member) {
+		return new MemberResponseDTO(
 			member.getMemberId(),
 			member.getEmail(),
 			member.getJoinDate()

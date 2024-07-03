@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.flab.dduikka.common.util.WebSocketMessageSender;
 import com.flab.dduikka.domain.livechat.application.LiveChatService;
-import com.flab.dduikka.domain.livechat.dto.LiveChatMessage;
-import com.flab.dduikka.domain.livechat.dto.LiveChatResponse;
-import com.flab.dduikka.domain.livechat.dto.LiveChatsResponse;
+import com.flab.dduikka.domain.livechat.dto.LiveChatMessageDTO;
+import com.flab.dduikka.domain.livechat.dto.LiveChatResponseDTO;
+import com.flab.dduikka.domain.livechat.dto.LiveChatsResponseDTO;
 import com.flab.dduikka.domain.login.api.SessionKey;
 import com.flab.dduikka.domain.login.dto.SessionMember;
 
@@ -32,14 +32,14 @@ public class LiveChatController {
 
 	@MessageMapping("/chat")
 	public void sendMessage(
-		@Valid @Payload final LiveChatMessage request,
+		@Valid @Payload final LiveChatMessageDTO request,
 		SimpMessageHeaderAccessor messageHeaderAccessor
 	) {
 		SessionMember sessionMember =
 			(SessionMember)messageHeaderAccessor.getSessionAttributes().get(SessionKey.LOGIN_USER.name());
 		//header 설정
 		Map<String, Object> headers = Map.of(EVENT_TYPE, EventType.CREATE.name());
-		LiveChatResponse response = liveChatService.createMessage(sessionMember.getMemberId(), request);
+		LiveChatResponseDTO response = liveChatService.createMessage(sessionMember.getMemberId(), request);
 		webSocketMessageSender.sendTo("/topic/messages", response, headers);
 	}
 
@@ -47,7 +47,7 @@ public class LiveChatController {
 	public void findLiveChatList(
 		@DestinationVariable final long lastMessageId,
 		SimpMessageHeaderAccessor messageHeaderAccessor) {
-		LiveChatsResponse response = liveChatService.findAllLiveChat(lastMessageId);
+		LiveChatsResponseDTO response = liveChatService.findAllLiveChat(lastMessageId);
 		webSocketMessageSender.sendToUser(
 			messageHeaderAccessor.getSessionId(),
 			"/queue/chats",

@@ -25,8 +25,8 @@ import org.springframework.restdocs.payload.JsonFieldType;
 
 import com.flab.dduikka.domain.helper.ApiDocumentationHelper;
 import com.flab.dduikka.domain.vote.domain.VoteType;
-import com.flab.dduikka.domain.vote.dto.VoteRecordResponseDto;
-import com.flab.dduikka.domain.vote.dto.VoteResponseDto;
+import com.flab.dduikka.domain.vote.dto.VoteRecordResponseDTO;
+import com.flab.dduikka.domain.vote.dto.VoteResponseDTO;
 
 class VoteDocumentationTest extends ApiDocumentationHelper {
 
@@ -38,8 +38,8 @@ class VoteDocumentationTest extends ApiDocumentationHelper {
 		voteTypeCountMap.put(VoteType.RUN, 1);
 		voteTypeCountMap.put(VoteType.NORUN, 3);
 		LocalDate voteDate = LocalDate.of(2024, 2, 13);
-		VoteResponseDto mockResponse =
-			new VoteResponseDto(1L, voteDate, voteTypeCountMap);
+		VoteResponseDTO mockResponse =
+			new VoteResponseDTO(1L, voteDate, voteTypeCountMap);
 
 		given(voteRecordService.findVoteTypeCount(any())).willReturn(mockResponse);
 
@@ -66,8 +66,8 @@ class VoteDocumentationTest extends ApiDocumentationHelper {
 	@DisplayName("유저의 투표 기록을 가져온다")
 	void findRecordVote() throws Exception {
 		//given
-		VoteRecordResponseDto mockResponse =
-			new VoteRecordResponseDto(1L, 1L, VoteType.RUN);
+		VoteRecordResponseDTO mockResponse =
+			new VoteRecordResponseDTO(1L, 1L, VoteType.RUN);
 		given(voteRecordService.findUserVoteRecord(anyLong(), anyLong()))
 			.willReturn(mockResponse);
 

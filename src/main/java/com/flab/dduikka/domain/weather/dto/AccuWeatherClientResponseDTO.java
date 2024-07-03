@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class AccuWeatherClientResponse {
+public class AccuWeatherClientResponseDTO {
 
 	@JsonProperty("DateTime")
 	private String dateTime;
@@ -29,7 +29,8 @@ public class AccuWeatherClientResponse {
 	@JsonProperty("RelativeHumidity")
 	private Integer relativeHumidity;
 
-	public static Weather from(AccuWeatherClientResponse response, Location location, LocalDateTime requestDateTime) {
+	public static Weather from(AccuWeatherClientResponseDTO response, Location location,
+		LocalDateTime requestDateTime) {
 		return Weather.builder()
 			.forecastDateTime(DateTimeUtil.toLocalDateTime(response.getDateTime()))
 			.temperature(response.getTemperature().getValue())

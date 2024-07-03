@@ -16,7 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 
 import com.flab.dduikka.domain.helper.IntegrationTestHelper;
-import com.flab.dduikka.domain.login.dto.LoginRequestDto;
+import com.flab.dduikka.domain.login.dto.LoginRequestDTO;
 import com.flab.dduikka.domain.login.dto.SessionMember;
 import com.flab.dduikka.domain.login.exception.LoginException;
 
@@ -29,7 +29,7 @@ class LoginControllerTest extends IntegrationTestHelper {
 	@DisplayName("로그인 요청을 하면 세션이 발급된다")
 	void whenLogInThenPublishSession() throws Exception {
 		//given
-		LoginRequestDto request = new LoginRequestDto("test@dduikka.com", "1234");
+		LoginRequestDTO request = new LoginRequestDTO("test@dduikka.com", "1234");
 		SessionMember sessionMember = new SessionMember(1L, "test@dduikka.com");
 		BDDMockito.given(loginService.login(any())).willReturn(sessionMember);
 
@@ -53,7 +53,7 @@ class LoginControllerTest extends IntegrationTestHelper {
 	@DisplayName("잘못된 로그인 요청을 하면 UNAUTHORIZED로 응답한다")
 	void whenLoginThenResponseUnauthorizedStatus() throws Exception {
 		//given
-		LoginRequestDto request = new LoginRequestDto("test@dduikka.com", "1234");
+		LoginRequestDTO request = new LoginRequestDTO("test@dduikka.com", "1234");
 		BDDMockito.given(loginService.login(any())).willReturn(null);
 
 		//when
@@ -71,7 +71,7 @@ class LoginControllerTest extends IntegrationTestHelper {
 	@DisplayName("로그아웃을 하면 세션이 만료된다")
 	void whenLogOutThenSessionIsInvalid() throws Exception {
 		//given
-		LoginRequestDto request = new LoginRequestDto("test@dduikka.com", "1234");
+		LoginRequestDTO request = new LoginRequestDTO("test@dduikka.com", "1234");
 		SessionMember sessionMember = new SessionMember(1L, "test@dduikka.com");
 		BDDMockito.given(loginService.login(any())).willReturn(sessionMember);
 
@@ -104,7 +104,7 @@ class LoginControllerTest extends IntegrationTestHelper {
 	@DisplayName("로그인을 하면 쿠키가 생성된다")
 	void whenLogInThenAddCookies() throws Exception {
 		//given
-		LoginRequestDto request = new LoginRequestDto("test@dduikka.com", "1234");
+		LoginRequestDTO request = new LoginRequestDTO("test@dduikka.com", "1234");
 		SessionMember sessionMember = new SessionMember(1L, "test@dduikka.com");
 		String eid = "1234";
 		BDDMockito.given(loginService.login(any())).willReturn(sessionMember);

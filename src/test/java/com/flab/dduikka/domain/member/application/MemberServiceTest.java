@@ -19,8 +19,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.flab.dduikka.common.validator.CustomValidator;
 import com.flab.dduikka.domain.member.domain.Member;
 import com.flab.dduikka.domain.member.domain.MemberStatus;
-import com.flab.dduikka.domain.member.dto.MemberRegisterRequestDto;
-import com.flab.dduikka.domain.member.dto.MemberResponseDto;
+import com.flab.dduikka.domain.member.dto.MemberRegisterRequestDTO;
+import com.flab.dduikka.domain.member.dto.MemberResponseDTO;
 import com.flab.dduikka.domain.member.exception.MemberException;
 import com.flab.dduikka.domain.member.repository.MemberRepository;
 
@@ -59,7 +59,7 @@ class MemberServiceTest {
 			.willReturn(Optional.ofNullable(mockMember));
 
 		// when
-		MemberResponseDto response = memberService.findMember(memberId);
+		MemberResponseDTO response = memberService.findMember(memberId);
 
 		//then
 		then(response.getMemberId()).isEqualTo(memberId);
@@ -157,8 +157,8 @@ class MemberServiceTest {
 	@DisplayName("회원가입 시 비밀번호 조건을 충족하지 못하면 예외를 반환한다")
 	void whenRegisterMemberIllegalPasswordThenThrowsIllegalStateException() {
 		//given
-		MemberRegisterRequestDto request
-			= new MemberRegisterRequestDto(
+		MemberRegisterRequestDTO request
+			= new MemberRegisterRequestDTO(
 			"test@dduikka.net",
 			"1234");
 		//when, then
@@ -172,8 +172,8 @@ class MemberServiceTest {
 	@DisplayName("회원이 이미 등록된 이메일로 회원가입하면 예외를 반환한다")
 	void whenRegisterMemberThenThrowsDuplicatedEmailException() {
 		//given
-		MemberRegisterRequestDto request
-			= new MemberRegisterRequestDto(
+		MemberRegisterRequestDTO request
+			= new MemberRegisterRequestDTO(
 			"test@dduikka.net",
 			"123456qW!@");
 		Member mockMember = Member.builder()
@@ -199,11 +199,11 @@ class MemberServiceTest {
 	@DisplayName("회원이 회원가입 요청 하면 addMember를 호출한다")
 	void whenRegisterMemberThenCallAddMember() {
 		//given
-		MemberRegisterRequestDto request
-			= new MemberRegisterRequestDto(
+		MemberRegisterRequestDTO request
+			= new MemberRegisterRequestDTO(
 			"test@dduikka.net",
 			"123456qW!@");
-		Member newMember = MemberRegisterRequestDto.to(request);
+		Member newMember = MemberRegisterRequestDTO.to(request);
 
 		given(memberRepository.findByEmailAndMemberStatus(anyString()))
 			.willReturn(Optional.empty());

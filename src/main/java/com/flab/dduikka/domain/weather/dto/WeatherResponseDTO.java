@@ -7,15 +7,15 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class WeatherResponse {
+public class WeatherResponseDTO {
 
 	private Double temperature;
 	private Integer relativeHumidity;
 	private Double rainfall;
 	private Double snowfall;
 
-	public static WeatherResponse from(Weather weather) {
-		return new WeatherResponse(
+	public static WeatherResponseDTO from(Weather weather) {
+		return new WeatherResponseDTO(
 			weather.getTemperature(),
 			weather.getRelativeHumidity(),
 			weather.getRainfall(),

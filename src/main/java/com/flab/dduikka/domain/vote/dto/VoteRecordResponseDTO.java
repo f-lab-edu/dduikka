@@ -8,18 +8,18 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class VoteRecordResponseDto {
+public class VoteRecordResponseDTO {
 
 	private long voteRecordId;
 	private long voteId;
 	private VoteType voteType;
 
-	public VoteRecordResponseDto(long voteId) {
+	public VoteRecordResponseDTO(long voteId) {
 		this.voteId = voteId;
 	}
 
-	public static VoteRecordResponseDto toDto(VoteRecord voteRecord) {
-		return new VoteRecordResponseDto(
+	public static VoteRecordResponseDTO toDto(VoteRecord voteRecord) {
+		return new VoteRecordResponseDTO(
 			voteRecord.getVoteId()
 			, voteRecord.getVoteRecordId()
 			, voteRecord.getVoteType()

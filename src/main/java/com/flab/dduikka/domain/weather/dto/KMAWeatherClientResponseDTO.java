@@ -17,13 +17,13 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class KMAWeatherClientResponse {
+public class KMAWeatherClientResponseDTO {
 
 	private WeatherPayload response;
 
 	public static Weather from
 		(
-			KMAWeatherClientResponse response,
+			KMAWeatherClientResponseDTO response,
 			Location location,
 			LocalDateTime requestDateTime
 		) {

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.flab.dduikka.domain.weather.application.WeatherService;
-import com.flab.dduikka.domain.weather.dto.WeatherResponse;
+import com.flab.dduikka.domain.weather.dto.WeatherResponseDTO;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,7 +21,7 @@ public class WeatherController {
 	private final WeatherService weatherService;
 
 	@GetMapping
-	public WeatherResponse findWeather(
+	public WeatherResponseDTO findWeather(
 		@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS") LocalDateTime dateTime,
 		@RequestParam String latitude,
 		@RequestParam String longitude,

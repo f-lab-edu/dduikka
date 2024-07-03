@@ -18,9 +18,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.flab.dduikka.domain.vote.domain.Vote;
 import com.flab.dduikka.domain.vote.domain.VoteRecord;
 import com.flab.dduikka.domain.vote.domain.VoteType;
-import com.flab.dduikka.domain.vote.dto.VoteRecordAddRequestDto;
-import com.flab.dduikka.domain.vote.dto.VoteRecordResponseDto;
-import com.flab.dduikka.domain.vote.dto.VoteResponseDto;
+import com.flab.dduikka.domain.vote.dto.VoteRecordAddRequestDTO;
+import com.flab.dduikka.domain.vote.dto.VoteRecordResponseDTO;
+import com.flab.dduikka.domain.vote.dto.VoteResponseDTO;
 import com.flab.dduikka.domain.vote.repository.VoteRecordRepository;
 import com.flab.dduikka.domain.vote.repository.VoteRepository;
 
@@ -37,8 +37,8 @@ class VoteRecordServiceTest {
 	@Test
 	void 유저가_투표하면_투표기록이_추가된다() {
 		//given
-		VoteRecordAddRequestDto request =
-			new VoteRecordAddRequestDto(
+		VoteRecordAddRequestDTO request =
+			new VoteRecordAddRequestDTO(
 				1L,
 				1L,
 				VoteType.RUN
@@ -57,7 +57,7 @@ class VoteRecordServiceTest {
 			.willReturn(Optional.of(mockVoteRecord));
 		//when
 		voteRecordService.addVoteRecord(request);
-		VoteRecordResponseDto response = voteRecordService.findUserVoteRecord(1L, 1L);
+		VoteRecordResponseDTO response = voteRecordService.findUserVoteRecord(1L, 1L);
 
 		//when
 		then(response.getVoteRecordId()).isNotZero();
@@ -68,8 +68,8 @@ class VoteRecordServiceTest {
 	@Test
 	void 이미_투표한_유저가_투표하면_예외가_발생한다() {
 		//given
-		VoteRecordAddRequestDto request =
-			new VoteRecordAddRequestDto(
+		VoteRecordAddRequestDTO request =
+			new VoteRecordAddRequestDTO(
 				1L,
 				1L,
 				VoteType.RUN
@@ -106,7 +106,7 @@ class VoteRecordServiceTest {
 			.willReturn(Optional.of(mockVoteRecord));
 
 		//when
-		VoteRecordResponseDto response = voteRecordService.findUserVoteRecord(1L, 1L);
+		VoteRecordResponseDTO response = voteRecordService.findUserVoteRecord(1L, 1L);
 
 		//then
 		then(response.getVoteRecordId()).isNotZero();
@@ -120,7 +120,7 @@ class VoteRecordServiceTest {
 			.willReturn(Optional.empty());
 
 		//when
-		VoteRecordResponseDto response = voteRecordService.findUserVoteRecord(1L, 1L);
+		VoteRecordResponseDTO response = voteRecordService.findUserVoteRecord(1L, 1L);
 
 		//then
 		then(response).isNull();
@@ -142,7 +142,7 @@ class VoteRecordServiceTest {
 			.willReturn(Optional.of(mockVote));
 
 		//when
-		VoteResponseDto response = voteRecordService.findVoteTypeCount(voteDate);
+		VoteResponseDTO response = voteRecordService.findVoteTypeCount(voteDate);
 
 		//then
 		then(response.getVoteTypeCountMap()).containsEntry(VoteType.RUN, 2);
@@ -161,7 +161,7 @@ class VoteRecordServiceTest {
 			.willReturn(Optional.of(mockVote));
 
 		//when
-		VoteResponseDto response = voteRecordService.findVoteTypeCount(voteDate);
+		VoteResponseDTO response = voteRecordService.findVoteTypeCount(voteDate);
 
 		//then
 		then(response.getVoteTypeCountMap()).containsEntry(VoteType.RUN, 0);
@@ -187,7 +187,7 @@ class VoteRecordServiceTest {
 		voteRecordService.cancelVoteRecord(1L);
 
 		//then
-		VoteRecordResponseDto voteRecord = voteRecordService.findUserVoteRecord(1L, 1L);
+		VoteRecordResponseDTO voteRecord = voteRecordService.findUserVoteRecord(1L, 1L);
 		then(voteRecord).isNull();
 	}
 

@@ -15,7 +15,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.flab.dduikka.domain.helper.ApiDocumentationHelper;
-import com.flab.dduikka.domain.login.dto.LoginRequestDto;
+import com.flab.dduikka.domain.login.dto.LoginRequestDTO;
 import com.flab.dduikka.domain.login.dto.SessionMember;
 
 import jakarta.servlet.http.HttpSession;
@@ -26,8 +26,8 @@ class LoginDocumentationTest extends ApiDocumentationHelper {
 	@DisplayName("로그인한다")
 	void login() throws Exception {
 		//given
-		LoginRequestDto request =
-			new LoginRequestDto("test@dduikka.net", "1234");
+		LoginRequestDTO request =
+			new LoginRequestDTO("test@dduikka.net", "1234");
 		SessionMember sessionMember =
 			new SessionMember(1L, request.getEmail());
 		given(loginService.login(any()))

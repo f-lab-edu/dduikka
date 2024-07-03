@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import com.flab.dduikka.domain.location.domain.Location;
 import com.flab.dduikka.domain.weather.application.AccuWeatherFeignClient;
 import com.flab.dduikka.domain.weather.domain.Weather;
-import com.flab.dduikka.domain.weather.dto.AccuWeatherClientResponse;
+import com.flab.dduikka.domain.weather.dto.AccuWeatherClientResponseDTO;
 import com.flab.dduikka.domain.weather.property.AccuWeatherProperty;
 
 import jakarta.validation.ValidationException;
@@ -25,7 +25,7 @@ public class AccuWeatherClient implements WeatherClient {
 	@Override
 	public Weather getWeather(LocalDateTime dateTime, String latitude, String longitude, String cityCode) {
 		validated(latitude, longitude, cityCode);
-		return AccuWeatherClientResponse.from(
+		return AccuWeatherClientResponseDTO.from(
 			weatherFeignClient.getWeather(
 				cityCode,
 				accuWeatherProperty.getApiKey(),

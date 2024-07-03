@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class LoginRequestDto {
+public class LoginRequestDTO {
 	@Email
 	@NotEmpty
 	private String email;
