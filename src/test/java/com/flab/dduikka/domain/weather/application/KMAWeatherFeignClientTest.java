@@ -15,7 +15,7 @@ import org.springframework.util.MultiValueMap;
 
 import com.flab.dduikka.common.util.DateTimeUtil;
 import com.flab.dduikka.domain.helper.WireMockServerHelper;
-import com.flab.dduikka.domain.weather.dto.KMAWeatherClientResponse;
+import com.flab.dduikka.domain.weather.dto.KMAWeatherClientResponseDTO;
 
 import feign.FeignException;
 
@@ -60,7 +60,7 @@ class KMAWeatherFeignClientTest extends WireMockServerHelper {
 			HttpStatus.OK.value()
 		);
 		//when
-		KMAWeatherClientResponse response =
+		KMAWeatherClientResponseDTO response =
 			kmaWeatherFeignClient.getWeather(
 				serviceKey,
 				pageNo,

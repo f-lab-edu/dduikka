@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.flab.dduikka.domain.member.application.MemberService;
-import com.flab.dduikka.domain.member.dto.MemberRegisterRequestDto;
-import com.flab.dduikka.domain.member.dto.MemberResponseDto;
+import com.flab.dduikka.domain.member.dto.MemberRegisterRequestDTO;
+import com.flab.dduikka.domain.member.dto.MemberResponseDTO;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
@@ -29,7 +29,7 @@ public class MemberController {
 
 	@GetMapping("/{memberId}")
 	@ResponseStatus(HttpStatus.OK)
-	public MemberResponseDto findMember(@PathVariable final long memberId) {
+	public MemberResponseDTO findMember(@PathVariable final long memberId) {
 		return memberService.findMember(memberId);
 	}
 
@@ -41,7 +41,7 @@ public class MemberController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public void registerMember(@RequestBody @Valid MemberRegisterRequestDto request) {
+	public void registerMember(@RequestBody @Valid MemberRegisterRequestDTO request) {
 		memberService.registerMember(request);
 	}
 

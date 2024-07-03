@@ -21,7 +21,7 @@ class AccuWeatherFeignClientResponseTest {
 	@Test
 	@DisplayName("json 응답이 객체로 역직렬화된다")
 	void whenCreateClass_thenSuccessfullyDeserialized() throws IOException {
-		AccuWeatherClientResponse response =
+		AccuWeatherClientResponseDTO response =
 			readJSONFile("/payload/weather/accu-weather-response.json");
 
 		assertThat(response.getDateTime()).isEqualTo("2024-04-26T22:00:00+09:00");
@@ -47,25 +47,25 @@ class AccuWeatherFeignClientResponseTest {
 				.location(location)
 				.requestDateTime(localDateTime)
 				.build();
-		AccuWeatherClientResponse response =
+		AccuWeatherClientResponseDTO response =
 			readJSONFile("/payload/weather/accu-weather-response.json");
 
 		//when
 		Weather newWeather =
-			AccuWeatherClientResponse.from(response, location, localDateTime);
+			AccuWeatherClientResponseDTO.from(response, location, localDateTime);
 
 		//then
 		assertThat(weather).isEqualTo(newWeather);
 
 	}
 
-	private AccuWeatherClientResponse readJSONFile(String path) throws IOException {
+	private AccuWeatherClientResponseDTO readJSONFile(String path) throws IOException {
 		ObjectMapper mapper = new ObjectMapper();
 		Class clazz = AccuWeatherFeignClientResponseTest.class;
 		InputStream stream = clazz.getResourceAsStream(path);
 		JsonNode jsonNode = mapper.readTree(stream);
 		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		return mapper.treeToValue(jsonNode, AccuWeatherClientResponse[].class)[0];
+		return mapper.treeToValue(jsonNode, AccuWeatherClientResponseDTO[].class)[0];
 	}
 
 }

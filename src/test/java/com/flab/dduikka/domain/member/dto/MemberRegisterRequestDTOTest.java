@@ -10,19 +10,19 @@ import org.junit.jupiter.api.Test;
 import com.flab.dduikka.domain.member.domain.Member;
 import com.flab.dduikka.domain.member.domain.MemberStatus;
 
-class MemberRegisterRequestDtoTest {
+class MemberRegisterRequestDTOTest {
 
 	@Test
 	@DisplayName("회원 객체를 정상적으로 생성한다")
 	void whenToEntityThenReturnsMember() {
 		//given
-		MemberRegisterRequestDto dto
-			= new MemberRegisterRequestDto(
+		MemberRegisterRequestDTO dto
+			= new MemberRegisterRequestDTO(
 			"test@dduikka.net",
 			"1234");
 
 		//when
-		Member createdMember = MemberRegisterRequestDto.to(dto);
+		Member createdMember = MemberRegisterRequestDTO.to(dto);
 
 		//then
 		assertThat(createdMember.getEmail()).isEqualTo(dto.getEmail());

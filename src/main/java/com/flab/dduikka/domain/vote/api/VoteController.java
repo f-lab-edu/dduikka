@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.flab.dduikka.domain.vote.application.VoteRecordService;
-import com.flab.dduikka.domain.vote.dto.VoteRecordAddRequestDto;
-import com.flab.dduikka.domain.vote.dto.VoteRecordResponseDto;
-import com.flab.dduikka.domain.vote.dto.VoteResponseDto;
+import com.flab.dduikka.domain.vote.dto.VoteRecordAddRequestDTO;
+import com.flab.dduikka.domain.vote.dto.VoteRecordResponseDTO;
+import com.flab.dduikka.domain.vote.dto.VoteResponseDTO;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,21 +29,21 @@ public class VoteController {
 
 	@GetMapping("/{voteDate}")
 	@ResponseStatus(HttpStatus.OK)
-	public VoteResponseDto findVote(@PathVariable final LocalDate voteDate) {
+	public VoteResponseDTO findVote(@PathVariable final LocalDate voteDate) {
 		return voteRecordService.findVoteTypeCount(voteDate);
 	}
 
 	// TODO: USER 구현 후 userId 가져오는 방법 추가
 	@GetMapping("/record/{voteId}")
 	@ResponseStatus(HttpStatus.OK)
-	public VoteRecordResponseDto findUserVoteRecord(@PathVariable final long voteId) {
+	public VoteRecordResponseDTO findUserVoteRecord(@PathVariable final long voteId) {
 		long userId = 1L;
 		return voteRecordService.findUserVoteRecord(userId, voteId);
 	}
 
 	@PostMapping("/record")
 	@ResponseStatus(HttpStatus.CREATED)
-	public void addVoteRecord(@RequestBody @Valid final VoteRecordAddRequestDto request) {
+	public void addVoteRecord(@RequestBody @Valid final VoteRecordAddRequestDTO request) {
 		voteRecordService.addVoteRecord(request);
 	}
 

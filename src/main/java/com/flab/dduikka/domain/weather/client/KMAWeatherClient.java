@@ -10,7 +10,7 @@ import com.flab.dduikka.domain.location.domain.Location;
 import com.flab.dduikka.domain.weather.application.KMAWeatherFeignClient;
 import com.flab.dduikka.domain.weather.domain.KMAWeatherResultCode;
 import com.flab.dduikka.domain.weather.domain.Weather;
-import com.flab.dduikka.domain.weather.dto.KMAWeatherClientResponse;
+import com.flab.dduikka.domain.weather.dto.KMAWeatherClientResponseDTO;
 import com.flab.dduikka.domain.weather.property.KMAWeatherProperty;
 
 import jakarta.validation.ValidationException;
@@ -27,7 +27,7 @@ public class KMAWeatherClient implements WeatherClient {
 	@Override
 	public Weather getWeather(LocalDateTime dateTime, String latitude, String longitude, String cityCode) {
 		validate(latitude, longitude);
-		KMAWeatherClientResponse response =
+		KMAWeatherClientResponseDTO response =
 			weatherFeignClient.getWeather
 				(
 					kmaWeatherProperty.getServiceKey(),
@@ -40,7 +40,7 @@ public class KMAWeatherClient implements WeatherClient {
 					longitude
 				);
 		KMAWeatherResultCode.checkErrorCode(response.getResponse().getHeader().getResultCode());
-		return KMAWeatherClientResponse.from
+		return KMAWeatherClientResponseDTO.from
 			(
 				response,
 				new Location(latitude, longitude),

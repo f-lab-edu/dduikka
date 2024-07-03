@@ -19,7 +19,7 @@ import com.flab.dduikka.domain.helper.JSONFileReader;
 import com.flab.dduikka.domain.location.domain.Location;
 import com.flab.dduikka.domain.weather.application.AccuWeatherFeignClient;
 import com.flab.dduikka.domain.weather.domain.Weather;
-import com.flab.dduikka.domain.weather.dto.AccuWeatherClientResponse;
+import com.flab.dduikka.domain.weather.dto.AccuWeatherClientResponseDTO;
 import com.flab.dduikka.domain.weather.property.AccuWeatherProperty;
 
 import jakarta.validation.ValidationException;
@@ -44,11 +44,11 @@ class AccuWeatherClientTest {
 	@DisplayName("날씨 조회를 요청하면 weather client가 한 번 호출된다")
 	void whenGetWeather_thenWeatherClientIsCalledOnce() throws IOException {
 		//given
-		AccuWeatherClientResponse[] mockResponse =
+		AccuWeatherClientResponseDTO[] mockResponse =
 			JSONFileReader.readJSONFile
 				(
 					"/payload/weather/accu-weather-response.json",
-					AccuWeatherClientResponse[].class
+					AccuWeatherClientResponseDTO[].class
 				);
 		LocalDateTime dateTime = LocalDateTime.now();
 		given(accuWeatherFeignClient.getWeather(anyString(), anyString(), anyString(), anyBoolean(), anyBoolean()))
@@ -69,11 +69,11 @@ class AccuWeatherClientTest {
 	@DisplayName("날씨 조회를 요청하면 weather가 반환된다")
 	void whenGetWeather_thenReturnsWeather() throws IOException {
 		//given
-		AccuWeatherClientResponse[] mockResponse =
+		AccuWeatherClientResponseDTO[] mockResponse =
 			JSONFileReader.readJSONFile
 				(
 					"/payload/weather/accu-weather-response.json",
-					AccuWeatherClientResponse[].class
+					AccuWeatherClientResponseDTO[].class
 				);
 		Location location = new Location("55", "127");
 		LocalDateTime localDateTime = LocalDateTime.now();

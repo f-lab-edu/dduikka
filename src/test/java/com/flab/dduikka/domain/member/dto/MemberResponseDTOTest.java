@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import com.flab.dduikka.domain.member.domain.Member;
 
-class MemberResponseDtoTest {
+class MemberResponseDTOTest {
 
 	@Test
 	void 응답_객체를_정상적으로_생성한다() {
@@ -20,7 +20,7 @@ class MemberResponseDtoTest {
 			.build();
 
 		//when
-		MemberResponseDto response = MemberResponseDto.from(member);
+		MemberResponseDTO response = MemberResponseDTO.from(member);
 
 		//then
 		assertThat(member.getMemberId()).isEqualTo(response.getMemberId());

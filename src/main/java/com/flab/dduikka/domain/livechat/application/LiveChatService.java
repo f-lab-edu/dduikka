@@ -7,9 +7,9 @@ import org.springframework.stereotype.Service;
 import com.flab.dduikka.common.encryption.EncryptedMemberIdentifierCache;
 import com.flab.dduikka.common.validator.CustomValidator;
 import com.flab.dduikka.domain.livechat.domain.LiveChat;
-import com.flab.dduikka.domain.livechat.dto.LiveChatMessage;
-import com.flab.dduikka.domain.livechat.dto.LiveChatResponse;
-import com.flab.dduikka.domain.livechat.dto.LiveChatsResponse;
+import com.flab.dduikka.domain.livechat.dto.LiveChatMessageDTO;
+import com.flab.dduikka.domain.livechat.dto.LiveChatResponseDTO;
+import com.flab.dduikka.domain.livechat.dto.LiveChatsResponseDTO;
 import com.flab.dduikka.domain.livechat.exception.LiveChatException;
 import com.flab.dduikka.domain.livechat.repository.LiveChatRepository;
 
@@ -23,19 +23,19 @@ public class LiveChatService {
 	private final EncryptedMemberIdentifierCache cachedEncryptor;
 	private final CustomValidator validator;
 
-	public LiveChatResponse createMessage(long sessionId, LiveChatMessage message) {
-		LiveChat newLiveChat = LiveChatMessage.to(sessionId, message);
+	public LiveChatResponseDTO createMessage(long sessionId, LiveChatMessageDTO message) {
+		LiveChat newLiveChat = LiveChatMessageDTO.to(sessionId, message);
 		validator.validateObject(newLiveChat);
 		LiveChat createdLiveChat = liveChatRepository.addLiveChat(newLiveChat);
 		String encryptSessionId = cachedEncryptor.cacheEncryptedMemberIdentifier(String.valueOf(sessionId));
-		return LiveChatResponse.from(createdLiveChat, encryptSessionId);
+		return LiveChatResponseDTO.from(createdLiveChat, encryptSessionId);
 	}
 
-	public LiveChatsResponse findAllLiveChat(long lastMessageId) {
+	public LiveChatsResponseDTO findAllLiveChat(long lastMessageId) {
 		List<LiveChat> liveChats = liveChatRepository.findAllLiveChat(lastMessageId);
-		return new LiveChatsResponse(
+		return new LiveChatsResponseDTO(
 			liveChats.stream()
-				.map(liveChat -> LiveChatResponse.from(
+				.map(liveChat -> LiveChatResponseDTO.from(
 					liveChat,
 					cachedEncryptor.cacheEncryptedMemberIdentifier(String.valueOf(liveChat.getMemberId()))
 				))

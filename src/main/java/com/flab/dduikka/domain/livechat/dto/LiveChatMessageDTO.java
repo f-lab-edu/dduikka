@@ -10,15 +10,15 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class LiveChatMessage {
+public class LiveChatMessageDTO {
 	@NotBlank
 	private String text;
 
-	public LiveChatMessage(String text) {
+	public LiveChatMessageDTO(String text) {
 		this.text = text;
 	}
 
-	public static LiveChat to(long sessionId, LiveChatMessage message) {
+	public static LiveChat to(long sessionId, LiveChatMessageDTO message) {
 		return LiveChat.builder()
 			.memberId(sessionId)
 			.message(message.getText())

@@ -17,7 +17,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.flab.dduikka.common.validator.CustomValidator;
-import com.flab.dduikka.domain.login.dto.LoginRequestDto;
+import com.flab.dduikka.domain.login.dto.LoginRequestDTO;
 import com.flab.dduikka.domain.login.dto.SessionMember;
 import com.flab.dduikka.domain.member.domain.Member;
 import com.flab.dduikka.domain.member.domain.MemberStatus;
@@ -46,7 +46,7 @@ class LoginServiceTest {
 				.joinDate(LocalDate.now())
 				.createAt(LocalDateTime.now())
 				.build();
-		LoginRequestDto request = new LoginRequestDto(email, "1234");
+		LoginRequestDTO request = new LoginRequestDTO(email, "1234");
 
 		given(memberRepository.findByEmailAndMemberStatus(email)).willReturn(Optional.ofNullable(mockMember));
 
@@ -60,7 +60,7 @@ class LoginServiceTest {
 	@DisplayName("가입하지 않은 회원이 로그인하면 NoSuchElementException 예외를 발생시킨다.")
 	void whenUnregisteredMemberLogInThenThrowNoSuchElementException() {
 		String email = "test@dduikka.com";
-		LoginRequestDto request = new LoginRequestDto(email, "1234");
+		LoginRequestDTO request = new LoginRequestDTO(email, "1234");
 		given(memberRepository.findByEmailAndMemberStatus(request.getEmail()))
 			.willReturn(Optional.empty());
 
@@ -74,7 +74,7 @@ class LoginServiceTest {
 	@DisplayName("비밀번호가 틀리면 IllegalStateException 예외를 발생시킨다.")
 	void whenPasswordIsIncorrectThenThrowIllegalStateException() {
 		String email = "test@dduikka.com";
-		LoginRequestDto request = new LoginRequestDto(email, "wrongPassword");
+		LoginRequestDTO request = new LoginRequestDTO(email, "wrongPassword");
 		Member mockMember = Member.builder()
 			.memberId(1L)
 			.email(email)

@@ -7,8 +7,8 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class LiveChatsResponse {
+public class LiveChatsResponseDTO {
 
-	private List<LiveChatResponse> liveChatsResponseList;
+	private List<LiveChatResponseDTO> liveChatsResponseList;
 
 }

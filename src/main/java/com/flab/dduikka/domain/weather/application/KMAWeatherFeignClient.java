@@ -4,13 +4,13 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.flab.dduikka.domain.weather.dto.KMAWeatherClientResponse;
+import com.flab.dduikka.domain.weather.dto.KMAWeatherClientResponseDTO;
 
 @FeignClient(name = "KMAWeatherClient", url = "${kma.end-point}")
 public interface KMAWeatherFeignClient {
 
 	@GetMapping(value = "/getUltraSrtNcst")
-	KMAWeatherClientResponse getWeather(
+	KMAWeatherClientResponseDTO getWeather(
 		@RequestParam("serviceKey") String serviceKey,
 		@RequestParam("pageNo") int pageNo,
 		@RequestParam("numOfRows") int numOfRows,

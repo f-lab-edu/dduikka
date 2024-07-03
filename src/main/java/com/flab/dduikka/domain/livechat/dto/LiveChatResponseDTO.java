@@ -10,7 +10,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class LiveChatResponse {
+public class LiveChatResponseDTO {
 
 	private long liveChatId;
 	private String eid;
@@ -18,8 +18,8 @@ public class LiveChatResponse {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
 	private LocalDateTime time;
 
-	public static LiveChatResponse from(LiveChat liveChat, String encryptId) {
-		return new LiveChatResponse(
+	public static LiveChatResponseDTO from(LiveChat liveChat, String encryptId) {
+		return new LiveChatResponseDTO(
 			liveChat.getLiveChatId(),
 			encryptId,
 			liveChat.getMessage(),

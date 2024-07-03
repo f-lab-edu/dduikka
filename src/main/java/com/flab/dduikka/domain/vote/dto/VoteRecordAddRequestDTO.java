@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
-public class VoteRecordAddRequestDto {
+public class VoteRecordAddRequestDTO {
 
 	@NotNull(message = "voteId null 일 수 없습니다.")
 	private final long voteId;
@@ -22,14 +22,14 @@ public class VoteRecordAddRequestDto {
 	private final VoteType voteType;
 	private final boolean isCanceled;
 
-	public VoteRecordAddRequestDto(long voteId, long userId, VoteType voteType) {
+	public VoteRecordAddRequestDTO(long voteId, long userId, VoteType voteType) {
 		this.voteId = voteId;
 		this.userId = userId;
 		this.voteType = voteType;
 		this.isCanceled = false;
 	}
 
-	public static VoteRecord toEntity(VoteRecordAddRequestDto request) {
+	public static VoteRecord toEntity(VoteRecordAddRequestDTO request) {
 		return VoteRecord.builder()
 			.voteId(request.getVoteId())
 			.userId(request.getUserId())

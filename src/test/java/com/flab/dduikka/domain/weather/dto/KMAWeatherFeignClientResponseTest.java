@@ -19,10 +19,11 @@ class KMAWeatherFeignClientResponseTest {
 	@DisplayName("json 응답이 객체로 역직렬화된다")
 	void whenCreateClass_thenSuccessfullyDeserialized() throws IOException {
 		//given, when
-		KMAWeatherClientResponse response =
-			JSONFileReader.readJSONFile("/payload/weather/kma-weather-response.json", KMAWeatherClientResponse.class);
+		KMAWeatherClientResponseDTO response =
+			JSONFileReader.readJSONFile("/payload/weather/kma-weather-response.json",
+				KMAWeatherClientResponseDTO.class);
 
-		KMAWeatherClientResponse.WeatherPayload payload = response.getResponse();
+		KMAWeatherClientResponseDTO.WeatherPayload payload = response.getResponse();
 
 		//then
 		assertThat(payload.getHeader().getResultCode()).isEqualTo("00");
@@ -49,12 +50,13 @@ class KMAWeatherFeignClientResponseTest {
 				.location(location)
 				.requestDateTime(localDateTime)
 				.build();
-		KMAWeatherClientResponse response =
-			JSONFileReader.readJSONFile("/payload/weather/kma-weather-response.json", KMAWeatherClientResponse.class);
+		KMAWeatherClientResponseDTO response =
+			JSONFileReader.readJSONFile("/payload/weather/kma-weather-response.json",
+				KMAWeatherClientResponseDTO.class);
 
 		//when
 		Weather newWeather =
-			KMAWeatherClientResponse.from(response, location, localDateTime);
+			KMAWeatherClientResponseDTO.from(response, location, localDateTime);
 
 		//then
 		assertThat(weather).isEqualTo(newWeather);
