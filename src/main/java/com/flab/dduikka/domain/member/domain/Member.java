@@ -44,10 +44,6 @@ public class Member extends Auditable {
 		return memberStatus.equals(MemberStatus.JOIN);
 	}
 
-	public boolean isCorrectPassword(String password) {
-		return this.password.equals(password);
-	}
-
 	public void leave() {
 		memberStatus = MemberStatus.LEAVE;
 		leaveDate = LocalDate.now();

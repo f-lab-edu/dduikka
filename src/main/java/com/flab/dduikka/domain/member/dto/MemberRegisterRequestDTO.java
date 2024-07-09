@@ -26,10 +26,10 @@ public class MemberRegisterRequestDTO {
 	@NotBlank(message = "비밀번호는 비어있거나 null일 수 없습니다.")
 	private String password;
 
-	public static Member to(MemberRegisterRequestDTO request) {
+	public static Member to(MemberRegisterRequestDTO request, String encodedPassword) {
 		return Member.builder()
 			.email(request.email)
-			.password(request.password)
+			.password(encodedPassword)
 			.memberStatus(MemberStatus.JOIN)
 			.joinDate(LocalDate.now())
 			.createAt(LocalDateTime.now())
