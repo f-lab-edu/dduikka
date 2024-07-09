@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.flab.dduikka.common.validator.CustomValidator;
 import com.flab.dduikka.domain.member.domain.Member;
@@ -33,13 +34,16 @@ class MemberServiceTest {
 	private MemberRepository memberRepository;
 	@Mock
 	private CustomValidator validator;
+	@Mock
+	private PasswordEncoder passwordEncoder;
 
 	@BeforeEach
 	void setUp() {
 		memberService = new MemberService(
 			"^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[\\W]).{10,}$",
 			memberRepository,
-			validator
+			validator,
+			passwordEncoder
 		);
 	}
 
@@ -203,8 +207,10 @@ class MemberServiceTest {
 			= new MemberRegisterRequestDTO(
 			"test@dduikka.net",
 			"123456qW!@");
-		Member newMember = MemberRegisterRequestDTO.to(request);
+		String encodedPassword = "encodedPassword";
+		Member newMember = MemberRegisterRequestDTO.to(request, encodedPassword);
 
+		given(passwordEncoder.encode(anyString())).willReturn(encodedPassword);
 		given(memberRepository.findByEmailAndMemberStatus(anyString()))
 			.willReturn(Optional.empty());
 		given(memberRepository.addMember(any()))

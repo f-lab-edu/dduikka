@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.flab.dduikka.common.validator.CustomValidator;
 import com.flab.dduikka.domain.login.dto.LoginRequestDTO;
@@ -32,6 +33,8 @@ class LoginServiceTest {
 	private MemberRepository memberRepository;
 	@Mock
 	private CustomValidator validator;
+	@Mock
+	private PasswordEncoder passwordEncoder;
 
 	@Test
 	@DisplayName("로그인하면 회원을 반환한다.")
@@ -47,7 +50,7 @@ class LoginServiceTest {
 				.createAt(LocalDateTime.now())
 				.build();
 		LoginRequestDTO request = new LoginRequestDTO(email, "1234");
-
+		given(passwordEncoder.matches(anyString(), anyString())).willReturn(true);
 		given(memberRepository.findByEmailAndMemberStatus(email)).willReturn(Optional.ofNullable(mockMember));
 
 		SessionMember sessionMember = loginService.login(request);
@@ -83,6 +86,8 @@ class LoginServiceTest {
 			.joinDate(LocalDate.now())
 			.createAt(LocalDateTime.now())
 			.build();
+
+		given(passwordEncoder.matches(anyString(), anyString())).willReturn(false);
 		given(memberRepository.findByEmailAndMemberStatus(email))
 			.willReturn(Optional.ofNullable(mockMember));
 
