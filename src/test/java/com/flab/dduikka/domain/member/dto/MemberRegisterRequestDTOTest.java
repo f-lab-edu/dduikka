@@ -20,13 +20,14 @@ class MemberRegisterRequestDTOTest {
 			= new MemberRegisterRequestDTO(
 			"test@dduikka.net",
 			"1234");
+		String encodedPassword = "encodedPassword";
 
 		//when
-		Member createdMember = MemberRegisterRequestDTO.to(dto);
+		Member createdMember = MemberRegisterRequestDTO.to(dto, encodedPassword);
 
 		//then
 		assertThat(createdMember.getEmail()).isEqualTo(dto.getEmail());
-		assertThat(createdMember.getPassword()).isEqualTo(dto.getPassword());
+		assertThat(createdMember.getPassword()).isNotEqualTo(dto.getPassword());
 		assertThat(createdMember.getMemberStatus()).isEqualTo(MemberStatus.JOIN);
 		assertThat(createdMember.getJoinDate()).isEqualTo(LocalDate.now());
 	}

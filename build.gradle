@@ -60,6 +60,7 @@ dependencies {
     compileOnly 'org.projectlombok:lombok' // 보일러 플레이트 코드를 자동화하는 java 라이브러리
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test' // Spring Boot 애플리케이션 테스트 스타터
+    implementation 'org.springframework.security:spring-security-crypto:6.3.0'
 
     //테스트에서 lombok 사용
     testCompileOnly 'org.projectlombok:lombok'

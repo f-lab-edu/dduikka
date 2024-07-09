@@ -4,6 +4,7 @@ import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.flab.dduikka.common.validator.CustomValidator;
@@ -19,15 +20,17 @@ public class MemberService {
 	private final String passwordRegexp;
 	private final MemberRepository memberRepository;
 	private final CustomValidator validator;
+	private final PasswordEncoder passwordEncoder;
 
 	@Autowired
 	public MemberService(
 		@Value("#{environment['regexp.password']}") String passwordRegexp,
 		MemberRepository memberRepository,
-		CustomValidator validator) {
+		CustomValidator validator, PasswordEncoder passwordEncoder) {
 		this.passwordRegexp = passwordRegexp;
 		this.memberRepository = memberRepository;
 		this.validator = validator;
+		this.passwordEncoder = passwordEncoder;
 	}
 
 	public MemberResponseDTO findMember(final long memberId) {
@@ -49,7 +52,8 @@ public class MemberService {
 		if (isEmailDuplicated(request.getEmail())) {
 			throw new MemberException.DuplicatedEmailException("기등록된 회원입니다. email" + request.getEmail());
 		}
-		Member newMember = MemberRegisterRequestDTO.to(request);
+		Member newMember =
+			MemberRegisterRequestDTO.to(request, passwordEncoder.encode(request.getPassword()));
 		validator.validateObject(newMember);
 		memberRepository.addMember(newMember);
 	}
