@@ -41,3 +41,8 @@ websocket:
     destination:
       prefix: /app
   endpoint: /chats
+
+# jasypt
+jasypt:
+  encryptor:
+    password: test
