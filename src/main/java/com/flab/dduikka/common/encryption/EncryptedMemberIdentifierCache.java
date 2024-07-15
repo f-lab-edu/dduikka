@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class EncryptedMemberIdentifierCache {
 
-	@Cacheable(value = "MemberIdentifier")
+	@Cacheable(value = "MEMBERIDENTIFIER_CACHE")
 	public String cacheEncryptedMemberIdentifier(String data) {
 		return SHA256Encryptor.hashSHA256(data);
 	}
