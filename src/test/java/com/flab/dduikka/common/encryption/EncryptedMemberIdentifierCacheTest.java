@@ -2,23 +2,23 @@ package com.flab.dduikka.common.encryption;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.util.concurrent.TimeUnit;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cache.CacheManager;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.flab.dduikka.config.CacheConfig;
+import com.flab.dduikka.common.domain.CacheType;
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest(classes = {
-	CacheConfig.class,
-	EncryptedMemberIdentifierCacheTest.TestConfig.class})
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@SpringBootTest
 class EncryptedMemberIdentifierCacheTest {
+
+	private static final String cacheName = CacheType.MEMBERIDENTIFIER_CACHE.name();
 
 	@Autowired
 	private CacheManager cacheManager;
@@ -27,7 +27,7 @@ class EncryptedMemberIdentifierCacheTest {
 	private EncryptedMemberIdentifierCache identifierCache;
 
 	private String getCachedMemberIdentifier(String data) {
-		return cacheManager.getCache("MemberIdentifier").get(data, String.class);
+		return cacheManager.getCache(cacheName).get(data, String.class);
 	}
 
 	@Test
@@ -54,11 +54,44 @@ class EncryptedMemberIdentifierCacheTest {
 		assertThat(getCachedMemberIdentifier(memberId)).isNull();
 	}
 
-	@Configuration
-	static class TestConfig {
-		@Bean
-		public EncryptedMemberIdentifierCache encryptedMemberIdentifierCache() {
-			return new EncryptedMemberIdentifierCache();
+	@Test
+	@DisplayName("로컬 캐시 사용 시 암호화 연산보다 속도가 더 빠르다.")
+	void whenUsingLocalCache_thenFasterThanEncryption() {
+		int loopCnt = 10_000;
+		String data = "1234567";
+
+		// 로컬 캐시 사용
+		long cacheStartTime = System.nanoTime();
+		for (int i = 0; i < loopCnt; i++) {
+			getCachedMemberIdentifier(data);
 		}
+		long cacheLatency = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - cacheStartTime);
+
+		// 암호화 연산
+		long encryptorStartTime = System.nanoTime();
+		for (int i = 0; i < loopCnt; i++) {
+			SHA256Encryptor.hashSHA256(data);
+		}
+		long encryptorLatency = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - encryptorStartTime);
+
+		log.info("Test execute cache time: {}", cacheLatency);
+		log.info("Test execute encrypted time: {}", encryptorLatency);
+		assertThat(cacheLatency).isLessThan(encryptorLatency);
+	}
+
+	@Test
+	@DisplayName("캐시 퍼포먼스 테스트")
+	void cachePerfomanceTest() {
+		//given
+		int loopCnt = 10_000;
+		String data = "1234567";
+		long startTime = System.nanoTime();
+		//when
+		for (int i = 0; i < loopCnt; i++)
+			getCachedMemberIdentifier(data);
+		long latency = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - startTime);
+		log.info("Test execute time : {}", latency);
+		//then
+		assertThat(latency).isLessThanOrEqualTo(100);
 	}
 }
