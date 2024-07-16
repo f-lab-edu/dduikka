@@ -27,8 +27,7 @@
 
 **INFRA**
 
-![](https://img.shields.io/badge/-amazon_ec2-FF9900?logo=amazonec2&logoColor=white&style=for-the-badge)
-![](https://img.shields.io/badge/-amazon_rds-527FFF?logo=amazonrds&logoColor=white&style=for-the-badge)
+![](https://img.shields.io/badge/-NAVER_CLOUD-6DB33F?logo=navercloud&logoColor=white&style=for-the-badge)
 ![](https://img.shields.io/badge/-jenkins-D24939?logo=jenkins&logoColor=white&style=for-the-badge)
 
 ## ERD
