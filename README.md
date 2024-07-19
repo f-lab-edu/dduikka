@@ -21,7 +21,6 @@
 ![](https://img.shields.io/badge/-SPRINGBOOT-6DB33F?logo=springboot&logoColor=white&style=for-the-badge)
 ![](https://img.shields.io/badge/-spring_rest_docs-6DB33F?logo=springboot&logoColor=white&style=for-the-badge)
 ![](https://img.shields.io/badge/-mysql-4479A1?logo=mysql&logoColor=white&style=for-the-badge)
-![](https://img.shields.io/badge/-redis-FF4438?logo=redis&logoColor=white&style=for-the-badge)
 ![](https://img.shields.io/badge/-junit5-25A162?logo=junit5&logoColor=white&style=for-the-badge)
 ![](https://img.shields.io/badge/-mockito-25A162?logo=mockito&logoColor=white&style=for-the-badge)
 
