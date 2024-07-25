@@ -1,8 +1,5 @@
 package com.flab.dduikka.domain.weather.api;
 
-import java.time.LocalDateTime;
-
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,11 +19,9 @@ public class WeatherController {
 
 	@GetMapping
 	public WeatherResponseDTO findWeather(
-		@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS") LocalDateTime dateTime,
 		@RequestParam String latitude,
-		@RequestParam String longitude,
-		@RequestParam String cityCode
+		@RequestParam String longitude
 	) {
-		return weatherService.getWeather(dateTime, latitude, longitude, cityCode);
+		return weatherService.findWeather(latitude, longitude);
 	}
 }
