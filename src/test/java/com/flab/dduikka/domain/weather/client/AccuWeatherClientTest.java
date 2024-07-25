@@ -17,7 +17,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.flab.dduikka.common.util.DateTimeUtil;
 import com.flab.dduikka.domain.helper.JSONFileReader;
 import com.flab.dduikka.domain.location.domain.Location;
-import com.flab.dduikka.domain.weather.application.AccuWeatherFeignClient;
 import com.flab.dduikka.domain.weather.domain.Weather;
 import com.flab.dduikka.domain.weather.dto.AccuWeatherClientResponseDTO;
 import com.flab.dduikka.domain.weather.property.AccuWeatherProperty;
@@ -85,7 +84,6 @@ class AccuWeatherClientTest {
 				.rainfall(0.0)
 				.snowfall(0.0)
 				.location(location)
-				.requestDateTime(localDateTime)
 				.build();
 		given(accuWeatherFeignClient.getWeather(anyString(), anyString(), anyString(), anyBoolean(), anyBoolean()))
 			.willReturn(List.of(mockResponse));

@@ -37,7 +37,6 @@ class WeatherDocumentationTest extends ApiDocumentationHelper {
 				.snowfall(0.0)
 				.rainfall(0.0)
 				.relativeHumidity(61)
-				.requestDateTime(requestDateTime)
 				.build();
 		given(weatherService.getWeather(any(), anyString(), anyString(), anyString()))
 			.willReturn(WeatherResponseDTO.from(response));

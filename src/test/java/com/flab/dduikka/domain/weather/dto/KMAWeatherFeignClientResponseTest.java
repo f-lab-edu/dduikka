@@ -3,7 +3,6 @@ package com.flab.dduikka.domain.weather.dto;
 import static org.assertj.core.api.Assertions.*;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,7 +38,6 @@ class KMAWeatherFeignClientResponseTest {
 	void whenDtoFromWeather_thenWeatherIsCorrectlyCreated() throws IOException {
 		//given
 		Location location = new Location("55", "127");
-		LocalDateTime localDateTime = LocalDateTime.now();
 		Weather weather =
 			Weather.builder()
 				.forecastDateTime(DateTimeUtil.toLocalDateTime("20240423", "1700"))
@@ -48,7 +46,6 @@ class KMAWeatherFeignClientResponseTest {
 				.rainfall(0.0)
 				.snowfall(0.0)
 				.location(location)
-				.requestDateTime(localDateTime)
 				.build();
 		KMAWeatherClientResponseDTO response =
 			JSONFileReader.readJSONFile("/payload/weather/kma-weather-response.json",
@@ -56,7 +53,7 @@ class KMAWeatherFeignClientResponseTest {
 
 		//when
 		Weather newWeather =
-			KMAWeatherClientResponseDTO.from(response, location, localDateTime);
+			KMAWeatherClientResponseDTO.from(response, location);
 
 		//then
 		assertThat(weather).isEqualTo(newWeather);

@@ -13,6 +13,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import com.flab.dduikka.domain.helper.WireMockServerHelper;
+import com.flab.dduikka.domain.weather.client.AccuWeatherFeignClient;
 import com.flab.dduikka.domain.weather.dto.AccuWeatherClientResponseDTO;
 
 import feign.FeignException;
