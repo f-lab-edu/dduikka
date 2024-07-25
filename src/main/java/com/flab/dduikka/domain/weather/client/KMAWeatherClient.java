@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 import com.flab.dduikka.common.util.DateTimeUtil;
 import com.flab.dduikka.domain.location.domain.Location;
-import com.flab.dduikka.domain.weather.application.KMAWeatherFeignClient;
 import com.flab.dduikka.domain.weather.domain.KMAWeatherResultCode;
 import com.flab.dduikka.domain.weather.domain.Weather;
 import com.flab.dduikka.domain.weather.dto.KMAWeatherClientResponseDTO;
@@ -43,8 +42,7 @@ public class KMAWeatherClient implements WeatherClient {
 		return KMAWeatherClientResponseDTO.from
 			(
 				response,
-				new Location(latitude, longitude),
-				dateTime
+				new Location(latitude, longitude)
 			);
 	}
 
