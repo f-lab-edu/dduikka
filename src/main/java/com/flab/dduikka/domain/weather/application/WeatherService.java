@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.flab.dduikka.common.util.GeoHashUtil;
 import com.flab.dduikka.domain.weather.client.WeatherClient;
 import com.flab.dduikka.domain.weather.domain.Weather;
 import com.flab.dduikka.domain.weather.dto.WeatherRequestDTO;
@@ -38,7 +39,7 @@ public class WeatherService {
 	}
 
 	public WeatherResponseDTO findWeather(WeatherRequestDTO request) {
-		String geoHash = pointToGeoHash(request.getLatitude(), request.getLongitude());
+		String geoHash = GeoHashUtil.getGeoHashString(request.getLatitude(), request.getLongitude());
 		Weather foundWeather = weatherRepository.findWeatherById(geoHash).orElseThrow(
 			() -> new WeatherException.WeatherNotFoundException("해당 위치에 대한 날씨가 존재하지 않습니다. weatherId: " + geoHash));
 		return WeatherResponseDTO.from(foundWeather);
@@ -65,10 +66,5 @@ public class WeatherService {
 	 */
 	private LocalDateTime advanceForecastRequestTime(LocalDateTime requestTime) {
 		return requestTime.minusMinutes(advanceMinutes);
-	}
-
-	//TODO : weather API 갱신하기 구현 시에 geohash 값 얻어오도록 함
-	private String pointToGeoHash(String latitude, String longitude) {
-		return "geohash temp";
 	}
 }
