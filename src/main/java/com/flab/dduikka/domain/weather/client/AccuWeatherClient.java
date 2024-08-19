@@ -6,7 +6,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import com.flab.dduikka.domain.location.domain.Location;
-import com.flab.dduikka.domain.weather.application.AccuWeatherFeignClient;
 import com.flab.dduikka.domain.weather.domain.Weather;
 import com.flab.dduikka.domain.weather.dto.AccuWeatherClientResponseDTO;
 import com.flab.dduikka.domain.weather.property.AccuWeatherProperty;
@@ -33,8 +32,7 @@ public class AccuWeatherClient implements WeatherClient {
 				accuWeatherProperty.isDetails(),
 				accuWeatherProperty.isMetric()
 			).get(0),
-			new Location(latitude, longitude),
-			dateTime
+			new Location(latitude, longitude)
 		);
 	}
 

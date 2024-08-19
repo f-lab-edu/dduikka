@@ -1,4 +1,4 @@
-package com.flab.dduikka.domain.weather.application;
+package com.flab.dduikka.domain.weather.client;
 
 import java.util.List;
 

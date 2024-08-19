@@ -26,7 +26,9 @@ public class MemberService {
 	public MemberService(
 		@Value("#{environment['regexp.password']}") String passwordRegexp,
 		MemberRepository memberRepository,
-		CustomValidator validator, PasswordEncoder passwordEncoder) {
+		CustomValidator validator,
+		PasswordEncoder passwordEncoder
+	) {
 		this.passwordRegexp = passwordRegexp;
 		this.memberRepository = memberRepository;
 		this.validator = validator;

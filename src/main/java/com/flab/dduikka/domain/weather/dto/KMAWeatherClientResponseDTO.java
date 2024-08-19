@@ -1,6 +1,5 @@
 package com.flab.dduikka.domain.weather.dto;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -24,8 +23,7 @@ public class KMAWeatherClientResponseDTO {
 	public static Weather from
 		(
 			KMAWeatherClientResponseDTO response,
-			Location location,
-			LocalDateTime requestDateTime
+			Location location
 		) {
 		double temperature = 0.0;
 		double precipitation = 0.0;
@@ -61,7 +59,6 @@ public class KMAWeatherClientResponseDTO {
 			.rainfall(isRainFall ? precipitation : 0.0)
 			.snowfall(!isRainFall ? precipitation : 0.0)
 			.location(location)
-			.requestDateTime(requestDateTime)
 			.build();
 	}
 

@@ -11,4 +11,10 @@ public class WeatherException extends RuntimeException {
 			super(message);
 		}
 	}
+
+	public static class WeatherNotFoundException extends WeatherException {
+		public WeatherNotFoundException(String message) {
+			super(message);
+		}
+	}
 }

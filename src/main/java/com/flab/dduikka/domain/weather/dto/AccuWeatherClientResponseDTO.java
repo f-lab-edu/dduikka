@@ -1,7 +1,5 @@
 package com.flab.dduikka.domain.weather.dto;
 
-import java.time.LocalDateTime;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.flab.dduikka.common.util.DateTimeUtil;
 import com.flab.dduikka.domain.location.domain.Location;
@@ -29,8 +27,7 @@ public class AccuWeatherClientResponseDTO {
 	@JsonProperty("RelativeHumidity")
 	private Integer relativeHumidity;
 
-	public static Weather from(AccuWeatherClientResponseDTO response, Location location,
-		LocalDateTime requestDateTime) {
+	public static Weather from(AccuWeatherClientResponseDTO response, Location location) {
 		return Weather.builder()
 			.forecastDateTime(DateTimeUtil.toLocalDateTime(response.getDateTime()))
 			.temperature(response.getTemperature().getValue())
@@ -38,7 +35,6 @@ public class AccuWeatherClientResponseDTO {
 			.rainfall(response.getRain().getValue())
 			.snowfall(response.getSnow().getValue())
 			.location(location)
-			.requestDateTime(requestDateTime)
 			.build();
 	}
 

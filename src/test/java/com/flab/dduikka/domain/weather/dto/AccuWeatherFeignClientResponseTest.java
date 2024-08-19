@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -36,7 +35,6 @@ class AccuWeatherFeignClientResponseTest {
 	void whenDtoFromWeather_thenWeatherIsCorrectlyCreated() throws IOException {
 		//given
 		Location location = new Location("55", "127");
-		LocalDateTime localDateTime = LocalDateTime.now();
 		Weather weather =
 			Weather.builder()
 				.forecastDateTime(DateTimeUtil.toLocalDateTime("2024-04-26T22:00:00+09:00"))
@@ -45,14 +43,13 @@ class AccuWeatherFeignClientResponseTest {
 				.rainfall(0.0)
 				.snowfall(0.0)
 				.location(location)
-				.requestDateTime(localDateTime)
 				.build();
 		AccuWeatherClientResponseDTO response =
 			readJSONFile("/payload/weather/accu-weather-response.json");
 
 		//when
 		Weather newWeather =
-			AccuWeatherClientResponseDTO.from(response, location, localDateTime);
+			AccuWeatherClientResponseDTO.from(response, location);
 
 		//then
 		assertThat(weather).isEqualTo(newWeather);

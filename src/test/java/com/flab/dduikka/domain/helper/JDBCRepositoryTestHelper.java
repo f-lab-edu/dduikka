@@ -12,6 +12,7 @@ import com.flab.dduikka.domain.livechat.repository.LiveChatRepository;
 import com.flab.dduikka.domain.member.repository.MemberRepository;
 import com.flab.dduikka.domain.vote.repository.VoteRecordRepository;
 import com.flab.dduikka.domain.vote.repository.VoteRepository;
+import com.flab.dduikka.domain.weather.repository.WeatherRepository;
 
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Sql(scripts = "classpath:h2/teardown.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
@@ -29,5 +30,8 @@ public abstract class JDBCRepositoryTestHelper {
 
 	@Autowired
 	protected LiveChatRepository liveChatRepository;
+
+	@Autowired
+	protected WeatherRepository weatherRepository;
 
 }

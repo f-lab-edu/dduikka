@@ -15,6 +15,7 @@ import org.springframework.util.MultiValueMap;
 
 import com.flab.dduikka.common.util.DateTimeUtil;
 import com.flab.dduikka.domain.helper.WireMockServerHelper;
+import com.flab.dduikka.domain.weather.client.KMAWeatherFeignClient;
 import com.flab.dduikka.domain.weather.dto.KMAWeatherClientResponseDTO;
 
 import feign.FeignException;
