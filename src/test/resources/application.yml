@@ -46,3 +46,7 @@ websocket:
 jasypt:
   encryptor:
     password: test
+
+weather:
+  advance-minutes: 10
+
