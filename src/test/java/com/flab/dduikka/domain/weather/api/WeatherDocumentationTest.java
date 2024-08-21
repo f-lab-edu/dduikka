@@ -8,6 +8,8 @@ import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.time.LocalDateTime;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
@@ -24,7 +26,8 @@ class WeatherDocumentationTest extends ApiDocumentationHelper {
 	@DisplayName("날씨를 조회한다")
 	void findWeather() throws Exception {
 		// given
-		WeatherRequestDTO request = new WeatherRequestDTO("55", "127");
+		LocalDateTime now = LocalDateTime.now();
+		WeatherRequestDTO request = new WeatherRequestDTO(now, "55", "127");
 		Weather response =
 			Weather.builder()
 				.location(new Location(request.getLatitude(), request.getLongitude()))
@@ -39,7 +42,8 @@ class WeatherDocumentationTest extends ApiDocumentationHelper {
 		// when
 		mockMvc.perform(
 				RestDocumentationRequestBuilders
-					.get("/weathers?latitude={latitude}&longitude={longitude}",
+					.get("/weathers?forecastDatetime={forecastDatetime}&latitude={latitude}&longitude={longitude}",
+						request.getForecastDatetime(),
 						request.getLatitude(),
 						request.getLongitude()))
 			.andDo(print())
@@ -47,6 +51,7 @@ class WeatherDocumentationTest extends ApiDocumentationHelper {
 				preprocessRequest(prettyPrint()),
 				preprocessResponse(prettyPrint()),
 				queryParameters(
+					parameterWithName("forecastDatetime").description("예보 요청시간"),
 					parameterWithName("latitude").description("위도"),
 					parameterWithName("longitude").description("경도")
 				),

@@ -38,7 +38,8 @@ class JdbcWeatherRepositoryTest extends JDBCRepositoryTestHelper {
 		weatherRepository.addWeather(mockWeather);
 
 		// then
-		Weather foundWeather = weatherRepository.findWeatherById(mockWeather.getWeatherId()).get();
+		Weather foundWeather =
+			weatherRepository.findWeatherByIdAndForecastDatetime(mockWeather.getWeatherId(), forecastDate).get();
 		assertThat(mockWeather).isEqualTo(foundWeather);
 	}
 
@@ -61,7 +62,8 @@ class JdbcWeatherRepositoryTest extends JDBCRepositoryTestHelper {
 		weatherRepository.addWeather(mockWeather);
 
 		// when
-		Weather foundWeather = weatherRepository.findWeatherById(mockWeather.getWeatherId()).get();
+		Weather foundWeather =
+			weatherRepository.findWeatherByIdAndForecastDatetime(mockWeather.getWeatherId(), forecastDate).get();
 
 		// then
 		assertThat(foundWeather).isEqualTo(mockWeather);

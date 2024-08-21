@@ -40,8 +40,11 @@ public class WeatherService {
 
 	public WeatherResponseDTO findWeather(WeatherRequestDTO request) {
 		String geoHash = GeoHashUtil.getGeoHashString(request.getLatitude(), request.getLongitude());
-		Weather foundWeather = weatherRepository.findWeatherById(geoHash).orElseThrow(
-			() -> new WeatherException.WeatherNotFoundException("해당 위치에 대한 날씨가 존재하지 않습니다. weatherId: " + geoHash));
+		LocalDateTime advancedForecastRequestTime = advanceForecastRequestTime(request.getForecastDatetime());
+		Weather foundWeather = weatherRepository.findWeatherByIdAndForecastDatetime(geoHash,
+				advancedForecastRequestTime)
+			.orElseThrow(
+				() -> new WeatherException.WeatherNotFoundException("해당 위치에 대한 날씨가 존재하지 않습니다. weatherId: " + geoHash));
 		return WeatherResponseDTO.from(foundWeather);
 	}
 

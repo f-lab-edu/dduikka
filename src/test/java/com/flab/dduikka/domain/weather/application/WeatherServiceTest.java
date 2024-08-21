@@ -46,7 +46,7 @@ class WeatherServiceTest {
 		// given
 		LocalDateTime now = LocalDateTime.now();
 		WeatherRequestDTO request =
-			new WeatherRequestDTO("55", "127");
+			new WeatherRequestDTO(now, "55", "127");
 		Weather mockWeather =
 			Weather.builder()
 				.weatherId("abcdedf")
@@ -58,7 +58,8 @@ class WeatherServiceTest {
 				.snowfall(0.0)
 				.createdAt(now)
 				.build();
-		given(weatherRepository.findWeatherById(anyString())).willReturn(Optional.of(mockWeather));
+		given(weatherRepository.findWeatherByIdAndForecastDatetime(anyString(), any())).willReturn(
+			Optional.of(mockWeather));
 
 		// when
 		WeatherResponseDTO response = weatherService.findWeather(request);
@@ -77,9 +78,10 @@ class WeatherServiceTest {
 	@DisplayName("저장되지 않은 날씨를 조회하면 예외가 발생한다.")
 	void whenFindWeather_thenThrowException() {
 		// given
-		given(weatherRepository.findWeatherById(anyString())).willReturn(Optional.empty());
+		LocalDateTime now = LocalDateTime.now();
+		given(weatherRepository.findWeatherByIdAndForecastDatetime(anyString(), any())).willReturn(Optional.empty());
 		WeatherRequestDTO request =
-			new WeatherRequestDTO("55", "127");
+			new WeatherRequestDTO(now, "55", "127");
 
 		// when, then
 		assertThatThrownBy(() -> weatherService.findWeather(request))
