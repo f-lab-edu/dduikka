@@ -1,5 +1,6 @@
 package com.flab.dduikka.domain.weather.repository;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -23,11 +24,12 @@ public class JdbcWeatherRepository implements WeatherRepository {
 	private final NamedParameterJdbcTemplate jdbcTemplate;
 
 	@Override
-	public Optional<Weather> findWeatherById(String weatherId) {
+	public Optional<Weather> findWeatherByIdAndForecastDatetime(String weatherId, LocalDateTime forecastDatetime) {
 		try {
-			String sql = "select * from weather where weather_id =:weatherId";
+			String sql = "select * from weather where weather_id =:weatherId and forecast_datetime =:forecastDatetime";
 			MapSqlParameterSource param = new MapSqlParameterSource()
-				.addValue("weatherId", weatherId);
+				.addValue("weatherId", weatherId)
+				.addValue("forecastDatetime", forecastDatetime);
 
 			Weather weather = jdbcTemplate.queryForObject(sql, param, weatherRowMapper());
 			assert weather != null;
