@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class WeatherRequestDTO {
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
-	private LocalDateTime forecastTime;
+	private LocalDateTime forecastDatetime;
 	private String latitude;
 	private String longitude;
 }

@@ -42,7 +42,8 @@ class WeatherDocumentationTest extends ApiDocumentationHelper {
 		// when
 		mockMvc.perform(
 				RestDocumentationRequestBuilders
-					.get("/weathers?latitude={latitude}&longitude={longitude}",
+					.get("/weathers?forecastDatetime={forecastDatetime}&latitude={latitude}&longitude={longitude}",
+						request.getForecastDatetime(),
 						request.getLatitude(),
 						request.getLongitude()))
 			.andDo(print())
@@ -50,6 +51,7 @@ class WeatherDocumentationTest extends ApiDocumentationHelper {
 				preprocessRequest(prettyPrint()),
 				preprocessResponse(prettyPrint()),
 				queryParameters(
+					parameterWithName("forecastDatetime").description("예보 요청시간"),
 					parameterWithName("latitude").description("위도"),
 					parameterWithName("longitude").description("경도")
 				),

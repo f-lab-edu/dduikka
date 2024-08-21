@@ -40,7 +40,7 @@ public class WeatherService {
 
 	public WeatherResponseDTO findWeather(WeatherRequestDTO request) {
 		String geoHash = GeoHashUtil.getGeoHashString(request.getLatitude(), request.getLongitude());
-		LocalDateTime advancedForecastRequestTime = advanceForecastRequestTime(request.getForecastTime());
+		LocalDateTime advancedForecastRequestTime = advanceForecastRequestTime(request.getForecastDatetime());
 		Weather foundWeather = weatherRepository.findWeatherByIdAndForecastDatetime(geoHash,
 				advancedForecastRequestTime)
 			.orElseThrow(
