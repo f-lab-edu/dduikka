@@ -3,10 +3,16 @@ package com.flab.dduikka.common.util;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class DateTimeUtil {
+
+	public LocalDateTime setMinutesToZero(LocalDateTime localDateTime) {
+		return localDateTime.withMinute(0).withSecond(0).withNano(0);
+	}
 
 	public String toLocalDateString(LocalDateTime localDateTime) {
 		return localDateTime.toLocalDate().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
