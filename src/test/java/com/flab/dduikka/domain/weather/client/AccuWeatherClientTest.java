@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.flab.dduikka.common.util.DateTimeUtil;
+import com.flab.dduikka.common.util.GeoHashUtil;
 import com.flab.dduikka.domain.helper.JSONFileReader;
 import com.flab.dduikka.domain.location.domain.Location;
 import com.flab.dduikka.domain.weather.domain.Weather;
@@ -78,6 +79,7 @@ class AccuWeatherClientTest {
 		LocalDateTime localDateTime = LocalDateTime.now();
 		Weather weather =
 			Weather.builder()
+				.weatherId(GeoHashUtil.getGeoHashString(location.getLatitude(), location.getLongitude()))
 				.forecastDateTime(DateTimeUtil.toLocalDateTime("2024-04-26T22:00:00+09:00"))
 				.temperature(15.3)
 				.relativeHumidity(61)

@@ -12,11 +12,13 @@ import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 
 import com.flab.dduikka.domain.helper.ApiDocumentationHelper;
 import com.flab.dduikka.domain.location.domain.Location;
 import com.flab.dduikka.domain.weather.domain.Weather;
+import com.flab.dduikka.domain.weather.dto.WeatherAddRequestDTO;
 import com.flab.dduikka.domain.weather.dto.WeatherRequestDTO;
 import com.flab.dduikka.domain.weather.dto.WeatherResponseDTO;
 
@@ -64,6 +66,34 @@ class WeatherDocumentationTest extends ApiDocumentationHelper {
 					fieldWithPath("statusCode").description("결과코드"),
 					fieldWithPath("statusCodeValue").description("결과값")
 				)))
+			.andExpect(status().isOk());
+	}
+
+	@Test
+	@DisplayName("날씨를 저장한다")
+	void addWeather() throws Exception {
+		// given
+		LocalDateTime now = LocalDateTime.now();
+		WeatherAddRequestDTO request = new WeatherAddRequestDTO(now, "55", "127", null);
+		doNothing().when(weatherFacade).addWeather(request);
+
+		// when
+		mockMvc.perform(
+				RestDocumentationRequestBuilders
+					.post("/weathers")
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(objectMapper.writeValueAsString(request)))
+			.andDo(print())
+			.andDo(document("weathers/addWeather",
+				preprocessRequest(prettyPrint()),
+				preprocessResponse(prettyPrint()),
+				requestFields(
+					fieldWithPath("forecastDatetime").description("예보 요청시간"),
+					fieldWithPath("latitude").description("위도"),
+					fieldWithPath("longitude").description("경도"),
+					fieldWithPath("cityCode").description("도시위치 (아큐웨더용)")
+				)
+			))
 			.andExpect(status().isOk());
 	}
 }

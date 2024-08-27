@@ -1,6 +1,9 @@
 package com.flab.dduikka.domain.weather.application;
 
+import static com.flab.dduikka.common.util.DateTimeUtil.DateTimePropery.*;
+import static com.flab.dduikka.common.util.DateTimeUtil.*;
 import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.SoftAssertions.*;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -13,15 +16,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import com.flab.dduikka.common.util.DateTimeUtil;
 import com.flab.dduikka.domain.helper.WireMockServerHelper;
-import com.flab.dduikka.domain.weather.dto.WeatherResponseDTO;
+import com.flab.dduikka.domain.weather.domain.Weather;
+import com.flab.dduikka.domain.weather.dto.WeatherAddRequestDTO;
 import com.flab.dduikka.domain.weather.exception.WeatherException;
 
 class WeatherServiceMockServerTest extends WireMockServerHelper {
 
 	@Autowired
-	private WeatherService weatherService;
+	private WeatherClientService weatherClientService;
 
 	@BeforeEach
 	void setUp() {
@@ -37,9 +40,8 @@ class WeatherServiceMockServerTest extends WireMockServerHelper {
 		int pageNo = 1;
 		int numOfRows = 8;
 		String dataType = "JSON";
-		LocalDateTime localDateTime = LocalDateTime.now();
-		String localDateString = DateTimeUtil.toLocalDateString(localDateTime);
-		String localTimeString = DateTimeUtil.toLocalTimeString(localDateTime.minusMinutes(10));
+		LocalDateTime requestDateTime = LocalDateTime.of(2024, 8, 22, 19, 40, 30);
+		LocalDateTime modifiedDateTime = advanceTimeAndSetMintuesToZero(requestDateTime, ADVANCED_TIME.getValue());
 		String nx = "55";
 		String ny = "127";
 		MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
@@ -47,8 +49,8 @@ class WeatherServiceMockServerTest extends WireMockServerHelper {
 		params.add("pageNo", String.valueOf(pageNo));
 		params.add("numOfRows", String.valueOf(numOfRows));
 		params.add("dataType", dataType);
-		params.add("base_date", localDateString);
-		params.add("base_time", localTimeString);
+		params.add("base_date", toLocalDateString(modifiedDateTime));
+		params.add("base_time", toLocalTimeString(modifiedDateTime));
 		params.add("nx", nx);
 		params.add("ny", ny);
 		String url = createUriString(KMA_PATH, params);
@@ -59,19 +61,18 @@ class WeatherServiceMockServerTest extends WireMockServerHelper {
 			HttpStatus.OK.value()
 		);
 
+		WeatherAddRequestDTO request = new WeatherAddRequestDTO(requestDateTime, nx, ny, null);
+
 		//when
-		WeatherResponseDTO response = weatherService.getWeather(
-			localDateTime,
-			nx,
-			ny,
-			""
-		);
+		Weather response = weatherClientService.getWeather(request);
 
 		//then
-		assertThat(response.getTemperature()).isEqualTo(18.7);
-		assertThat(response.getRelativeHumidity()).isEqualTo(55);
-		assertThat(response.getRainfall()).isEqualTo(0.0);
-		assertThat(response.getSnowfall()).isEqualTo(0.0);
+		assertSoftly(softly -> {
+			softly.assertThat(response.getTemperature()).isEqualTo(18.7);
+			softly.assertThat(response.getRelativeHumidity()).isEqualTo(55);
+			softly.assertThat(response.getRainfall()).isEqualTo(0.0);
+			softly.assertThat(response.getSnowfall()).isEqualTo(0.0);
+		});
 	}
 
 	@Test
@@ -95,23 +96,23 @@ class WeatherServiceMockServerTest extends WireMockServerHelper {
 			HttpStatus.OK.value()
 		);
 
-		LocalDateTime localDateTime = LocalDateTime.now();
+		LocalDateTime now = LocalDateTime.now();
 		String nx = "55";
 		String ny = "127";
 
 		//when
-		WeatherResponseDTO response = weatherService.getWeather(
-			localDateTime,
-			nx,
-			ny,
-			cityCode
-		);
+		WeatherAddRequestDTO request = new WeatherAddRequestDTO(now, nx, ny, cityCode);
+
+		//when
+		Weather response = weatherClientService.getWeather(request);
 
 		//then
-		assertThat(response.getTemperature()).isEqualTo(15.3);
-		assertThat(response.getRelativeHumidity()).isEqualTo(61);
-		assertThat(response.getRainfall()).isEqualTo(0.0);
-		assertThat(response.getSnowfall()).isEqualTo(0.0);
+		assertSoftly(softly -> {
+			softly.assertThat(response.getTemperature()).isEqualTo(15.3);
+			softly.assertThat(response.getRelativeHumidity()).isEqualTo(61);
+			softly.assertThat(response.getRainfall()).isEqualTo(0.0);
+			softly.assertThat(response.getSnowfall()).isEqualTo(0.0);
+		});
 	}
 
 	@Test
@@ -135,17 +136,15 @@ class WeatherServiceMockServerTest extends WireMockServerHelper {
 			HttpStatus.BAD_REQUEST.value()
 		);
 
-		LocalDateTime localDateTime = LocalDateTime.now();
+		LocalDateTime now = LocalDateTime.now();
 		String nx = "55";
 		String ny = "127";
+		WeatherAddRequestDTO request = new WeatherAddRequestDTO(now, nx, ny, cityCode);
+
+		//when
 
 		//when, then
-		assertThatThrownBy(() -> weatherService.getWeather(
-			localDateTime,
-			nx,
-			ny,
-			cityCode
-		))
+		assertThatThrownBy(() -> weatherClientService.getWeather(request))
 			.isInstanceOf(WeatherException.ExternalAPIException.class)
 			.hasMessageContaining("외부 API에서 오류가 발생하였습니다.");
 	}

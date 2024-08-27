@@ -18,6 +18,7 @@ import com.flab.dduikka.domain.vote.api.VoteController;
 import com.flab.dduikka.domain.vote.application.VoteRecordService;
 import com.flab.dduikka.domain.weather.api.WeatherController;
 import com.flab.dduikka.domain.weather.application.WeatherService;
+import com.flab.dduikka.domain.weather.facade.WeatherFacade;
 
 @ExtendWith({RestDocumentationExtension.class})
 @AutoConfigureRestDocs
@@ -44,6 +45,9 @@ public abstract class ApiDocumentationHelper {
 
 	@MockBean
 	protected WeatherService weatherService;
+
+	@MockBean
+	protected WeatherFacade weatherFacade;
 
 	@Autowired
 	protected ObjectMapper objectMapper;
