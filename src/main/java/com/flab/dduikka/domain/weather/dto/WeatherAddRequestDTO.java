@@ -8,19 +8,19 @@ import java.time.LocalDateTime;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
-public class WeatherRequestDTO {
+public class WeatherAddRequestDTO {
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
-	private LocalDateTime forecastDatetime;
+	private LocalDateTime forecastDatetime; // 현재시간
 	private String latitude;
 	private String longitude;
+	private String cityCode;
 
-	public WeatherRequestDTO(LocalDateTime forecastDatetime, String latitude, String longitude) {
+	public WeatherAddRequestDTO(LocalDateTime forecastDatetime, String latitude, String longitude, String cityCode) {
 		this.forecastDatetime = advanceTimeAndSetMintuesToZero(forecastDatetime, ADVANCED_TIME.getValue());
 		this.latitude = latitude;
 		this.longitude = longitude;
+		this.cityCode = cityCode;
 	}
 }

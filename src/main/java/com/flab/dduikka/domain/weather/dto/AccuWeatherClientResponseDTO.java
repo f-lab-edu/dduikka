@@ -1,7 +1,10 @@
 package com.flab.dduikka.domain.weather.dto;
 
+import java.time.LocalDateTime;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.flab.dduikka.common.util.DateTimeUtil;
+import com.flab.dduikka.common.util.GeoHashUtil;
 import com.flab.dduikka.domain.location.domain.Location;
 import com.flab.dduikka.domain.weather.domain.Weather;
 
@@ -29,12 +32,14 @@ public class AccuWeatherClientResponseDTO {
 
 	public static Weather from(AccuWeatherClientResponseDTO response, Location location) {
 		return Weather.builder()
+			.weatherId(GeoHashUtil.getGeoHashString(location.getLatitude(), location.getLongitude()))
 			.forecastDateTime(DateTimeUtil.toLocalDateTime(response.getDateTime()))
 			.temperature(response.getTemperature().getValue())
 			.relativeHumidity(response.getRelativeHumidity())
 			.rainfall(response.getRain().getValue())
 			.snowfall(response.getSnow().getValue())
 			.location(location)
+			.createdAt(LocalDateTime.now())
 			.build();
 	}
 

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.flab.dduikka.domain.weather.application.WeatherService;
+import com.flab.dduikka.domain.weather.dto.WeatherAddRequestDTO;
 import com.flab.dduikka.domain.weather.dto.WeatherRequestDTO;
 import com.flab.dduikka.domain.weather.dto.WeatherResponseDTO;
 
