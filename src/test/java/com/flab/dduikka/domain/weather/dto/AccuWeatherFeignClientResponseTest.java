@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flab.dduikka.common.util.DateTimeUtil;
+import com.flab.dduikka.common.util.GeoHashUtil;
 import com.flab.dduikka.domain.location.domain.Location;
 import com.flab.dduikka.domain.weather.domain.Weather;
 
@@ -37,6 +38,7 @@ class AccuWeatherFeignClientResponseTest {
 		Location location = new Location("55", "127");
 		Weather weather =
 			Weather.builder()
+				.weatherId(GeoHashUtil.getGeoHashString(location.getLatitude(), location.getLongitude()))
 				.forecastDateTime(DateTimeUtil.toLocalDateTime("2024-04-26T22:00:00+09:00"))
 				.temperature(15.3)
 				.relativeHumidity(61)

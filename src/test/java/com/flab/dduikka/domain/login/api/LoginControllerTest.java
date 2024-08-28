@@ -15,7 +15,7 @@ import org.mockito.BDDMockito;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 
-import com.flab.dduikka.domain.helper.IntegrationTestHelper;
+import com.flab.dduikka.domain.helper.WebMvcTestHelper;
 import com.flab.dduikka.domain.login.dto.LoginRequestDTO;
 import com.flab.dduikka.domain.login.dto.SessionMember;
 import com.flab.dduikka.domain.login.exception.LoginException;
@@ -23,7 +23,7 @@ import com.flab.dduikka.domain.login.exception.LoginException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpSession;
 
-class LoginControllerTest extends IntegrationTestHelper {
+class LoginControllerTest extends WebMvcTestHelper {
 
 	@Test
 	@DisplayName("로그인 요청을 하면 세션이 발급된다")

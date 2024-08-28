@@ -42,6 +42,3 @@ websocket:
     destination:
       prefix: /app
   endpoint: /chats
-
-weather:
-  advance-minutes: 10

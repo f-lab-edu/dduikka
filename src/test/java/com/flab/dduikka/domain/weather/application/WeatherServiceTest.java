@@ -1,24 +1,24 @@
 package com.flab.dduikka.domain.weather.application;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.BDDAssertions.*;
 import static org.assertj.core.api.SoftAssertions.*;
 import static org.mockito.BDDMockito.*;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
+import org.mockito.BDDMockito;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.flab.dduikka.common.util.DateTimeUtil;
 import com.flab.dduikka.domain.location.domain.Location;
-import com.flab.dduikka.domain.weather.client.WeatherClient;
 import com.flab.dduikka.domain.weather.domain.Weather;
+import com.flab.dduikka.domain.weather.dto.WeatherAddRequestDTO;
 import com.flab.dduikka.domain.weather.dto.WeatherRequestDTO;
 import com.flab.dduikka.domain.weather.dto.WeatherResponseDTO;
 import com.flab.dduikka.domain.weather.exception.WeatherException;
@@ -27,18 +27,10 @@ import com.flab.dduikka.domain.weather.repository.WeatherRepository;
 @ExtendWith(MockitoExtension.class)
 class WeatherServiceTest {
 
+	@InjectMocks
 	private WeatherService weatherService;
+	@Mock
 	private WeatherRepository weatherRepository;
-	private List<WeatherClient> weatherClientList;
-
-	@BeforeEach
-	void setUp() {
-		// Integer, String이 mocking 불가하기 때문에 setup을 활용하여 빈 생성 및 주입
-		WeatherClient weatherClient = Mockito.mock(WeatherClient.class);
-		weatherClientList = Collections.singletonList(weatherClient);
-		weatherRepository = Mockito.mock(WeatherRepository.class);
-		weatherService = new WeatherService(10, weatherClientList, weatherRepository);
-	}
 
 	@Test
 	@DisplayName("날씨를 조회한다")
@@ -84,7 +76,7 @@ class WeatherServiceTest {
 			new WeatherRequestDTO(now, "55", "127");
 
 		// when, then
-		assertThatThrownBy(() -> weatherService.findWeather(request))
+		thenThrownBy(() -> weatherService.findWeather(request))
 			.isInstanceOf(WeatherException.WeatherNotFoundException.class)
 			.hasMessageContaining("해당 위치에 대한 날씨가 존재하지 않습니다");
 	}
