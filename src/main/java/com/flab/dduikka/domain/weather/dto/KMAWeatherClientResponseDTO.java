@@ -1,10 +1,12 @@
 package com.flab.dduikka.domain.weather.dto;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.flab.dduikka.common.util.DateTimeUtil;
+import com.flab.dduikka.common.util.GeoHashUtil;
 import com.flab.dduikka.domain.location.domain.Location;
 import com.flab.dduikka.domain.weather.domain.Weather;
 import com.flab.dduikka.domain.weather.domain.WeatherCode;
@@ -50,6 +52,7 @@ public class KMAWeatherClientResponseDTO {
 			}
 		}
 		return Weather.builder()
+			.weatherId(GeoHashUtil.getGeoHashString(location.getLatitude(), location.getLongitude()))
 			.forecastDateTime
 				(
 					DateTimeUtil.toLocalDateTime(weatherItems.get(0).baseDate, weatherItems.get(0).baseTime)
@@ -59,6 +62,7 @@ public class KMAWeatherClientResponseDTO {
 			.rainfall(isRainFall ? precipitation : 0.0)
 			.snowfall(!isRainFall ? precipitation : 0.0)
 			.location(location)
+			.createdAt(LocalDateTime.now())
 			.build();
 	}
 

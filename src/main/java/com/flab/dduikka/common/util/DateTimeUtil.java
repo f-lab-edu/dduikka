@@ -11,7 +11,11 @@ import lombok.experimental.UtilityClass;
 public class DateTimeUtil {
 
 	public LocalDateTime setMinutesToZero(LocalDateTime localDateTime) {
-		return localDateTime.withMinute(0).withSecond(0).withNano(0);
+		return localDateTime.withMinute(0).withSecond(0);
+	}
+
+	public LocalDateTime advanceTimeAndSetMintuesToZero(LocalDateTime localDateTime, int minusMinutes) {
+		return setMinutesToZero(localDateTime.minusMinutes(minusMinutes));
 	}
 
 	public String toLocalDateString(LocalDateTime localDateTime) {
@@ -33,5 +37,12 @@ public class DateTimeUtil {
 	public LocalDateTime toLocalDateTime(String localDate, String localTime) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmm");
 		return LocalDateTime.parse(String.format("%s%s", localDate, localTime), formatter);
+	}
+
+	@Getter
+	@AllArgsConstructor
+	public enum DateTimePropery {
+		ADVANCED_TIME(10);
+		private int value;
 	}
 }
