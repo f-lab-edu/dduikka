@@ -7,15 +7,19 @@ import java.time.LocalDateTime;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
 public class WeatherRequestDTO {
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
+
+	@NotNull
+	@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
 	private LocalDateTime forecastDatetime;
+	@NotBlank
 	private String latitude;
+	@NotBlank
 	private String longitude;
 
 	public WeatherRequestDTO(LocalDateTime forecastDatetime, String latitude, String longitude) {

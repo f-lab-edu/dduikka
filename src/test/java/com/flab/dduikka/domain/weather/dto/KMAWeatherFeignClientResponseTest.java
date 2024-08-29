@@ -8,6 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.flab.dduikka.common.util.DateTimeUtil;
+import com.flab.dduikka.common.util.GeoHashUtil;
 import com.flab.dduikka.domain.helper.JSONFileReader;
 import com.flab.dduikka.domain.location.domain.Location;
 import com.flab.dduikka.domain.weather.domain.Weather;
@@ -40,6 +41,7 @@ class KMAWeatherFeignClientResponseTest {
 		Location location = new Location("55", "127");
 		Weather weather =
 			Weather.builder()
+				.weatherId(GeoHashUtil.getGeoHashString(location.getLatitude(), location.getLongitude()))
 				.forecastDateTime(DateTimeUtil.toLocalDateTime("20240423", "1700"))
 				.temperature(15.3)
 				.relativeHumidity(55)

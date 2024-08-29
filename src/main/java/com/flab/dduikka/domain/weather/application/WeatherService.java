@@ -41,15 +41,4 @@ public class WeatherService {
 	public void addWeather(Weather weather) {
 		weatherRepository.addWeather(weather);
 	}
-
-	/**
-	 * 기상청 api 기준으로 발표 시간 딜레이가 존재한다.
-	 * n분을 앞당겨 발표가 딜레이 되어도 조회할 수 있도록 변경한다.
-	 *
-	 * @param requestTime
-	 * @return LocalDateTime
-	 */
-	private LocalDateTime advanceForecastRequestTime(LocalDateTime requestTime) {
-		return requestTime.minusMinutes(advanceMinutes);
-	}
 }

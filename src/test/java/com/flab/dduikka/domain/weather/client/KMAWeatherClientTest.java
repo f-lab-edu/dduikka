@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.flab.dduikka.common.util.DateTimeUtil;
+import com.flab.dduikka.common.util.GeoHashUtil;
 import com.flab.dduikka.domain.helper.JSONFileReader;
 import com.flab.dduikka.domain.location.domain.Location;
 import com.flab.dduikka.domain.weather.domain.Weather;
@@ -77,6 +78,7 @@ class KMAWeatherClientTest {
 		LocalDateTime localDateTime = LocalDateTime.now();
 		Weather weather =
 			Weather.builder()
+				.weatherId(GeoHashUtil.getGeoHashString(location.getLatitude(), location.getLongitude()))
 				.forecastDateTime(DateTimeUtil.toLocalDateTime("20240423", "1700"))
 				.temperature(15.3)
 				.relativeHumidity(55)
@@ -117,7 +119,7 @@ class KMAWeatherClientTest {
 
 	@Test
 	@DisplayName("날씨를 요청할 때 citycode가 blank여도 정상으로 weather가 반환된다")
-	void whenCodeCityIsBlank_thenReturnsWeather() throws IOException {
+	void whenCityCodeIsBlank_thenReturnsWeather() throws IOException {
 		//given
 		KMAWeatherClientResponseDTO mockResponse = JSONFileReader.readJSONFile(
 			"/payload/weather/kma-weather-response.json",
@@ -130,6 +132,7 @@ class KMAWeatherClientTest {
 		LocalDateTime localDateTime = LocalDateTime.now();
 		Weather weather =
 			Weather.builder()
+				.weatherId(GeoHashUtil.getGeoHashString(location.getLatitude(), location.getLongitude()))
 				.forecastDateTime(DateTimeUtil.toLocalDateTime("20240423", "1700"))
 				.temperature(15.3)
 				.relativeHumidity(55)
