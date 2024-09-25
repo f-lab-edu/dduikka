@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.flab.dduikka.common.annotation.Member;
+import com.flab.dduikka.domain.login.dto.SessionMember;
 import com.flab.dduikka.domain.vote.application.VoteRecordService;
 import com.flab.dduikka.domain.vote.dto.VoteRecordAddRequestDTO;
 import com.flab.dduikka.domain.vote.dto.VoteRecordResponseDTO;
@@ -33,12 +35,13 @@ public class VoteController {
 		return voteRecordService.findVoteTypeCount(voteDate);
 	}
 
-	// TODO: USER 구현 후 userId 가져오는 방법 추가
 	@GetMapping("/record/{voteId}")
 	@ResponseStatus(HttpStatus.OK)
-	public VoteRecordResponseDTO findUserVoteRecord(@PathVariable final long voteId) {
-		long userId = 1L;
-		return voteRecordService.findUserVoteRecord(userId, voteId);
+	public VoteRecordResponseDTO findUserVoteRecord(
+		@Member SessionMember member,
+		@PathVariable final long voteId
+	) {
+		return voteRecordService.findUserVoteRecord(member.getMemberId(), voteId);
 	}
 
 	@PostMapping("/record")
