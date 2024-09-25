@@ -11,4 +11,10 @@ public class LoginException extends RuntimeException {
 			super(message);
 		}
 	}
+
+	public static class UnauthorizedAccessException extends LoginException {
+		public UnauthorizedAccessException(String message) {
+			super(message);
+		}
+	}
 }
