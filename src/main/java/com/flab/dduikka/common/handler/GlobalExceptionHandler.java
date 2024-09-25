@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.flab.dduikka.domain.login.exception.LoginException;
 import com.flab.dduikka.domain.member.exception.MemberException;
+import com.flab.dduikka.domain.weather.exception.WeatherException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -18,6 +19,11 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(LoginException.FailLoginException.class)
 	public ResponseEntity<String> handleFailLoginException(LoginException.FailLoginException e) {
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+	}
+
+	@ExceptionHandler(LoginException.UnauthorizedAccessException.class)
+	public ResponseEntity<String> handleUnauthorizedAccessException(LoginException.UnauthorizedAccessException e) {
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
 	}
 
@@ -33,6 +39,11 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(MemberException.MemberNotJoinedException.class)
 	public ResponseEntity<String> handleMemberNotJoinedException(MemberException.MemberNotJoinedException e) {
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+	}
+
+	@ExceptionHandler(WeatherException.WeatherNotFoundException.class)
+	public ResponseEntity<String> handleWeatherNotFoundException(WeatherException.WeatherNotFoundException e) {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 	}
 }
