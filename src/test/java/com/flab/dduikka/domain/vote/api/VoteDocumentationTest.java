@@ -19,11 +19,13 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
-import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.JsonFieldType;
 
 import com.flab.dduikka.domain.helper.ApiDocumentationHelper;
+import com.flab.dduikka.domain.login.api.SessionKey;
+import com.flab.dduikka.domain.login.dto.SessionMember;
 import com.flab.dduikka.domain.vote.domain.VoteType;
 import com.flab.dduikka.domain.vote.dto.VoteRecordResponseDTO;
 import com.flab.dduikka.domain.vote.dto.VoteResponseDTO;
@@ -44,7 +46,7 @@ class VoteDocumentationTest extends ApiDocumentationHelper {
 		given(voteRecordService.findVoteTypeCount(any())).willReturn(mockResponse);
 
 		//when, then
-		mockMvc.perform(RestDocumentationRequestBuilders.get("/vote/{voteDate}", voteDate))
+		mockMvc.perform(get("/vote/{voteDate}", voteDate))
 			.andDo(print())
 			.andDo(document("vote/findVote",
 				preprocessRequest(prettyPrint()),
@@ -71,8 +73,13 @@ class VoteDocumentationTest extends ApiDocumentationHelper {
 		given(voteRecordService.findUserVoteRecord(anyLong(), anyLong()))
 			.willReturn(mockResponse);
 
+		MockHttpSession mockSession = new MockHttpSession();
+		mockSession.setAttribute(
+			SessionKey.LOGIN_USER.name(), new SessionMember(1L, "test@test.com")
+		);
+
 		//when,then
-		mockMvc.perform(RestDocumentationRequestBuilders.get("/vote/record/{voteId}", 1L))
+		mockMvc.perform(get("/vote/record/{voteId}", 1L).session(mockSession))
 			.andDo(print())
 			.andDo(document("vote/findVoteRecord",
 				preprocessRequest(prettyPrint()),

@@ -15,9 +15,11 @@ import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
-import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.mock.web.MockHttpSession;
 
 import com.flab.dduikka.domain.helper.ApiDocumentationHelper;
+import com.flab.dduikka.domain.login.api.SessionKey;
+import com.flab.dduikka.domain.login.dto.SessionMember;
 import com.flab.dduikka.domain.member.domain.Member;
 import com.flab.dduikka.domain.member.dto.MemberRegisterRequestDTO;
 import com.flab.dduikka.domain.member.dto.MemberResponseDTO;
@@ -40,13 +42,17 @@ class MemberDocumentationTest extends ApiDocumentationHelper {
 		given(memberService.findMember(anyLong()))
 			.willReturn(response);
 
+		MockHttpSession mockSession = new MockHttpSession();
+		mockSession.setAttribute(
+			SessionKey.LOGIN_USER.name(), new SessionMember(mockMember.getMemberId(), mockMember.getEmail())
+		);
+
 		//when,then
-		mockMvc.perform(RestDocumentationRequestBuilders.get("/members/{memberId}", memberId))
+		mockMvc.perform(get("/members/me").session(mockSession))
 			.andDo(print())
 			.andDo(document("members/findMember",
 				preprocessRequest(prettyPrint()),
 				preprocessResponse(prettyPrint()),
-				pathParameters(parameterWithName("memberId").description("회원아이디")),
 				responseFields(
 					fieldWithPath("headers").description("헤더")
 					, fieldWithPath("body.memberId").description("회원아이디")
@@ -65,7 +71,7 @@ class MemberDocumentationTest extends ApiDocumentationHelper {
 		given(memberService.isEmailDuplicated(email))
 			.willReturn(false);
 
-		mockMvc.perform(RestDocumentationRequestBuilders.get("/members/{email}/duplicated", email))
+		mockMvc.perform(get("/members/{email}/duplicated", email))
 			.andDo(print())
 			.andDo(document("members/isDuplicatedEmail",
 				preprocessRequest(prettyPrint()),
