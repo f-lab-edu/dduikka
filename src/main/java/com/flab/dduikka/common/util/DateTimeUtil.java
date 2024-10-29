@@ -11,7 +11,8 @@ import lombok.experimental.UtilityClass;
 public class DateTimeUtil {
 
 	public LocalDateTime setMinutesToZero(LocalDateTime localDateTime) {
-		return localDateTime.withMinute(0).withSecond(0);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:00:00");
+		return LocalDateTime.parse(localDateTime.format(formatter));
 	}
 
 	public LocalDateTime advanceTimeAndSetMintuesToZero(LocalDateTime localDateTime, int minusMinutes) {
