@@ -85,16 +85,23 @@ dependencies {
 
     //geohash
     implementation 'ch.hsr:geohash:1.4.0'
+
+    //test container
+    testImplementation 'org.testcontainers:testcontainers'
+    testImplementation 'org.testcontainers:junit-jupiter'
+    testImplementation 'org.testcontainers:mysql'
+}
+
+ext {
+    snippetsDir = file("build/generated-snippets") // snippets 파일이 저장될 경로
+    set('testcontainersVersion', "1.20.3")
 }
 
 dependencyManagement {
     imports {
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:2022.0.5"
+        mavenBom "org.testcontainers:testcontainers-bom:${testcontainersVersion}"
     }
-}
-
-ext {
-    snippetsDir = file("build/generated-snippets") // snippets 파일이 저장될 경로
 }
 
 tasks.named('bootBuildImage') {
