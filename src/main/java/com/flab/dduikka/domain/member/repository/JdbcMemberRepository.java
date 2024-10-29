@@ -56,8 +56,8 @@ public class JdbcMemberRepository implements MemberRepository {
 		SqlParameterSource param = new BeanPropertySqlParameterSource(member);
 
 		jdbcInsert
-			.withTableName("MEMBER")
-			.usingGeneratedKeyColumns("MEMBER_ID");
+			.withTableName("member")
+			.usingGeneratedKeyColumns("member_id");
 		Long key = jdbcInsert.executeAndReturnKey(param).longValue();
 
 		return Member.builder()

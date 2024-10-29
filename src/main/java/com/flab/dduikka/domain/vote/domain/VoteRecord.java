@@ -15,21 +15,21 @@ public class VoteRecord extends Auditable {
 
 	private Long voteId;
 
-	private Long userId;
+	private Long memberId;
 
 	private VoteType voteType;
 
-	private Boolean isCanceled;
+	private Boolean canceledFlag;
 
 	@Builder
-	public VoteRecord(Long voteRecordId, Long voteId, Long userId, VoteType voteType, boolean isCanceled,
+	public VoteRecord(Long voteRecordId, Long voteId, Long memberId, VoteType voteType, boolean canceledFlag,
 		LocalDateTime createdAt) {
 		super(createdAt);
 		this.voteRecordId = voteRecordId;
 		this.voteId = voteId;
-		this.userId = userId;
+		this.memberId = memberId;
 		this.voteType = voteType;
-		this.isCanceled = isCanceled;
+		this.canceledFlag = canceledFlag;
 	}
 
 	@Override
@@ -40,17 +40,17 @@ public class VoteRecord extends Auditable {
 			return false;
 		VoteRecord that = (VoteRecord)o;
 		return Objects.equals(voteRecordId, that.voteRecordId) && Objects.equals(voteId, that.voteId)
-			&& Objects.equals(userId, that.userId) && voteType == that.voteType && Objects.equals(
-			isCanceled, that.isCanceled);
+			&& Objects.equals(memberId, that.memberId) && voteType == that.voteType && Objects.equals(
+			canceledFlag, that.canceledFlag);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(voteRecordId, voteId, userId, voteType, isCanceled);
+		return Objects.hash(voteRecordId, voteId, memberId, voteType, canceledFlag);
 	}
 
 	public void cancel() {
-		this.isCanceled = true;
+		this.canceledFlag = true;
 	}
 
 }

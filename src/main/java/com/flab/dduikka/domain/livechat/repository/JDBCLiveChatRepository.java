@@ -42,8 +42,8 @@ public class JDBCLiveChatRepository implements LiveChatRepository {
 		SqlParameterSource param = new BeanPropertySqlParameterSource(liveChat);
 
 		jdbcInsert
-			.withTableName("LIVE_CHAT")
-			.usingGeneratedKeyColumns("LIVE_CHAT_ID");
+			.withTableName("live_chat")
+			.usingGeneratedKeyColumns("live_chat_id");
 		Long key = jdbcInsert.executeAndReturnKey(param).longValue();
 
 		return LiveChat.builder()

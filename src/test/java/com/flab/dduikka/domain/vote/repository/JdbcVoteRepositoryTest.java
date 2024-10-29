@@ -8,12 +8,16 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 
-import com.flab.dduikka.domain.helper.JDBCRepositoryTestHelper;
+import com.flab.dduikka.domain.helper.IntegrationTestHelper;
 import com.flab.dduikka.domain.vote.domain.Vote;
 
-class JdbcVoteRepositoryTest extends JDBCRepositoryTestHelper {
+class JdbcVoteRepositoryTest extends IntegrationTestHelper {
+
+	@Autowired
+	private VoteRepository voteRepository;
 
 	@Test
 	void 투표가_생성된다() {

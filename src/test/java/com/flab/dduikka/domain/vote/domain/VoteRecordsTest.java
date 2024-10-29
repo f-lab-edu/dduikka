@@ -48,9 +48,9 @@ class VoteRecordsTest {
 		VoteRecord voteRecord1 = VoteRecord.builder()
 			.voteRecordId(1L)
 			.voteId(1L)
-			.userId(1L)
+			.memberId(1L)
 			.voteType(VoteType.RUN)
-			.isCanceled(false)
+			.canceledFlag(false)
 			.build();
 		mockVoteRecords.add(voteRecord1);
 		voteRecords = new VoteRecords(mockVoteRecords);
@@ -69,23 +69,23 @@ class VoteRecordsTest {
 		VoteRecord voteRecord1 = VoteRecord.builder()
 			.voteRecordId(1L)
 			.voteId(1L)
-			.userId(1L)
+			.memberId(1L)
 			.voteType(VoteType.RUN)
-			.isCanceled(false)
+			.canceledFlag(false)
 			.build();
 		VoteRecord voteRecord2 = VoteRecord.builder()
 			.voteRecordId(2L)
 			.voteId(1L)
-			.userId(2L)
+			.memberId(2L)
 			.voteType(VoteType.RUN)
-			.isCanceled(false)
+			.canceledFlag(false)
 			.build();
 		VoteRecord voteRecord3 = VoteRecord.builder()
 			.voteRecordId(3L)
 			.voteId(1L)
-			.userId(3L)
+			.memberId(3L)
 			.voteType(VoteType.NORUN)
-			.isCanceled(false)
+			.canceledFlag(false)
 			.build();
 		mockVoteRecordList.add(voteRecord1);
 		mockVoteRecordList.add(voteRecord2);

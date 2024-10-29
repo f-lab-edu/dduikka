@@ -30,27 +30,27 @@ public class JdbcVoteRecordRepository implements VoteRecordRepository {
 		SqlParameterSource param = new BeanPropertySqlParameterSource(voteRecord);
 
 		jdbcInsert
-			.withTableName("VOTE_RECORD")
-			.usingGeneratedKeyColumns("VOTE_RECORD_ID");
+			.withTableName("vote_record")
+			.usingGeneratedKeyColumns("vote_record_id");
 		Long key = jdbcInsert.executeAndReturnKey(param).longValue();
 
 		return VoteRecord.builder()
 			.voteRecordId(key)
 			.voteId(voteRecord.getVoteId())
-			.userId(voteRecord.getUserId())
+			.memberId(voteRecord.getMemberId())
 			.voteType(voteRecord.getVoteType())
-			.isCanceled(voteRecord.getIsCanceled())
+			.canceledFlag(voteRecord.getCanceledFlag())
 			.createdAt(voteRecord.getCreatedAt())
 			.build();
 	}
 
 	@Override
-	public Optional<VoteRecord> findByUserAndVoteAndIsCanceled(long userId, long voteId) {
+	public Optional<VoteRecord> findByUserAndVoteAndIsCanceled(long memberId, long voteId) {
 		try {
-			String sql = "select vote_record_id, vote_id, user_id, vote_type, is_canceled, created_at from vote_record where vote_id = :voteId and user_id = :userId and is_canceled = 0 ";
+			String sql = "select vote_record_id, vote_id, member_id, vote_type, canceled_flag, created_at from vote_record where vote_id = :voteId and member_id = :memberId and canceled_flag = 0 ";
 			MapSqlParameterSource param = new MapSqlParameterSource()
 				.addValue("voteId", voteId)
-				.addValue("userId", userId);
+				.addValue("memberId", memberId);
 
 			VoteRecord createdVoteRecord = jdbcTemplate.queryForObject(sql, param, voteRecordMapper());
 			assert createdVoteRecord != null; // 뭘까?
@@ -62,7 +62,7 @@ public class JdbcVoteRecordRepository implements VoteRecordRepository {
 
 	@Override
 	public List<VoteRecord> findAllByVoteId(long voteId) {
-		String sql = "select vote_record_id, vote_id, user_id, vote_type, is_canceled, created_at from vote_record where vote_id = :voteId and is_canceled = 0 ";
+		String sql = "select vote_record_id, vote_id, member_id, vote_type, canceled_flag, created_at from vote_record where vote_id = :voteId and canceled_flag = 0 ";
 		Map<String, Object> param = Map.of("voteId", voteId);
 		return jdbcTemplate.query(sql, param, voteRecordMapper());
 	}
@@ -70,7 +70,7 @@ public class JdbcVoteRecordRepository implements VoteRecordRepository {
 	@Override
 	public Optional<VoteRecord> findById(long voteRecordId) {
 		try {
-			String sql = "select vote_record_id, vote_id, user_id, vote_type, is_canceled, created_at from vote_record where vote_record_id = :voteRecordId and is_canceled = 0";
+			String sql = "select vote_record_id, vote_id, member_id, vote_type, canceled_flag, created_at from vote_record where vote_record_id = :voteRecordId and canceled_flag = 0";
 			Map<String, Object> param = Map.of("voteRecordId", voteRecordId);
 			VoteRecord foundVoteRecord = jdbcTemplate.queryForObject(sql, param, voteRecordMapper());
 			assert foundVoteRecord != null;
@@ -82,24 +82,23 @@ public class JdbcVoteRecordRepository implements VoteRecordRepository {
 
 	@Override
 	public void cancelVoteRecord(VoteRecord foundVoteRecord) {
-		String sql = "update vote_record set is_canceled = :isCanceled where vote_record_id = :voteRecordId ";
+		String sql = "update vote_record set canceled_flag = :canceledFlag where vote_record_id = :voteRecordId ";
 		MapSqlParameterSource param = new MapSqlParameterSource()
-			.addValue("isCanceled", foundVoteRecord.getIsCanceled())
+			.addValue("canceledFlag", foundVoteRecord.getCanceledFlag())
 			.addValue("voteRecordId", foundVoteRecord.getVoteRecordId());
 
 		jdbcTemplate.update(sql, param);
 	}
 
 	private RowMapper<VoteRecord> voteRecordMapper() {
-		return ((rs, rowNum) -> {
-			return VoteRecord.builder()
+		return (rs, rowNum) ->
+			VoteRecord.builder()
 				.voteRecordId(rs.getLong("vote_record_id"))
 				.voteId(rs.getLong("vote_id"))
-				.userId(rs.getLong("user_id"))
+				.memberId(rs.getLong("member_id"))
 				.voteType(VoteType.valueOf(rs.getString("vote_type")))
-				.isCanceled(rs.getBoolean("is_canceled"))
+				.canceledFlag(rs.getBoolean("canceled_flag"))
 				.createdAt(rs.getTimestamp("created_at").toLocalDateTime())
 				.build();
-		});
 	}
 }
