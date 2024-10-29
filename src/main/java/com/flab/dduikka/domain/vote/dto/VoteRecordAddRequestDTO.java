@@ -20,21 +20,21 @@ public class VoteRecordAddRequestDTO {
 	private final long userId;
 	@NotNull(message = "voteType null 일 수 없습니다.")
 	private final VoteType voteType;
-	private final boolean isCanceled;
+	private final boolean canceledFlag;
 
 	public VoteRecordAddRequestDTO(long voteId, long userId, VoteType voteType) {
 		this.voteId = voteId;
 		this.userId = userId;
 		this.voteType = voteType;
-		this.isCanceled = false;
+		this.canceledFlag = false;
 	}
 
 	public static VoteRecord toEntity(VoteRecordAddRequestDTO request) {
 		return VoteRecord.builder()
 			.voteId(request.getVoteId())
-			.userId(request.getUserId())
+			.memberId(request.getUserId())
 			.voteType(request.getVoteType())
-			.isCanceled(request.isCanceled())
+			.canceledFlag(request.isCanceledFlag())
 			.createdAt(LocalDateTime.now())
 			.build();
 	}

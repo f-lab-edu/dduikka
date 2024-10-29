@@ -8,11 +8,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.flab.dduikka.domain.helper.JDBCRepositoryTestHelper;
+import com.flab.dduikka.domain.helper.IntegrationTestHelper;
 import com.flab.dduikka.domain.location.domain.Location;
 import com.flab.dduikka.domain.weather.domain.Weather;
 
-class JdbcWeatherRepositoryTest extends JDBCRepositoryTestHelper {
+class JdbcWeatherRepositoryTest extends IntegrationTestHelper {
 
 	@Autowired
 	private WeatherRepository weatherRepository;

@@ -16,7 +16,9 @@ import com.flab.dduikka.domain.location.domain.Location;
 import com.flab.dduikka.domain.weather.domain.Weather;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class JdbcWeatherRepository implements WeatherRepository {
@@ -31,6 +33,7 @@ public class JdbcWeatherRepository implements WeatherRepository {
 				.addValue("weatherId", weatherId)
 				.addValue("forecastDatetime", forecastDatetime);
 
+			log.info("!!!!!!!! weatherId = {}, forecastDatetime = {} !!!!!", weatherId, forecastDatetime);
 			Weather weather = jdbcTemplate.queryForObject(sql, param, weatherRowMapper());
 			assert weather != null;
 			return Optional.of(weather);
@@ -46,13 +49,13 @@ public class JdbcWeatherRepository implements WeatherRepository {
 		param.put("weather_id", weather.getWeatherId());
 		param.put("forecast_datetime", weather.getForecastDateTime());
 		param.put("latitude", weather.getLocation().getLatitude());
-		param.put("longitude", weather.getLocation().getLatitude());
+		param.put("longitude", weather.getLocation().getLongitude());
 		param.put("temperature", weather.getTemperature());
 		param.put("relative_humidity", weather.getRelativeHumidity());
 		param.put("rainfall", weather.getRainfall());
 		param.put("snowfall", weather.getSnowfall());
 		param.put("created_at", weather.getCreatedAt());
-		jdbcInsert.withTableName("WEATHER");
+		jdbcInsert.withTableName("weather");
 		jdbcInsert.execute(param);
 	}
 

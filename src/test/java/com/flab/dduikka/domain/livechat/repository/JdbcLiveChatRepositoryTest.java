@@ -8,13 +8,18 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import com.flab.dduikka.domain.helper.JDBCRepositoryTestHelper;
+import com.flab.dduikka.domain.helper.IntegrationTestHelper;
 import com.flab.dduikka.domain.livechat.domain.LiveChat;
 
-class JdbcLiveChatRepositoryTest extends JDBCRepositoryTestHelper {
+class JdbcLiveChatRepositoryTest extends IntegrationTestHelper {
 
-	private final static int CURSOR = 999999;
+	private static final int CURSOR = 999999;
+	@Autowired
+	private LiveChatRepository liveChatRepository;
 
 	@Test
 	@DisplayName("메세지를 정상 등록하면 조회된다")
@@ -81,33 +86,11 @@ class JdbcLiveChatRepositoryTest extends JDBCRepositoryTestHelper {
 	@Nested
 	@DisplayName("노 오프셋 페이징 테스트")
 	class noOffSetPagingTest {
-		@Test
-		@DisplayName("메세지를 10개 등록하면 5개가 조회된다")
-		void whenAdd10LiveChatThenReturn10LiveChat() {
+		@ParameterizedTest
+		@ValueSource(ints = {10, 5})
+		@DisplayName("pageSize 보다 크거나 같으면 pageSize만큼 조회된다")
+		void whenAdd10LiveChatThenReturn10LiveChat(int len) {
 			//given
-			int len = 10;
-			for (int i = 0; i < len; i++) {
-				LiveChat liveChat = LiveChat.builder()
-					.memberId(1L)
-					.message("테스트용 메세지")
-					.deletedFlag(false)
-					.createdAt(LocalDateTime.now())
-					.build();
-				liveChatRepository.addLiveChat(liveChat);
-			}
-
-			//when
-			List<LiveChat> liveChats = liveChatRepository.findAllLiveChat(CURSOR);
-
-			//then
-			assertThat(liveChats).hasSize(5);
-		}
-
-		@Test
-		@DisplayName("메세지를 5개 등록하면 5개가 조회된다")
-		void whenAdd5LiveChatThenReturn5LiveChat() {
-			//given
-			int len = 5;
 			for (int i = 0; i < len; i++) {
 				LiveChat liveChat = LiveChat.builder()
 					.memberId(1L)

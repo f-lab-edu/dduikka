@@ -29,8 +29,8 @@ public class JdbcVoteRepository implements VoteRepository {
 		SqlParameterSource param = new BeanPropertySqlParameterSource(vote);
 
 		jdbcInsert
-			.withTableName("VOTE")
-			.usingGeneratedKeyColumns("VOTE_ID");
+			.withTableName("vote")
+			.usingGeneratedKeyColumns("vote_id");
 		Long key = jdbcInsert.executeAndReturnKey(param).longValue();
 
 		return Vote.builder().
@@ -54,12 +54,11 @@ public class JdbcVoteRepository implements VoteRepository {
 	}
 
 	private RowMapper<Vote> voteRowMapper() {
-		return (rs, rowNum) -> {
-			return Vote.builder().
+		return (rs, rowNum) ->
+			Vote.builder().
 				voteId(rs.getLong("vote_id")).
 				voteDate(rs.getDate("vote_date").toLocalDate()).
 				createdAt(rs.getTimestamp("created_at").toLocalDateTime()).
 				build();
-		};
 	}
 }

@@ -8,22 +8,29 @@ import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import com.flab.dduikka.domain.helper.JDBCRepositoryTestHelper;
+import com.flab.dduikka.domain.helper.IntegrationTestHelper;
 import com.flab.dduikka.domain.vote.domain.Vote;
 import com.flab.dduikka.domain.vote.domain.VoteRecord;
 import com.flab.dduikka.domain.vote.domain.VoteType;
 
-class JdbcVoteRecordRepositoryTest extends JDBCRepositoryTestHelper {
+class JdbcVoteRecordRepositoryTest extends IntegrationTestHelper {
+
+	@Autowired
+	private VoteRepository voteRepository;
+
+	@Autowired
+	private VoteRecordRepository voteRecordRepository;
 
 	@Test
 	void 유저가_투표하면_투표기록이_생성된다() {
 		//given
 		VoteRecord newVote = VoteRecord.builder()
 			.voteId(1L)
-			.userId(1L)
+			.memberId(1L)
 			.voteType(VoteType.RUN)
-			.isCanceled(false)
+			.canceledFlag(false)
 			.createdAt(LocalDateTime.now())
 			.build();
 
@@ -41,9 +48,9 @@ class JdbcVoteRecordRepositoryTest extends JDBCRepositoryTestHelper {
 		//given
 		VoteRecord newVote = VoteRecord.builder()
 			.voteId(1L)
-			.userId(1L)
+			.memberId(1L)
 			.voteType(VoteType.RUN)
-			.isCanceled(false)
+			.canceledFlag(false)
 			.createdAt(LocalDateTime.now())
 			.build();
 		VoteRecord createdVote = voteRecordRepository.createVoteRecord(newVote);
@@ -74,9 +81,9 @@ class JdbcVoteRecordRepositoryTest extends JDBCRepositoryTestHelper {
 		Vote createdVote = voteRepository.createVote(newVote);
 		VoteRecord newVoteRecord = VoteRecord.builder()
 			.voteId(createdVote.getVoteId())
-			.userId(1L)
+			.memberId(1L)
 			.voteType(VoteType.RUN)
-			.isCanceled(false)
+			.canceledFlag(false)
 			.createdAt(LocalDateTime.now())
 			.build();
 		voteRecordRepository.createVoteRecord(newVoteRecord);
@@ -96,9 +103,9 @@ class JdbcVoteRecordRepositoryTest extends JDBCRepositoryTestHelper {
 		Vote createdVote = voteRepository.createVote(newVote);
 		VoteRecord newVoteRecord = VoteRecord.builder()
 			.voteId(createdVote.getVoteId())
-			.userId(1L)
+			.memberId(1L)
 			.voteType(VoteType.RUN)
-			.isCanceled(false)
+			.canceledFlag(false)
 			.createdAt(LocalDateTime.now())
 			.build();
 		VoteRecord createdVoteRecord = voteRecordRepository.createVoteRecord(newVoteRecord);
@@ -120,9 +127,9 @@ class JdbcVoteRecordRepositoryTest extends JDBCRepositoryTestHelper {
 		Vote createdVote = voteRepository.createVote(newVote);
 		VoteRecord newVoteRecord = VoteRecord.builder()
 			.voteId(createdVote.getVoteId())
-			.userId(1L)
+			.memberId(1L)
 			.voteType(VoteType.RUN)
-			.isCanceled(false)
+			.canceledFlag(false)
 			.createdAt(LocalDateTime.now())
 			.build();
 		VoteRecord createdVoteRecord = voteRecordRepository.createVoteRecord(newVoteRecord);
