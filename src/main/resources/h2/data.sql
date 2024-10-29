@@ -1,9 +1,12 @@
 insert into member(email, password, member_status, join_date, leave_date, created_at)
-values ('test@dduikka.net', '1234', 'JOIN', CURRENT_TIMESTAMP, null, CURRENT_TIMESTAMP);
+values ('test@dduikka.net', '$2a$10$m/3nG8j0jZ1y4NxkfWcDdu05vx3w8wCjCN.Ni9PtNKTLZfoUF7FH2', 'JOIN', CURRENT_TIMESTAMP,
+        null, CURRENT_TIMESTAMP);
 insert into member(email, password, member_status, join_date, leave_date, created_at)
-values ('test2@dduikka.net', '1234', 'LEAVE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+values ('test2@dduikka.net', '$2a$10$m/3nG8j0jZ1y4NxkfWcDdu05vx3w8wCjCN.Ni9PtNKTLZfoUF7FH2', 'LEAVE', CURRENT_TIMESTAMP,
+        CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 insert into member(email, password, member_status, join_date, leave_date, created_at)
-values ('test3@dduikka.net', '1234', 'JOIN', CURRENT_TIMESTAMP, null, CURRENT_TIMESTAMP);
+values ('test3@dduikka.net', '$2a$10$m/3nG8j0jZ1y4NxkfWcDdu05vx3w8wCjCN.Ni9PtNKTLZfoUF7FH2', 'JOIN', CURRENT_TIMESTAMP,
+        null, CURRENT_TIMESTAMP); -- 12345678qW!@
 
 insert into vote(vote_date, created_at)
 values (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
