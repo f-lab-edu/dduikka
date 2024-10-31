@@ -1,7 +1,6 @@
 package com.flab.dduikka.domain.vote.repository;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -48,8 +47,8 @@ class JdbcVoteRepositoryTest extends IntegrationTestHelper {
 		voteRepository.createVote(aVote);
 
 		//then
-		assertThrows(DuplicateKeyException.class,
-			() -> voteRepository.createVote(anotherVote));
+		assertThatThrownBy(() -> voteRepository.createVote(anotherVote))
+			.isInstanceOf(DuplicateKeyException.class);
 	}
 
 	@Test
