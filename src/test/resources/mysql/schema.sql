@@ -15,7 +15,7 @@ DROP TABLE IF EXISTS vote;
 CREATE TABLE vote
 (
     vote_id    INT      NOT NULL AUTO_INCREMENT,
-    vote_date  DATE     NOT NULL,
+    vote_date  DATE     NOT NULL UNIQUE,
     created_at DATETIME NOT NULL DEFAULT NOW(),
     PRIMARY KEY (vote_id)
 );
