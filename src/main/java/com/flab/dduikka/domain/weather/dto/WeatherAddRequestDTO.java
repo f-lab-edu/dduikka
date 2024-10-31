@@ -17,7 +17,7 @@ import lombok.Getter;
 public class WeatherAddRequestDTO {
 
 	@NotNull
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asis/Seoul")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
 	private final LocalDateTime forecastDatetime; // 현재시간
 	@NotBlank
 	private final String latitude;
